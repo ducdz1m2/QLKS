@@ -1,0 +1,14 @@
+# Bỏ qua thư mục ảo của Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Bỏ qua môi trường ảo
+venv/
+env/
+
+# Bỏ qua file cấu hình riêng
+*.sqlite3
+db.sqlite3
+.env
