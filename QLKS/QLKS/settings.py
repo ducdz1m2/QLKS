@@ -37,7 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'myapp',
+    'room',
 ]
 
 MIDDLEWARE = [
@@ -77,10 +77,10 @@ WSGI_APPLICATION = 'QLKS.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'QLKS',
-        'USER': 'ngducchilly',
-        'PASSWORD': 'ducthu04',
-        'HOST': 'localhost',
+        'NAME': 'qlks_qtdl_project',
+        'USER': 'qlks_admin',
+        'PASSWORD': 'Chubaohong@123',
+        'HOST': 'mysql-qlks.alwaysdata.net',
         'PORT': '3306',
         'OPTIONS': {
             'init_command': "SET sql_mode='STRICT_TRANS_TABLES'"

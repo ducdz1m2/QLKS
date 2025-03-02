@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Danh Sách Phòng</title>
+</head>
+<body>
+    <h2>Danh Sách Phòng</h2>
+    <table border="1">
+        <tr>
+            <th>Số phòng</th> 
+            <th>Loại phòng</th>
+            <th>Trạng thái</th>
+        </tr>
+        {% for room in rooms %}
+        <tr>
+            <td>{{ room.soPhong }}</td>
+            <td>{{ room.TenLoai  }}</td>
+            <td>{{ room.TrangThai }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+</body>
+</html>
