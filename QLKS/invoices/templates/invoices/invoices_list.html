@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Danh Sách Hóa Đơn</title>
+</head>
+
+<body>
+    <h2>Danh Sách Hóa Đơn</h2>
+    <table border="1">
+        <tr>
+            <th>Mã sử dụng dịch sủ</th>
+            <th>Ngày lập hóa đơn</th>
+            <th>Tổng tiền</th>
+        </tr>
+        {% for invoices in invoices %}
+        <tr>
+            <td>{{ invoices.MaSDDV }}</td>
+            <td>{{ invoices.NgayLapHoaDon }}</td>
+            <td>{{ invoices.TongTien }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+</body>
+
+</html>
