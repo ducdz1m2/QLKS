@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Danh Sách Nhân Viên</title>
+</head>
+<body>
+    <h2>Danh Sách Nhân Viên</h2>
+    <table border="1">
+        <tr>
+            <th>Họ tên</th> 
+            <th>Ngày sinh</th>
+            <th>Số điện thoại</th>
+        </tr>
+        {% for staff in staffs %}
+        <tr>
+            <td>{{ staff.HoTen }}</td>
+            <td>{{ staff.NgaySinh  }}</td>
+            <td>{{ staff.SoDienThoai }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+</body>
+</html>
