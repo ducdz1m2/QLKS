@@ -11,6 +11,8 @@ def get_available_invoices():
         return [dict(zip(columns, row)) for row in cursor.fetchall()]  # Convert tuple -> dict
 
 
+
+
 def invoices_list(request):
     invoice = get_available_invoices()
     return render(request, 'invoices/invoices_list.html', {'invoices': invoice})
