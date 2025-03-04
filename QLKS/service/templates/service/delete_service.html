@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% block title %}Xóa dịch vụ{% endblock %}
+
+{% block content %}
+<div class="container my-4">
+  <h2 class="text-center">Xóa Dịch Vụ</h2>
+  <p>Bạn có chắc chắn muốn xóa dịch vụ: <strong>{{ service.TenDichVu }}</strong>?</p>
+  <form method="post">
+    {% csrf_token %}
+    <button type="submit" class="btn btn-danger">Xóa</button>
+    <a href="{% url 'service_list' %}" class="btn btn-secondary">Hủy</a>
+  </form>
+</div>
+{% endblock %}

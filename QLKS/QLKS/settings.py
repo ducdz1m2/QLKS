@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'staff',
     'hello',
     'customer',
+    'service'
 ]
 
 MIDDLEWARE = [
