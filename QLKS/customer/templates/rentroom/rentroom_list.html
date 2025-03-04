@@ -9,13 +9,13 @@
     <table border="1">
         <tr> 
             <th>Tên Khách Hàng</th>
-            <th>Mã Phòng</th>
+            <th>Số Phòng</th>
             <th>Ngày Nhận</th>
         </tr>
         {% for rentroom in rentrooms %}
         <tr>
-            <td>{{ rentroom.MaKhachHang_id.TenKhachHang }}</td>
-            <td>{{ rentroom.MaPhong_id  }}</td>
+            <td>{{ rentroom.TenKhachHang }}</td>
+            <td>{{ rentroom.soPhong  }}</td>
             <td>{{ rentroom.NgayNhan }}</td>
         </tr>                                     
         {% endfor %}
