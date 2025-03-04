@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Danh Sách Khách Hàng</title>
+</head>
+<body>
+    <h2>Danh Sách Khách Hàng</h2>
+    <table border="1">
+        <tr> 
+            <th>Tên Khách Hàng</th>
+            <th>Địa Chỉ</th>
+            <th>Số Điện Thoại</th>
+        </tr>
+        {% for customer in customers %}
+        <tr>
+            <td>{{ customer.TenKhachHang }}</td>
+            <td>{{ customer.DiaChi  }}</td>
+            <td>{{ customer.SoDienThoai }}</td>
+        </tr>                                    
+        {% endfor %}
+    </table>
+</body>
+</html>

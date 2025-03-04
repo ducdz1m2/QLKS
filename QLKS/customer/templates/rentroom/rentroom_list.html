@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Danh Sách Thuê Phòng</title>
+</head>
+<body>
+    <h2>Danh Sách Thuê Phòng</h2>
+    <table border="1">
+        <tr> 
+            <th>Tên Khách Hàng</th>
+            <th>Mã Phòng</th>
+            <th>Ngày Nhận</th>
+        </tr>
+        {% for rentroom in rentrooms %}
+        <tr>
+            <td>{{ rentroom.MaKhachHang_id.TenKhachHang }}</td>
+            <td>{{ rentroom.MaPhong_id  }}</td>
+            <td>{{ rentroom.NgayNhan }}</td>
+        </tr>                                     
+        {% endfor %}
+    </table>
+</body>
+</html>
