@@ -1,6 +1,7 @@
 from django.shortcuts import render
-from .models import NhanVien
 from django.db import connection
+
+
 def get_all_staff():
     with connection.cursor() as cursor:
         cursor.callproc('GetAllStaff')

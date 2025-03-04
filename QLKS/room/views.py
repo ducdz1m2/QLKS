@@ -3,7 +3,10 @@ from .models import Phong
 from django.db import connection
 
 
-def get_available_rooms():
+
+
+
+def get_all_rooms():
     with connection.cursor() as cursor:
         cursor.callproc('GetAllRooms')
         columns = [col[0] for col in cursor.description]  # Lấy tên cột
@@ -11,7 +14,6 @@ def get_available_rooms():
 
 
 def room_list(request):
-    rooms = get_available_rooms()
-    print(rooms)
+    rooms = get_all_rooms()
     return render(request, 'room/room_list.html', {'rooms': rooms})
 
