@@ -19,3 +19,4 @@ class Phong(models.Model):
         choices=TRANG_THAI_CHOICES,
         default='TRONG'
     )
+    

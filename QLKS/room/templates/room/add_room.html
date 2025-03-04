@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2 class="text-center mb-4">Thêm Phòng Mới</h2>
+    
+    <form method="POST" class="card p-4 shadow-lg">
+        {% csrf_token %}
+        
+        <div class="mb-3">
+            <label for="so_phong" class="form-label">Số Phòng</label>
+            <input type="number" class="form-control" id="so_phong" name="so_phong" required>
+        </div>
+
+        <div class="mb-3">
+            <label for="trang_thai" class="form-label">Trạng Thái</label>
+            <select class="form-select" id="trang_thai" name="trang_thai">
+                <option value="Trống">Trống</option>
+                <option value="Đã đặt">Đã đặt</option>
+                <option value="Đang sửa chữa">Đang sửa chữa</option>
+            </select>
+        </div>
+
+        <div class="mb-3">
+            <label for="ma_loai_id" class="form-label">Mã Loại Phòng</label>
+            <input type="number" class="form-control" id="ma_loai_id" name="ma_loai_id" required>
+        </div>
+
+        <button type="submit" class="btn btn-primary w-100">Thêm Phòng</button>
+    </form>
+
+    <div class="text-center mt-3">
+        <a href="{% url 'room_list' %}" class="btn btn-secondary">Quay lại danh sách</a>
+    </div>
+</div>
+{% endblock %}

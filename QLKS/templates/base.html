@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{% block title %}Quản lý khách sạn{% endblock %}</title>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+    />
+    <style>
+      body {
+        background: linear-gradient(135deg, #f5f7fa, #c3cfe2);
+        min-height: 100vh;
+      }
+      .navbar {
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      }
+      .hero {
+        padding: 100px 0;
+        background: url("https://source.unsplash.com/1600x900/?hotel")
+          center/cover no-repeat;
+        color: white;
+        text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.7);
+      }
+      .hero h1 {
+        font-size: 3rem;
+        font-weight: bold;
+      }
+      .card {
+        transition: transform 0.3s ease-in-out;
+      }
+      .card:hover {
+        transform: scale(1.05);
+      }
+    </style>
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+      <div class="container">
+        <a class="navbar-brand fw-bold" href="{% url 'home' %}">QLKS</a>
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarNav"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav ms-auto">
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'home' %}">Trang chủ</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'room_list' %}">Quản lý phòng</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/staff/">Quản lý nhân viên</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/invoices/">Quản lý hóa đơn</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/customer/">Quản lý khách hàng</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <div class="hero text-center">
+      <h1>
+        {% block hero_title %}Chào mừng đến với hệ thống quản lý khách sạn{%endblock %}
+      </h1>
+      <p class="lead">
+        {% block hero_subtitle %}Quản lý phòng, dịch vụ và nhân viên dễ dàng
+        hơn!{% endblock %}
+      </p>
+    </div>
+
+    <div class="container mt-5">
+      {% if messages %} {% for message in messages %}
+      <div
+        class="alert alert-{{ message.tags }} alert-dismissible fade show"
+        role="alert"
+      >
+        {{ message }}
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="alert"
+          aria-label="Close"
+        ></button>
+      </div>
+      {% endfor %} {% endif %} {% block content %}{% endblock %}
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  </body>
+</html>
