@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% block title %}Thêm dịch vụ{% endblock %}
+
+{% block content %}
+<div class="container my-4">
+  <h2 class="text-center">Thêm Dịch Vụ</h2>
+  <form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="btn btn-success">Thêm</button>
+    <a href="{% url 'service_list' %}" class="btn btn-secondary">Hủy</a>
+  </form>
+</div>
+{% endblock %}
