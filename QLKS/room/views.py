@@ -46,16 +46,11 @@ def edit_room(request, MaPhong):
     if not room:  
         messages.error(request, "Phòng không tồn tại!")
         return redirect('room_list')
-    print(room)
-    # Chuyển đổi số phòng về số nguyên
-   
     
     loai_phongs = get_all_roomtypes()
 
     if request.method == 'POST':
         soPhong = request.POST.get('so_phong', '').strip()
-        
-        # Kiểm tra số phòng hợp lệ
         if not soPhong.isdigit():
             messages.error(request, "Số phòng không hợp lệ!")
             return redirect(f'/room/edit/{MaPhong}')
@@ -88,3 +83,22 @@ def room_list(request):
     print(rooms)
     return render(request, 'room/room_list.html', {'rooms': rooms})
 
+## NEW ###
+def search_rooms(request):
+    so_phong = request.GET.get('so_phong', '').strip()
+    trang_thai = request.GET.get('trang_thai', '').strip()
+    ten_loai = request.GET.get('ten_loai', '').strip()  # Lấy TenLoai từ request
+
+    # Xử lý giá trị rỗng -> NULL
+    so_phong = so_phong if so_phong else None
+    trang_thai = trang_thai if trang_thai else None
+    ten_loai = ten_loai if ten_loai else None  # Giữ dạng chuỗi, không cần chuyển kiểu
+
+    with connection.cursor() as cursor:
+        cursor.callproc('SearchRooms', [so_phong, trang_thai, ten_loai])
+        columns = [col[0] for col in cursor.description]
+        rooms = [dict(zip(columns, row)) for row in cursor.fetchall()]
+    
+    room_types = get_all_roomtypes()
+    print(rooms)  # Debug kết quả
+    return render(request, 'room/room_list.html', {'rooms': rooms, 'room_types': room_types})

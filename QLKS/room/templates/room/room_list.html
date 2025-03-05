@@ -20,11 +20,41 @@
       </tr>
     </thead>
     <tbody>
+      <form method="GET" action="{% url 'search_rooms' %}" class="mb-3">
+        <div class="row">
+            <div class="col-md-3">
+                <input type="text" name="so_phong" class="form-control" placeholder="Nhập số phòng" value="{{ request.GET.so_phong }}">
+            </div>
+            <div class="col-md-3">
+                <select name="trang_thai" class="form-control">
+                    <option value="">-- Trạng thái --</option>
+                    <option value="Trống" {% if request.GET.trang_thai == "Trống" %}selected{% endif %}>Trống</option>
+                    <option value="Đã đặt" {% if request.GET.trang_thai == "Đã đặt" %}selected{% endif %}>Đã đặt</option>
+                </select>
+            </div>
+            <div class="col-md-3">
+                <select name="ten_loai" class="form-control">
+                    <option value="">-- Loại phòng --</option>
+                    {% for loai in room_types %}
+                    <option value="{{ loai.TenLoai }}" {% if request.GET.ten_loai == loai.TenLoai %}selected{% endif %}>
+                        {{ loai.TenLoai }}
+                    </option>
+                {% endfor %}
+                
+                </select>
+            </div>
+            <div class="col-md-3">
+                <button type="submit" class="btn btn-primary">🔍 Tìm kiếm</button>
+            </div>
+        </div>
+    </form>
+    
+      
       {% for room in rooms %}
       <tr>
         <td>
           <a href="{% url 'view_room_detail' room.MaPhong %}" class="btn btn-primary btn-sm">
-            <b>{{ room.soPhong }}</b>
+            <b>{{ room.SoPhong }}</b>
           </a>
         </td>
         <td>{{ room.TrangThai }}</td>
