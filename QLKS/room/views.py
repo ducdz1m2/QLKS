@@ -41,17 +41,14 @@ def delete_room(request, MaPhong):
     return redirect('room_list')
 
 def edit_room(request, MaPhong):
-    with connection.cursor() as cursor:
-        cursor.execute("SELECT soPhong, TrangThai, MaLoai_id FROM room_phong WHERE MaPhong = %s", [MaPhong])
-        room = cursor.fetchone()
+    room = get_room_detail(MaPhong)
 
     if not room:  
         messages.error(request, "Phòng không tồn tại!")
         return redirect('room_list')
-
+    print(room)
     # Chuyển đổi số phòng về số nguyên
-    soPhong = int(room[0]) if room[0] and room[0].isdigit() else None
-    room_dict = {'MaPhong': MaPhong, 'soPhong': soPhong, 'TrangThai': room[1], 'MaLoai_id': room[2]}
+   
     
     loai_phongs = get_all_roomtypes()
 
@@ -73,7 +70,7 @@ def edit_room(request, MaPhong):
         messages.success(request, f"Cập nhật phòng {soPhong} thành công!")
         return redirect('room_list')
 
-    return render(request, 'room/edit_room.html', {'room': room_dict, 'loai_phongs': loai_phongs})
+    return render(request, 'room/edit_room.html', {'room': room, 'loai_phongs': loai_phongs})
 
 def get_all_rooms():
     with connection.cursor() as cursor:
