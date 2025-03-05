@@ -11,7 +11,7 @@
     <thead>
       <tr>
         <th>Mã sử dụng</th>
-        <th>Mã Phòng</th>
+        <th>Số phòng</th>
         <th>Tên Khách Hàng</th>
         <th>Tên Dịch Vụ</th>
         <th>Số Lượng</th>
@@ -24,7 +24,7 @@
       {% for usage in usages %}
       <tr>
         <td>{{ usage.MaSuDung }}</td>
-        <td>{{ usage.MaPhong_id }}</td>
+        <td>{{ usage.SoPhong }}</td>
         <td>{{ usage.TenKhachHang }}</td>
         <td>{{ usage.TenDichVu }}</td>
         <td>{{ usage.SoLuong }}</td>

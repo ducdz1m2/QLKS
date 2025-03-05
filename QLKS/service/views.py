@@ -60,6 +60,13 @@ def delete_service(request, pk):
         return redirect('service_list')
     return render(request, 'service/delete_service.html', {'service': service})
 
+def service_detail(request, pk):
+    service = get_service(pk)
+    if not service:
+        messages.error(request, "Dịch vụ không tồn tại!")
+        return redirect('service_list')
+    return render(request, 'service/detail_service.html', {'service': service})
+
 #Su dung dich vu
 def usage_list(request):
     usages = get_all_usages()
