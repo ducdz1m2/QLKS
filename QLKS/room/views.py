@@ -3,9 +3,6 @@ from django.db import connection
 from django.contrib import messages
 
 
-from django.db import connection
-from django.shortcuts import render
-
 def get_room_detail(MaPhong):
     with connection.cursor() as cursor:
         cursor.callproc('GetDetailRoom', [MaPhong])
