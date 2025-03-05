@@ -1,24 +1,59 @@
+{% extends 'base.html' %}
+{% block title %}Danh sách người dùng{% endblock %}
+
+{% block content %}
 <!DOCTYPE html>
 <html lang="vi">
+
 <head>
     <meta charset="UTF-8">
     <title>Danh Sách Khách Hàng</title>
 </head>
+
 <body>
     <h2>Danh Sách Khách Hàng</h2>
-    <table border="1">
-        <tr> 
-            <th>Tên Khách Hàng</th>
-            <th>Địa Chỉ</th>
-            <th>Số Điện Thoại</th>
-        </tr>
+    <!-- Nút thêm phòng -->
+    <div class="text-end mb-3">
+        <a href="{% url 'add_customer' %}" class="btn btn-success">➕ Thêm khách hàng</a>
+    </div>
+    <table class="table table-bordered table-hover">
+        <thead class="table-dark">
+            <tr>
+                <th>Tên Khách Hàng</th>
+                <th>Địa Chỉ</th>
+                <th>Số Điện Thoại</th>
+                <th>Thao tác</th>
+            </tr>
+        </thead>
         {% for customer in customers %}
         <tr>
-            <td>{{ customer.TenKhachHang }}</td>
-            <td>{{ customer.DiaChi  }}</td>
+            <td><a href="{% url 'detail_customer' customer.MaKhachHang %}">
+                    {{ customer.TenKhachHang }}
+                </a></td>
+            <td>{{ customer.DiaChi }}</td>
             <td>{{ customer.SoDienThoai }}</td>
-        </tr>                                    
+            <td> <!-- Nút chỉnh sửa -->
+                <a href="{% url 'edit_customer' customer.MaKhachHang %}" class="btn btn-primary btn-sm">✏️ Sửa</a>
+
+                <!-- Nút xóa -->
+                <form action="{% url 'delete_customer' customer.MaKhachHang %}" method="post" class="d-inline">
+                    {% csrf_token %}
+                    <input type="hidden" name="so_phong" value=""> <!-- Đảm bảo có name -->
+                    <button type="submit" class="btn btn-danger btn-sm"
+                        onclick="return confirm('Bạn có chắc chắn muốn xóa khách hàng này?');">
+                        🗑️ Xóa
+                    </button>
+            </td>
+        </tr>
         {% endfor %}
     </table>
 </body>
+
+<style>
+    a{
+        text-decoration: none;
+        color: #000;
+    }
+</style>
 </html>
+{% endblock %}
