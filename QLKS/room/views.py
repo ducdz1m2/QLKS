@@ -2,6 +2,25 @@ from django.shortcuts import render, redirect
 from django.db import connection
 from django.contrib import messages
 
+
+from django.db import connection
+from django.shortcuts import render
+
+def get_room_detail(MaPhong):
+    with connection.cursor() as cursor:
+        cursor.callproc('GetDetailRoom', [MaPhong])
+        row = cursor.fetchone()
+        columns = [col[0] for col in cursor.description] if cursor.description else []
+        return dict(zip(columns, row)) if row else None
+
+def view_room_detail(request, MaPhong):
+    room = get_room_detail(MaPhong)
+    print(room)
+    if not room:
+        return render(request, 'room/detail_room.html', {'error': 'Không tìm thấy phòng'})
+    return render(request, 'room/detail_room.html', {'room': room})
+
+
 def add_room(request):
     print(request)
     if request.method == 'POST':

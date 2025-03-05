@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2 class="text-center mb-4">Chi Tiết Phòng</h2>
+    
+    {% if error %}
+        <div class="alert alert-danger text-center">{{ error }}</div>
+    {% else %}
+        <div class="card p-4 shadow-lg">
+            <div class="mb-3">
+                <label class="form-label fw-bold">Số Phòng:</label>
+                <p class="form-control">{{ room.SoPhong }}</p>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label fw-bold">Trạng Thái:</label>
+                <p class="form-control">{{ room.TrangThai }}</p>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label fw-bold">Mã Loại Phòng:</label>
+                <p class="form-control">{{ room.MaLoai_id }}</p>
+            </div>
+        </div>
+    {% endif %}
+    
+    <div class="text-center mt-3">
+        <a href="{% url 'room_list' %}" class="btn btn-secondary">Quay lại danh sách</a>
+    </div>
+</div>
+{% endblock %}

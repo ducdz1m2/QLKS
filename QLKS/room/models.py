@@ -13,7 +13,7 @@ class Phong(models.Model):
     ]
     MaPhong = models.AutoField(primary_key=True)
     MaLoai = models.ForeignKey(LoaiPhong, on_delete=models.CASCADE)
-    soPhong = models.CharField(max_length=10)
+    SoPhong = models.CharField(max_length=10)
     TrangThai = models.CharField(
         max_length=20,
         choices=TRANG_THAI_CHOICES,

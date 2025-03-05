@@ -22,7 +22,11 @@
     <tbody>
       {% for room in rooms %}
       <tr>
-        <td>{{ room.soPhong }}</td>
+        <td>
+          <a href="{% url 'view_room_detail' room.MaPhong %}" class="btn btn-primary btn-sm">
+            <b>{{ room.soPhong }}</b>
+          </a>
+        </td>
         <td>{{ room.TrangThai }}</td>
         <td>{{ room.TenLoai }}</td>
         <td>
