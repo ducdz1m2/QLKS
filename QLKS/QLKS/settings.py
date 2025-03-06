@@ -41,9 +41,10 @@ INSTALLED_APPS = [
     'invoices',
     'staff',
     'customer',
-    'service'
+    'service',
+    'accounts',
 ]
-
+AUTH_USER_MODEL = 'accounts.CustomUser'
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
