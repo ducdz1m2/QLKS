@@ -29,12 +29,14 @@ def add_room(request):
         with connection.cursor() as cursor:
             cursor.callproc('AddRoom', [SoPhong, TrangThai, MaLoai_id])
         messages.success(request, f"Thêm phòng {SoPhong} thành công!")
-    return render(request, 'room/add_room.html')
+    loai_phongs = get_all_roomtypes()
+    return render(request, 'room/add_room.html', {'loai_phongs': loai_phongs})
 
 def delete_room(request, MaPhong):
     if request.method == 'POST':  
         
-        SoPhong = request.POST['so_phong']
+        SoPhong = get_room_detail(MaPhong)['SoPhong']
+        
         with connection.cursor() as cursor:
             cursor.callproc('DeleteRoom', [MaPhong])
         messages.success(request, f"Xóa phòng {SoPhong} thành công!")
@@ -80,8 +82,9 @@ def get_all_roomtypes():
 
 def room_list(request):
     rooms = get_all_rooms()
+    room_types = get_all_roomtypes()
     print(rooms)
-    return render(request, 'room/room_list.html', {'rooms': rooms})
+    return render(request, 'room/room_list.html', {'rooms': rooms, 'room_types': room_types})
 
 ## NEW ###
 def search_rooms(request):

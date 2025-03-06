@@ -22,10 +22,13 @@
         </div>
 
         <div class="mb-3">
-            <label for="ma_loai_id" class="form-label">Mã Loại Phòng</label>
-            <input type="number" class="form-control" id="ma_loai_id" name="ma_loai_id" required>
+            <select class="form-control" id="maLoai" name="ma_loai_id" required>
+                {% for loai in loai_phongs %}
+                    <option value="{{ loai.MaLoai }}" >{{ loai.TenLoai }}</option>
+                {% endfor %}
+            </select>
         </div>
-
+               
         <button type="submit" class="btn btn-primary w-100">Thêm Phòng</button>
     </form>
 
