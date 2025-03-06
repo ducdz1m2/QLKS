@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block title %}Chi tiết Dịch vụ{% endblock %}
+
+{% block content %}
+<div class="container my-4">
+  <h2 class="text-center mb-4">Chi tiết Dịch vụ</h2>
+  <div class="card">
+    <div class="card-header">
+      Mã dịch vụ: {{ service.MaDichVu }}
+    </div>
+    <div class="card-body">
+      <h5 class="card-title">Tên dịch vụ: {{ service.TenDichVu }}</h5>
+      <p class="card-text">Giá dịch vụ: {{ service.GiaDichVu }}</p>
+    </div>
+  </div>
+  <div class="mt-4">
+    <a href="{% url 'service_list' %}" class="btn btn-secondary">Trở về danh sách</a>
+  </div>
+</div>
+{% endblock %}

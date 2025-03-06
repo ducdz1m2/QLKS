@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% block title %}Xóa hóa đơn{% endblock %}
+
+{% block content %}
+<div class="container my-4">
+  <h2 class="text-center">Xóa Hóa Đơn</h2>
+  <p>Bạn có chắc chắn muốn xóa hóa đơn: <strong>{{ invoices.MaHoaDon }}</strong>?</p>
+  <form method="post">
+    {% csrf_token %}
+    <button type="submit" class="btn btn-danger">Xóa</button>
+    <a href="{% url 'invoices_list' %}" class="btn btn-secondary">Hủy</a>
+  </form>
+</div>
+{% endblock %}

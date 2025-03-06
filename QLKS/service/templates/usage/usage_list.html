@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% block title %}Danh sách Sử Dụng Dịch Vụ{% endblock %}
+
+{% block content %}
+<div class="container">
+  <h2>Danh sách Sử Dụng Dịch Vụ</h2>
+  <div class="mb-3">
+    <a href="{% url 'add_usage' %}" class="btn btn-success">Thêm Sử Dụng Dịch Vụ</a>
+  </div>
+  <table class="table table-bordered">
+    <thead>
+      <tr>
+        <th>Mã sử dụng</th>
+        <th>Số phòng</th>
+        <th>Tên Khách Hàng</th>
+        <th>Tên Dịch Vụ</th>
+        <th>Số Lượng</th>
+        <th>Ngày Sử Dụng</th>
+        <th>Thành Tiền</th>
+        <th>Hành động</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for usage in usages %}
+      <tr>
+        <td>{{ usage.MaSuDung }}</td>
+        <td>{{ usage.SoPhong }}</td>
+        <td>{{ usage.TenKhachHang }}</td>
+        <td>{{ usage.TenDichVu }}</td>
+        <td>{{ usage.SoLuong }}</td>
+        <td>{{ usage.NgaySuDung }}</td>
+        <td>{{ usage.ThanhTien }}</td>
+        <td>
+          <a href="{% url 'edit_usage' usage.MaSuDung %}" class="btn btn-primary btn-sm">Sửa</a>
+          <form action="{% url 'delete_usage' usage.MaSuDung %}" method="post" class="d-inline">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Bạn có chắc muốn xóa không?');">Xóa</button>
+          </form>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}
