@@ -1,24 +1,78 @@
-<!DOCTYPE html>
-<html lang="vi">
-<head>
-    <meta charset="UTF-8">
-    <title>Danh Sách Nhân Viên</title>
-</head>
-<body>
-    <h2>Danh Sách Nhân Viên</h2>
-    <table border="1">
-        <tr>
-            <th>Họ tên</th> 
-            <th>Ngày sinh</th>
-            <th>Số điện thoại</th>
-        </tr>
-        {% for staff in staffs %}
-        <tr>
-            <td>{{ staff.HoTen }}</td>
-            <td>{{ staff.NgaySinh  }}</td>
-            <td>{{ staff.SoDienThoai }}</td>
-        </tr>
-        {% endfor %}
-    </table>
-</body>
-</html>
+{% extends 'base.html' %}
+
+{% block title %}Danh sách nhân viên{% endblock %}
+
+{% block content %}
+<div class="container">
+  <h2 class="text-center my-4">Danh Sách Nhân Viên</h2>
+
+  <!-- Nút thêm nhân viên -->
+  <div class="text-end mb-3">
+    <a href="{% url 'add_staff' %}" class="btn btn-success">➕ Thêm nhân viên</a>
+  </div>
+
+  <!-- Form tìm kiếm -->
+  <form method="GET" action="{% url 'search_staff' %}" class="mb-3 p-3 bg-light rounded shadow-sm">
+    <div class="row g-2 align-items-center">
+      <div class="col-md-3">
+        <input type="text" name="ho_ten" class="form-control" placeholder="Nhập họ tên" value="{{ request.GET.ho_ten }}">
+      </div>
+      <div class="col-md-3">
+        <input type="date" name="ngay_sinh" class="form-control" value="{{ request.GET.ngay_sinh }}">
+      </div>
+      <div class="col-md-3">
+        <input type="text" name="so_dien_thoai" class="form-control" placeholder="Nhập số điện thoại" value="{{ request.GET.so_dien_thoai }}">
+      </div>
+      <div class="col-md-3">
+        <select name="phong_ban" class="form-select">
+          <option value="">-- Chọn phòng ban --</option>
+          {% for pb in phong_bans %}
+          <option value="{{ pb.TenPhongBan }}" {% if request.GET.phong_ban == pb.TenPhongBan %}selected{% endif %}>{{ pb.TenPhongBan }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="col-md-3 mt-2">
+        <button type="submit" class="btn btn-primary w-100">🔍 Tìm kiếm</button>
+      </div>
+    </div>
+  </form>
+
+  <!-- Bảng danh sách nhân viên -->
+  <table class="table table-bordered table-hover">
+    <thead class="table-dark">
+      <tr>
+        <th>Họ tên</th>
+        <th>Ngày sinh</th>
+        <th>Số điện thoại</th>
+        <th>Phòng ban</th>
+        <th>Hành động</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for staff in staffs %}
+      <tr>
+        <td>
+          <a href="{% url 'view_staff_detail' staff.MaNhanVien %}" class="btn btn-primary btn-sm">
+            <b>{{ staff.HoTen }}</b>
+          </a>
+        </td>
+        <td>{{ staff.NgaySinh }}</td>
+        <td>{{ staff.SoDienThoai }}</td>
+        <td>{{ staff.TenPhongBan }}</td>
+        <td>
+          <!-- Nút chỉnh sửa -->
+          <a href="{% url 'edit_staff' staff.MaNhanVien %}" class="btn btn-warning btn-sm">✏️ Sửa</a>
+          
+          <!-- Nút xóa -->
+          <form action="{% url 'delete_staff' staff.MaNhanVien %}" method="post" class="d-inline">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Bạn có chắc chắn muốn xóa nhân viên này?');">🗑️ Xóa</button>
+            
+        </form>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2 class="text-center mb-4">Chi Tiết Nhân Viên</h2>
+    
+    {% if error %}
+        <div class="alert alert-danger text-center">{{ error }}</div>
+    {% else %}
+        <div class="card p-4 shadow-lg">
+            <div class="mb-3">
+                <label class="form-label fw-bold">Mã Nhân Viên:</label>
+                <p class="form-control">{{ staff.MaNhanVien }}</p>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label fw-bold">Họ Tên:</label>
+                <p class="form-control">{{ staff.HoTen }}</p>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label fw-bold">Ngày Sinh:</label>
+                <p class="form-control">{{ staff.NgaySinh }}</p>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label fw-bold">Số Điện Thoại:</label>
+                <p class="form-control">{{ staff.SoDienThoai }}</p>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label fw-bold">Phòng Ban:</label>
+                <p class="form-control">{{ phongban }}</p>
+            </div>
+        </div>
+    {% endif %}
+    
+    <div class="text-center mt-3">
+        <a href="{% url 'staff_list' %}" class="btn btn-secondary">Quay lại danh sách</a>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+{% block title %}Chỉnh sửa nhân viên{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h2 class="text-center my-4">Chỉnh sửa nhân viên</h2>
+    
+    <form action="{% url 'edit_staff' staff.MaNhanVien %}" method="post">
+        {% csrf_token %}
+        
+        <div class="mb-3">
+            <label for="hoTen" class="form-label">Họ tên</label>
+            <input type="text" class="form-control" id="hoTen" name="ho_ten" value="{{ staff.HoTen }}" required>
+        </div>
+        
+        <div class="mb-3">
+            <label for="maPhongBan" class="form-label">Phòng ban</label>
+            <select class="form-control" id="maPhongBan" name="ma_phong_ban_id" required>
+                {% for pb in phong_bans %}
+                    <option value="{{ pb.MaPhongBan }}" {% if pb.MaPhongBan == staff.MaPhongBan_id %}selected{% endif %}>
+                        {{ pb.TenPhongBan }}
+                    </option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="mb-3">
+            <label for="ngaySinh" class="form-label">Ngày sinh</label>
+            <input type="date" class="form-control" id="ngaySinh" name="ngay_sinh" value="{{ staff.NgaySinh|date:'Y-m-d' }}" required>
+        </div>
+
+        <div class="mb-3">
+            <label for="soDienThoai" class="form-label">Số điện thoại</label>
+            <input type="text" class="form-control" id="soDienThoai" name="so_dien_thoai" value="{{ staff.SoDienThoai }}" required>
+        </div>
+        
+        <button type="submit" class="btn btn-primary">Lưu thay đổi</button>
+        <a href="{% url 'staff_list' %}" class="btn btn-secondary">Hủy</a>
+    </form>
+</div>
+{% endblock %}
