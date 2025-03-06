@@ -1,0 +1,37 @@
+
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+    <h2 class="text-center mb-4">Thêm Hóa Đơn</h2>
+
+    <form method="POST" class="card p-4 shadow-lg mb-5">
+        {% csrf_token %}
+
+        <div class="mb-3">
+            <label for="NgayLapHoaDon" class="form-label">Ngày Lập Hóa Đơn</label>
+            <input type="date" class="form-control" id="NgayLapHoaDon" name="NgayLapHoaDon" required>
+        </div>
+
+        <div class="mb-3">
+            <label for="TongTien" class="form-label">Tổng Tiền</label>
+            <input type="text" class="form-control" id="TongTien" name="TongTien" required>
+        </div>
+
+        <!-- <div class="mb-3">
+            <label for="MaSuDung_id" class="form-label">Mã Sử Dụng Dịch Vụ</label>
+            <input type="text" class="form-control" id="MaSuDung_id" name="MaSuDung_id" required>
+        </div> -->
+        <select class="form-control" id="MaSuDung_id" name="MaSuDung_id" required>
+            {% for ma in useservices %}
+            <option value="{{ ma }}">{{ ma }}</option>
+
+            {% endfor %}
+        </select>
+        <div class="d-flex justify-content-end">
+            <a href="{% url 'invoices_list' %}" class="btn btn-secondary me-1" style="width: 8rem;">Quay lại</a>
+            <button type="submit" class="btn btn-primary w-100" style="width: 10rem !important;">Thêm Hóa Đơn</button>
+        </div>
+    </form>
+</div>
+{% endblock %}

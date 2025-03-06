@@ -10,6 +10,7 @@ class Phong(models.Model):
     TRANG_THAI_CHOICES = [
         ('TRONG', 'Trống'),
         ('SU_DUNG', 'Đang sử dụng'),
+        ('DANG_DON_DEP', 'Đang dọn dẹp'),
     ]
     MaPhong = models.AutoField(primary_key=True)
     MaLoai = models.ForeignKey(LoaiPhong, on_delete=models.CASCADE)

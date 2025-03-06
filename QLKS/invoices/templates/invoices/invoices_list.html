@@ -1,27 +1,51 @@
-<!DOCTYPE html>
-<html lang="vi">
+{% extends 'base.html' %} 
+{% block title %}Danh sách hóa đơn{% endblock %} 
 
-<head>
-    <meta charset="UTF-8">
-    <title>Danh Sách Hóa Đơn</title>
-</head>
+{% block content %}
+<div class="container">
+  <h2 class="text-center my-4">Danh Sách Hóa Đơn</h2>
 
-<body>
-    <h2>Danh Sách Hóa Đơn</h2>
-    <table border="1">
-        <tr>
-            <th>Mã sử dụng dịch sủ</th>
-            <th>Ngày lập hóa đơn</th>
-            <th>Tổng tiền</th>
-        </tr>
-        {% for invoices in invoices %}
-        <tr>
-            <td>{{ invoices.MaSDDV }}</td>
-            <td>{{ invoices.NgayLapHoaDon }}</td>
-            <td>{{ invoices.TongTien }}</td>
-        </tr>
-        {% endfor %}
-    </table>
-</body>
+  <!-- Nút thêm hóa đơn -->
+  <div class="text-end mb-3">
+    <a href="{% url 'add_invoices' %}" class="btn btn-success">➕ Thêm Hóa Đơn</a>
+  </div>
 
-</html>
+  <table class="table table-bordered table-hover">
+    <thead class="table-dark">
+      <tr>
+        <th>Mã Hóa Đơn</th>
+        <th>Ngày Lập</th>
+        <th>Tổng Tiền</th>
+        <th>Mã Sử Dụng Dịch Vụ</th>
+        <th>Hành động</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for invoice in invoices %}
+      <tr>
+        <td>
+          <a href="{% url 'detail_invoices' invoice.MaHoaDon %}" class="btn btn-primary btn-sm">
+            <b>{{ invoice.MaHoaDon }}</b>
+          </a>
+        </td>
+        <td>{{ invoice.NgayLapHoaDon }}</td>
+        <td>{{ invoice.TongTien }}</td>
+        <td>{{ invoice.MaSuDung_id }}</td>
+        <td>
+          <!-- Nút chỉnh sửa -->
+          <a href="{% url 'edit_invoices' invoice.MaHoaDon %}" class="btn btn-primary btn-sm">✏️ Sửa</a>
+
+          <!-- Nút xóa -->
+          <form action="{% url 'delete_invoices' invoice.MaHoaDon %}" method="post" class="d-inline">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Bạn có chắc chắn muốn xóa hóa đơn này?');">
+                🗑️ Xóa
+            </button>
+          </form>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

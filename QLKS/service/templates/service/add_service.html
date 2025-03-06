@@ -2,13 +2,15 @@
 {% block title %}Thêm dịch vụ{% endblock %}
 
 {% block content %}
-<div class="container my-4">
-  <h2 class="text-center">Thêm Dịch Vụ</h2>
-  <form method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit" class="btn btn-success">Thêm</button>
-    <a href="{% url 'service_list' %}" class="btn btn-secondary">Hủy</a>
-  </form>
+<div class="container mt-5">
+    <h2 class="text-center mb-4">Thêm Dịch Vụ</h2>
+    <form method="post" class="card p-4 shadow-lg">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-primary w-100">Thêm dịch vụ</button>
+    </form>
+    <div class="text-center mt-3">
+      <a href="{% url 'service_list' %}" class="btn btn-secondary">Quay lại danh sách</a>
+    </div>
 </div>
 {% endblock %}

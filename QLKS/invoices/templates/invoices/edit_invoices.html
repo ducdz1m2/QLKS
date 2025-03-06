@@ -1,0 +1,44 @@
+
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+    <h2 class="text-center mb-4">Chỉnh Sửa Thông Tin Hóa Đơn</h2>
+
+    {% if error %}
+    <div class="alert alert-danger text-center">{{ error }}</div>
+    <div class="d-flex justify-content-end">
+        <a href="{% url 'invoices_list' %}" class="btn btn-secondary me-1" style="width: 8rem;">Quay lại</a>
+    </div>
+    {% else %}
+
+    <form method="POST" class="card p-4 shadow-lg mb-5">
+        {% csrf_token %}
+
+        <div class="mb-3">
+            <label for="NgayLapHoaDon" class="form-label">Ngày Lập Hóa Đơn</label>
+            <input type="date" class="form-control" id="NgayLapHoaDon" name="NgayLapHoaDon"
+       value="{{ invoices.NgayLapHoaDon|date:'Y-m-d' }}" required >
+        </div>
+
+        <div class="mb-3">
+            <label for="TongTien" class="form-label">Tổng Tiền</label>
+            <input type="text" class="form-control" id="TongTien" name="TongTien"
+            value="{{ invoices.TongTien}}" required >
+        </div>
+
+        <select class="form-control" id="MaSuDung_id" name="MaSuDung_id" required>
+            {% for ma in useservices %}
+                <option value="{{ ma }}" {% if invoices.MaSuDung_id == ma %}selected{% endif %}>{{ ma }}</option>
+            {% endfor %}
+        </select>
+        
+
+        <div class="d-flex justify-content-end">
+            <a href="{% url 'invoices_list' %}" class="btn btn-secondary me-1" style="width: 8rem;">Quay lại</a>
+            <button type="submit" class="btn btn-primary w-100" style="width: 10rem !important;">Lưu</button>
+        </div>
+    </form>
+    {% endif %}
+</div>
+{% endblock %}
