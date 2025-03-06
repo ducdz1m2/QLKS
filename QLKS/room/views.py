@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.db import connection
 from django.contrib import messages
 
-
+## Xem chi tiet phong
 def get_room_detail(MaPhong):
     with connection.cursor() as cursor:
         cursor.callproc('GetDetailRoom', [MaPhong])
@@ -17,7 +17,7 @@ def view_room_detail(request, MaPhong):
         return render(request, 'room/detail_room.html', {'error': 'Không tìm thấy phòng'})
     return render(request, 'room/detail_room.html', {'room': room})
 
-
+#them phong
 def add_room(request):
     print(request)
     if request.method == 'POST':
@@ -32,6 +32,7 @@ def add_room(request):
     loai_phongs = get_all_roomtypes()
     return render(request, 'room/add_room.html', {'loai_phongs': loai_phongs})
 
+#xoa phong
 def delete_room(request, MaPhong):
     if request.method == 'POST':  
         
@@ -41,7 +42,7 @@ def delete_room(request, MaPhong):
             cursor.callproc('DeleteRoom', [MaPhong])
         messages.success(request, f"Xóa phòng {SoPhong} thành công!")
     return redirect('room_list')
-
+#chinh sua phong
 def edit_room(request, MaPhong):
     room = get_room_detail(MaPhong)
 
@@ -68,7 +69,7 @@ def edit_room(request, MaPhong):
         return redirect('room_list')
 
     return render(request, 'room/edit_room.html', {'room': room, 'loai_phongs': loai_phongs})
-
+#lay tat ca phong
 def get_all_rooms():
     with connection.cursor() as cursor:
         cursor.callproc('GetAllRooms')
@@ -86,7 +87,7 @@ def room_list(request):
     print(rooms)
     return render(request, 'room/room_list.html', {'rooms': rooms, 'room_types': room_types})
 
-## NEW ###
+#tim kiem phong
 def search_rooms(request):
     so_phong = request.GET.get('so_phong', '').strip()
     trang_thai = request.GET.get('trang_thai', '').strip()

@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2 class="text-center mb-4">Thêm Nhân Viên Mới</h2>
+    
+    <form method="POST" class="card p-4 shadow-lg">
+        {% csrf_token %}
+        
+        <div class="mb-3">
+            <label for="ho_ten" class="form-label">Họ và Tên</label>
+            <input type="text" class="form-control" id="ho_ten" name="ho_ten" required>
+        </div>
+
+        <div class="mb-3">
+            <label for="ngay_sinh" class="form-label">Ngày Sinh</label>
+            <input type="date" class="form-control" id="ngay_sinh" name="ngay_sinh" required>
+        </div>
+
+        <div class="mb-3">
+            <label for="so_dien_thoai" class="form-label">Số Điện Thoại</label>
+            <input type="text" class="form-control" id="so_dien_thoai" name="so_dien_thoai" required>
+        </div>
+
+        <div class="mb-3">
+            <label for="ma_phong_ban" class="form-label">Phòng Ban</label>
+            <select class="form-select" id="ma_phong_ban" name="ma_phong_ban_id" required>
+                {% for phong in phong_bans %}
+                    <option value="{{ phong.MaPhongBan }}">{{ phong.TenPhongBan }}</option>
+                {% endfor %}
+            </select>
+        </div>
+               
+        <button type="submit" class="btn btn-primary w-100">Thêm Nhân Viên</button>
+    </form>
+
+    <div class="text-center mt-3">
+        <a href="{% url 'staff_list' %}" class="btn btn-secondary">Quay lại danh sách</a>
+    </div>
+</div>
+{% endblock %}
