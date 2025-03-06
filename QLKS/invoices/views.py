@@ -1,11 +1,15 @@
-from django.shortcuts import render, redirect, get_object_or_404
+from django.shortcuts import render, redirect
 from .models import *
 from django.db import connection
 from django.contrib import messages
 from .models import HoaDon
 
-from django.db import connection
-from django.shortcuts import render
+def get_all_useservice():
+    with connection.cursor() as cursor:
+        cursor.callproc('GetAllMaUseService')
+        row = cursor.fetchall()
+        row = [item[0] for item in row]
+        return row
 
 def get_invoices_detail(MaHoaDon):
     with connection.cursor() as cursor:
@@ -33,7 +37,10 @@ def add_invoices(request):
             cursor.callproc('AddInvoices', [NgayLapHoaDon, TongTien, MaSuDung_id])
             
         messages.success(request, f"Thêm hóa đơn thành công!")
-    return render(request, 'invoices/add_invoices.html')
+
+    useservices= get_all_useservice()
+    
+    return render(request, 'invoices/add_invoices.html', {'useservices': useservices})
 
 
 # def edit_invoices(request, MaHoaDon):
@@ -76,21 +83,24 @@ def edit_invoices(request, MaHoaDon):
         TongTien = request.POST.get("TongTien")
         MaSuDung_id = request.POST.get("MaSuDung_id")
         with connection.cursor() as cursor:
-            cursor.callproc('UpdateInvoices', [MaHoaDon ,NgayLapHoaDon, TongTien, MaSuDung_id])
+            cursor.callproc('UpdateInvoices', [MaHoaDon ,NgayLapHoaDon, MaSuDung_id, TongTien])
         messages.success(request, f"Cập nhật hóa đơn {MaHoaDon} thành công!")
         return redirect('invoices_list')
     
     if not invoice:
         return render(request, 'invoices/edit_invoices.html', {'error': 'Không tìm thấy hóa đơn'})
-    return render(request, 'invoices/edit_invoices.html', {'invoices' : invoice})
+    
+    useservices= get_all_useservice()
+    return render(request, 'invoices/edit_invoices.html', {'invoices' : invoice, 'useservices': useservices})
 
 # Xóa hóa đơn
 def delete_invoices(request, MaHoaDon):
-    invoice = get_invoices(MaHoaDon)  
+    
+
     if request.method == 'POST':  
         with connection.cursor() as cursor:
             cursor.callproc('DeleteInvoices', [MaHoaDon])
-        messages.success(request, f"Xóa hóa đơn {invoice.MaHoaDon} thành công!")
+        messages.success(request, f"Xóa hóa đơn {MaHoaDon} thành công!")
     return redirect('invoices_list')
 
 
