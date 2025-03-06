@@ -42,30 +42,6 @@ def add_invoices(request):
     
     return render(request, 'invoices/add_invoices.html', {'useservices': useservices})
 
-
-# def edit_invoices(request, MaHoaDon):
-#     with connection.cursor() as cursor:
-#         cursor.execute("SELECT NgayLapHoaDon, TongTien, MaSuDung_id FROM invoices_hoadon WHERE MaHoaDon = %s", [MaHoaDon])
-#         invoice = cursor.fetchone()
-
-#     if not invoice:  
-#         messages.error(request, "Hóa đơn không tồn tại!")
-#         return redirect('invoices_list')
-
-#     invoices_dict = {'NgayLapHoaDon': invoice[0], 'TongTien': invoice[1], 'MaSuDung_id': invoice[2]}
-
-#     if request.method == 'POST':
-#         NgayLapHoaDon = request.POST.get('ngay_lap_hoa_don')
-#         TongTien = request.POST.get('tong_tien')
-#         MaSuDung_id = request.POST.get('ma_su_dung_id')
-
-#         with connection.cursor() as cursor:
-#             cursor.callproc('UpdateInvoices', [NgayLapHoaDon, TongTien, MaSuDung_id, MaHoaDon])
-
-#         messages.success(request, f"Cập nhật hóa đơn {MaHoaDon} thành công!")
-#         return redirect('invoices_list')
-
-#     return render(request, 'invoices/edit_invoices.html', {'invoices': invoices_dict})
 # Lấy một hóa đơn theo mã 
 def get_invoices(MaHoaDon):
     with connection.cursor() as cursor:
@@ -119,3 +95,25 @@ def invoices_list(request):
     invoice= get_all_invoices()
     return render(request, 'invoices/invoices_list.html', {'invoices': invoice})
 
+# tìm kiếm hóa đơn
+def search_invoices(request):
+    MaHoaDon = request.GET.get('MaHoaDon', '').strip()
+    NgayLapHoaDon = request.GET.get('NgayLapHoaDon', '').strip()
+    TongTien = request.GET.get('TongTien', '').strip()
+    MaSuDung_id = request.GET.get('MaSuDung_id', '').strip()
+   
+
+    MaHoaDon = MaHoaDon if MaHoaDon else None
+    NgayLapHoaDon = NgayLapHoaDon if NgayLapHoaDon else None
+    TongTien = TongTien if TongTien else None
+    MaSuDung_id = MaSuDung_id if MaSuDung_id else None
+   
+
+    with connection.cursor() as cursor:
+        cursor.callproc('SearchInvoices', [MaHoaDon, NgayLapHoaDon,TongTien, MaSuDung_id])
+        columns = [col[0] for col in cursor.description]
+        invoice = [dict(zip(columns, row)) for row in cursor.fetchall()]
+
+    invoices_types = get_all_invoicestypes()
+    print(invoice)
+    return render(request, 'invoices/invoices_list.html', {'invoices': invoice, 'invoices_types': invoices_types})

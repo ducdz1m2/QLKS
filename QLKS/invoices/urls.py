@@ -8,5 +8,5 @@ urlpatterns = [
     path('delete/<int:MaHoaDon>', delete_invoices, name='delete_invoices'),
     path('edit/<int:MaHoaDon>', edit_invoices, name='edit_invoices'),
     path('detail/<int:MaHoaDon>',detail_invoices, name='detail_invoices'),
-    # path('search/', search_invoices, name='search_invoices'),
+    path('search/', search_invoices, name='search_invoices'),
 ]
