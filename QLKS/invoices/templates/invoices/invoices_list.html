@@ -1,5 +1,5 @@
-{% extends 'base.html' %} 
-{% block title %}Danh sách hóa đơn{% endblock %} 
+{% extends 'base.html' %}
+{% block title %}Danh sách hóa đơn{% endblock %}
 
 {% block content %}
 <div class="container">
@@ -9,6 +9,32 @@
   <div class="text-end mb-3">
     <a href="{% url 'add_invoices' %}" class="btn btn-success">➕ Thêm Hóa Đơn</a>
   </div>
+  <!-- Form tìm kiếm hóa dơn -->
+  <form method="GET" action="{% url 'search_invoices' %}" class="mb-3 p-3 bg-light rounded shadow-sm">
+    <div class="row g-2 align-items-center">
+      <div class="col-md-3">
+        <input type="number" name="MaHoaDon" class="form-control" placeholder="Nhập mã hóa đơn" value="{{ request.GET.MaHoaDon }}">
+      </div>
+      <div class="col-md-3">
+        <input type="date" name="NgayLapHoaDon" class="form-control" placeholder="Nhập ngày lập hóa đơn" value="{{ request.GET.NgayLapHoaDon }}">
+      </div>
+      <div class="col-md-3">
+        <input type="number" name="TongTien" class="form-control" placeholder="Nhập tổng tiền hóa đơn" value="{{ request.GET.TongTien }}">
+      </div>
+      <div class="col-md-3">
+        <select name="MaSuDung_id" class="form-select">
+          <option value="">-- Mã Sử Dụng Dịch Vụ --</option>
+          {% for Ma in invoices_types %}
+          <option value="{{ Ma.MaSuDung_id }}" {% if request.GET.MaSuDung_id == Ma.MaSuDung_id %}selected{% endif %}>{{ Ma.MaSuDung_id }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="col-md-3">
+        <button type="submit" class="btn btn-primary w-100">🔍 Tìm kiếm</button>
+      </div>
+    </div>
+  </form>
+
 
   <table class="table table-bordered table-hover">
     <thead class="table-dark">
@@ -38,8 +64,9 @@
           <!-- Nút xóa -->
           <form action="{% url 'delete_invoices' invoice.MaHoaDon %}" method="post" class="d-inline">
             {% csrf_token %}
-            <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Bạn có chắc chắn muốn xóa hóa đơn này?');">
-                🗑️ Xóa
+            <button type="submit" class="btn btn-danger btn-sm"
+              onclick="return confirm('Bạn có chắc chắn muốn xóa hóa đơn này?');">
+              🗑️ Xóa
             </button>
           </form>
         </td>
