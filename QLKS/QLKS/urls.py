@@ -10,6 +10,10 @@ urlpatterns = [
     path('staff/', include('staff.urls')),
     path('customer/', include("customer.urls")),
     path('service/', include("service.urls")),
-    path("accounts/", include("django.contrib.auth.urls")),
-  
+    
+    # Thêm dòng này để include URL từ accounts
+    path("accounts/", include("accounts.urls")),  
+
+    # Giữ lại django auth urls để hỗ trợ login/logout
+    path("accounts/", include("django.contrib.auth.urls")),  
 ]
