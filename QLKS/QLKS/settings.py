@@ -82,7 +82,7 @@ WSGI_APPLICATION = 'QLKS.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'qlks_qtdl_project',
+        'NAME': 'qlks_demo',
         'USER': 'qlks_admin',
         'PASSWORD': 'Chubaohong@123',
         'HOST': 'mysql-qlks.alwaysdata.net',
