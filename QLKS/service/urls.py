@@ -1,6 +1,5 @@
 from django.urls import path
-from .views import service_list, add_service, edit_service, delete_service, service_detail
-from .views import usage_list, add_usage, edit_usage, delete_usage
+from .views import *
 
 urlpatterns = [
     #Dich vu
@@ -9,6 +8,7 @@ urlpatterns = [
     path('edit/<int:pk>/', edit_service, name='edit_service'),
     path('delete/<int:pk>/', delete_service, name='delete_service'),
     path('detail/<int:pk>/', service_detail, name='service_detail'),
+    path('search/', search_services, name='search_services'),
     #Su dung dich vu
     path('usage/', usage_list, name='usage_list'),
     path('usage/add/', add_usage, name='add_usage'),

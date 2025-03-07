@@ -3,10 +3,46 @@
 
 {% block content %}
 <div class="container">
-  <h2 class="text-center my-4">Danh sách dịch vụ</h2>
+  <h2 class="text-center my-4">Danh sách phòng</h2>
+
+  <!-- Nút thêm dịch vụ -->
   <div class="text-end mb-3">
     <a href="{% url 'add_service' %}" class="btn btn-success">➕ Thêm dịch vụ</a>
   </div>
+
+  <!-- Form tìm kiếm -->
+  <form method="GET" action="{% url 'search_services' %}" class="mb-3 p-3 bg-light rounded shadow-sm">
+    <div class="row g-2 align-items-center">
+      <div class="col-md-3">
+        <input type="text" name="name" class="form-control" placeholder="Nhập tên dịch vụ" value="{{ request.GET.name }}">
+      </div>
+      <div class="col-md-3">
+        <select name="min" class="form-select">
+          <option value="">-- Giá tối thiểu --</option>
+          <option value="0" {% if request.GET.min == "0" %}selected{% endif %}>0</option>
+          <option value="100000" {% if request.GET.min == "100000" %}selected{% endif %}>100,000</option>
+          <option value="200000" {% if request.GET.min == "200000" %}selected{% endif %}>200,000</option>
+          <option value="500000" {% if request.GET.min == "500000" %}selected{% endif %}>500,000</option>
+          <option value="1000000" {% if request.GET.min == "1000000" %}selected{% endif %}>1,000,000</option>
+        </select>
+      </div>
+      <div class="col-md-3">
+        <select name="max" class="form-select">
+          <option value="">-- Giá tối đa --</option>
+          <option value="100000" {% if request.GET.max == "100000" %}selected{% endif %}>100,000</option>
+          <option value="200000" {% if request.GET.max == "200000" %}selected{% endif %}>200,000</option>
+          <option value="500000" {% if request.GET.max == "500000" %}selected{% endif %}>500,000</option>
+          <option value="1000000" {% if request.GET.max == "1000000" %}selected{% endif %}>1,000,000</option>
+          <option value="10000000" {% if request.GET.max == "10000000" %}selected{% endif %}>10,000,000</option>
+        </select>
+      </div>
+      <div class="col-md-3">
+        <button type="submit" class="btn btn-primary w-100">🔍 Tìm kiếm</button>
+      </div>
+    </div>
+  </form>
+
+  <!-- Bảng danh sách dịch vụ -->
   <table class="table table-bordered table-hover">
     <thead class="table-dark">
       <tr>
@@ -18,7 +54,7 @@
     </thead>
     <tbody>
       {% for service in services %}
-      <tr style="cursor: pointer;" onclick="window.location.href='{% url 'service_detail' service.MaDichVu %}'">
+      <tr>
         <td>{{ service.MaDichVu }}</td>
         <td>{{ service.TenDichVu }}</td>
         <td>{{ service.GiaDichVu }}</td>

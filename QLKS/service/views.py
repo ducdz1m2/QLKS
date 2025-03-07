@@ -67,6 +67,22 @@ def service_detail(request, pk):
         return redirect('service_list')
     return render(request, 'service/detail_service.html', {'service': service})
 
+def search_services(request):
+    TenDichVu = request.GET.get('name', '').strip()
+    GiaToiThieu = request.GET.get('min', '').strip()
+    GiaToiDa = request.GET.get('max', '').strip()
+
+    TenDichVu = TenDichVu if TenDichVu else None
+    GiaToiThieu = GiaToiThieu if GiaToiThieu else None
+    GiaToiDa = GiaToiDa if GiaToiDa else None
+
+    with connection.cursor() as cursor:
+        cursor.callproc('SearchServices', [TenDichVu, GiaToiThieu, GiaToiDa])
+        columns = [col[0] for col in cursor.description]
+        services = [dict(zip(columns, row)) for row in cursor.fetchall()]
+
+    return render(request, 'service/service_list.html', {'services': services})
+
 #Su dung dich vu
 def usage_list(request):
     usages = get_all_usages()
