@@ -1,6 +1,14 @@
 from django.shortcuts import render, redirect
 from django.db import connection
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
+
+@login_required
+def staff_home(request):
+    return render(request, 'staff/staff_home.html')  # Trang dành cho nhân viên
+
+
+
 
 def get_phongban_by_id(MaPhongBan):
      with connection.cursor() as cursor:

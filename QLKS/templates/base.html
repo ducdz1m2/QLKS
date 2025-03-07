@@ -67,7 +67,23 @@
             <li class="nav-item">
               <a class="nav-link" href="/service/">Quản lý dịch vụ</a>
             </li>
+          
+            {% if user.is_authenticated %}
+            <li class="nav-item">
+              <form action="{% url 'logout' %}" method="post" style="display: inline;">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-danger">Đăng xuất</button>
+            </form>
+            
+            </li>
+            {% else %}
+            <li class="nav-item">
+              <a class="nav-link btn btn-primary text-white ms-2" href="{% url 'login' %}">Đăng nhập</a>
+            </li>
+            {% endif %}
           </ul>
+          
+          
         </div>
       </div>
     </nav>

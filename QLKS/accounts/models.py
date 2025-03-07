@@ -7,3 +7,9 @@ class CustomUser(AbstractUser):
         ('khachhang', 'Khách hàng'),
     ]
     role = models.CharField(max_length=10, choices=ROLE_CHOICES, default='khachhang')
+
+    def is_nhanvien(self):
+        return self.role == 'nhanvien'
+
+    def is_khachhang(self):
+        return self.role == 'khachhang'

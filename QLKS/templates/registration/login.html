@@ -1,0 +1,10 @@
+{% extends "base.html" %}  {# Nếu có base.html thì kế thừa, không thì xóa dòng này #}
+
+{% block content %}
+<h2>Đăng nhập</h2>
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Đăng nhập</button>
+</form>
+{% endblock %}
