@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'customer',
     'service',
     'accounts',
+    'django.contrib.humanize',
 ]
 
 AUTH_USER_MODEL = 'accounts.CustomUser'

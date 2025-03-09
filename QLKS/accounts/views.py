@@ -7,6 +7,8 @@ from accounts.forms import RegisterForm, StaffForm, CustomerForm
 
 from django.shortcuts import redirect
 from staff.models import NhanVien
+
+
 def register(request):
     if request.method == 'POST':
         user_form = RegisterForm(request.POST)
