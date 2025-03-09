@@ -61,27 +61,6 @@ def rentroom_list(request):
 
     return render(request, 'customer/rentroom_list.html', {'rentrooms': rentrooms})
 
-# Yêu cầu dịch vụ
-def request_service(request):
-    services = get_all_services()
-    print(services)
-    return render(request, 'customer_rentroom/customer_addService.html',
-                  {'services' : services,
-                   'MaPhong' : request.POST.get("MaPhong")})
-
-# Xác nhận dịch vụ
-def comfirm_request(request):
-    servicesID = request.POST.getlist("serviceId")
-    print(servicesID)
-    
-    services = get_all_services()
-    # print(services)
-    return render(request, 'customer_rentroom/customer_addService.html', {'services' : services})
-    
-# Danh sách dịch vụ đã yêu cầu
-def list_service(request):
-    return render(request, 'customer_rentroom/customer_addService.html')
-
 def add_customer_view(request):
     if request.method == 'POST':
         user_form = CustomerRegisterForm(request.POST)
@@ -161,6 +140,21 @@ def customer_list(request):
     customers = get_all_customers()
     return render(request, 'customer/customer_list.html', {'customers': customers})
 
+
+# Tìm kiếm customer
+def search_customer(request):
+    TenKhachHang = request.GET.get('TenKhachHang', '').strip()
+    DiaChi = request.GET.get('DiaChi', '').strip()
+    SoDienThoai = request.GET.get('SoDienThoai', '').strip()
+    with connection.cursor() as cursor:
+        cursor.callproc('SearchCustomer', [TenKhachHang, DiaChi,SoDienThoai])
+        columns = [col[0] for col in cursor.description]
+        customers = [dict(zip(columns, row)) for row in cursor.fetchall()]
+    # print(TenKhachHang, DiaChi, SoDienThoai, customers)
+    return render(request, 'customer/customer_list.html', {"customers": customers})
+
+
+# ================ Sử dụng dịch vụ của khách hàng ===================
 # Lấy tất cả thông tin thuê phòng
 def get_all_rentrooms():
     with connection.cursor() as cursor:
@@ -176,7 +170,6 @@ def customer_rentroom(request):
         columns = [col[0] for col in cursor.description]
         customer = [dict(zip(columns, row)) for row in cursor.fetchall()]
         
-    print( customer)
     # Lấy ra phòng của khách hàng đang thuê
     with connection.cursor() as cursor:
         cursor.callproc('GetCustomerRentRoom', [customer[0]['id']])   
@@ -185,14 +178,37 @@ def customer_rentroom(request):
         
     return render(request, 'customer_rentroom/customer_rentroom.html', {"rentRooms" : rentRooms})
 
-# Tìm kiếm customer
-def search_customer(request):
-    TenKhachHang = request.GET.get('TenKhachHang', '').strip()
-    DiaChi = request.GET.get('DiaChi', '').strip()
-    SoDienThoai = request.GET.get('SoDienThoai', '').strip()
+
+
+# Yêu cầu dịch vụ
+def request_service(request, MaThue):
+    services = get_all_services()
+    print(MaThue)
+    
+    return render(request, 'customer_rentroom/customer_addService.html',
+                  {'services' : services,
+                   'MaThue' : MaThue})
+
+# Xác nhận dịch vụ
+def comfirm_request(request):
+    servicesIDs = request.POST.getlist("serviceId")
+    MaThue = request.POST.get("MaThue")
+    for MaDichVu in servicesIDs:
+        with connection.cursor() as cursor:
+            cursor.callproc("AddUseServiceByCustomer", [MaDichVu, MaThue])
+    messages.success(request, f"Yêu cầu dịch vụ thành công!")
+    return customer_rentroom(request)
+    
+# Danh sách dịch vụ đã yêu cầu
+def service_order(request):
+    # Lấy ra thông tin khách hàng đang đăng nhập
     with connection.cursor() as cursor:
-        cursor.callproc('SearchCustomer', [TenKhachHang, DiaChi,SoDienThoai])
+        cursor.callproc('GetCustomerByAccountId', [request.user.id])
         columns = [col[0] for col in cursor.description]
-        customers = [dict(zip(columns, row)) for row in cursor.fetchall()]
-    print(TenKhachHang, DiaChi, SoDienThoai, customers)
-    return render(request, 'customer/customer_list.html', {"customers": customers})
+        
+        customer = [dict(zip(columns, row)) for row in cursor.fetchall()]
+    with connection.cursor() as cursor:
+        cursor.callproc("GetCustomerServiceByRentRoom", [customer[0]['id']])
+        columns = [col[0] for col in cursor.description]  
+        services = [dict(zip(columns, row)) for row in cursor.fetchall()] 
+    return render(request, 'customer_rentroom/customer_serviceOrder.html', {"services" : services})

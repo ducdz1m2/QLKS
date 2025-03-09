@@ -8,7 +8,7 @@ def home(request):
         return render(request, 'base.html')  # Ưu tiên xử lý admin trước
 
     if user.is_khachhang():
-        return redirect('customer_home')
+        return redirect('customer_rentroom')
     elif user.is_nhanvien():
         return redirect('redirect_home')
     

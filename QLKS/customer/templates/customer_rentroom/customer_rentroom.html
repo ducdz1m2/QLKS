@@ -14,12 +14,10 @@
         <h2>Phòng đang thuê</h2>
         <!-- Nút thêm phòng -->
         <div class="text-end mb-3">
-            <a href="{% url 'request_service' %}" class="btn btn-success">➕ Gọi dịch vụ</a>
-        </div>
-        <div class="text-end mb-3">
-            <a href="{% url 'list_service' %}" class="btn btn-success">Danh sách dịch vụ</a>
-        </div>
+            <a href="{% url 'service_order' %}" class="btn btn-primary">Dịch vụ đã yêu cầu</a>
 
+
+        </div>
 
         <table class="table table-bordered table-hover">
             <thead class="table-dark">
@@ -27,8 +25,9 @@
                     <th>Số phòng</th>
                     <th>Loại phòng</th>
                     <th>Trạng Thái</th>
+                    <th>Ngày thuê</th>
                     <th>Ngày nhận</th>
-                    <th>Ngày trả</th>
+                    <th>Thao tác</th>
                 </tr>
             </thead>
             {% for rentRoom in rentRooms %}
@@ -38,6 +37,7 @@
                 <td>{{ rentRoom.TrangThai }}</td>
                 <td>{{ rentRoom.NgayThue }}</td>
                 <td>{{ rentRoom.NgayNhan }}</td>
+                <td><a href="{% url 'request_service' rentRoom.MaThue %}" class="btn btn-success">➕ Gọi dịch vụ</a></td>
             </tr>
             {% endfor %}
         </table>

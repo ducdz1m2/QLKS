@@ -13,9 +13,9 @@ urlpatterns = [
     
     #
     path('rentrooms/', customer_rentroom, name='customer_rentroom'),    
-    path('request/', request_service, name='request_service'),  # Yêu cầu dịch vụ
+    path('request/<int:MaThue>/', request_service, name='request_service'),  # Yêu cầu dịch vụ
     path('comfirm_request/', comfirm_request, name='comfirm_request'),  # Xác nhận dịch vụ
-    path('list_service/', list_service, name='list_service'),  # Xác nhận dịch vụ
+    path('service_order/', service_order, name='service_order'),  # Xác nhận dịch vụ
 ]
 
 
