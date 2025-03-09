@@ -9,7 +9,8 @@ class CustomUser(AbstractUser):
     role = models.CharField(max_length=10, choices=ROLE_CHOICES, default='khachhang')
 
     def is_nhanvien(self):
-        return self.role == 'nhanvien'
+        return self.role == 'nhanvien' and not self.is_staff and not self.is_superuser
+
 
     def is_khachhang(self):
         return self.role == 'khachhang'

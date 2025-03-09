@@ -4,8 +4,9 @@ from django.views.decorators.csrf import csrf_exempt
 from django.shortcuts import render, redirect
 from django.contrib.auth import login
 from accounts.forms import RegisterForm, StaffForm, CustomerForm
-from accounts.models import CustomUser
 
+from django.shortcuts import redirect
+from staff.models import NhanVien
 def register(request):
     if request.method == 'POST':
         user_form = RegisterForm(request.POST)
@@ -49,3 +50,28 @@ def logout_view(request):
         logout(request)
         return redirect('/accounts/login/')
     return redirect('/')  # Nếu request không hợp lệ, quay về trang chủ
+
+def redirect_user_home(request):
+    if request.user.is_authenticated:
+        # Nếu là admin hoặc staff → không redirect theo phòng ban nữa
+        if request.user.is_staff or request.user.is_superuser:
+            return redirect('home')
+
+        try:
+            nhanvien = NhanVien.objects.get(user=request.user)
+            phongban = nhanvien.MaPhongBan.TenPhongBan.lower()
+
+            if "hk" in phongban:
+                return redirect('hk_home')
+            elif "fb" in phongban:
+                return redirect('fb_home')
+            elif "receptionist" in phongban:
+                return redirect('receptionist_home')
+            elif "engineer" in phongban:
+                return redirect('engineer_home')
+            else:
+                return redirect('home')
+        except NhanVien.DoesNotExist:
+            return redirect('home')
+
+    return redirect('login')
