@@ -5,6 +5,7 @@ from accounts.decorators import khachhang_required
 from django.contrib import messages
 from accounts.forms import CustomerRegisterForm, CustomerForm
 from django.contrib.auth import login
+from service.views import get_all_services
 
 
 def add_customer_view(request):
@@ -61,19 +62,25 @@ def rentroom_list(request):
     return render(request, 'customer/rentroom_list.html', {'rentrooms': rentrooms})
 
 # Yêu cầu dịch vụ
-@login_required
-@khachhang_required
 def request_service(request):
-    if request.method == 'POST':
-        MaKhachHang = request.user.id  
-        MaDichVu = request.POST.get('MaDichVu')  
-        
-        with connection.cursor() as cursor:
-            cursor.callproc('RequestService', [MaKhachHang, MaDichVu])
-        
-        return render(request, 'customer/service_success.html', {'message': 'Yêu cầu dịch vụ thành công!'})
+    services = get_all_services()
+    print(services)
+    return render(request, 'customer_rentroom/customer_addService.html',
+                  {'services' : services,
+                   'MaPhong' : request.POST.get("MaPhong")})
 
-    return render(request, 'customer/request_service.html')
+# Xác nhận dịch vụ
+def comfirm_request(request):
+    servicesID = request.POST.getlist("serviceId")
+    print(servicesID)
+    
+    services = get_all_services()
+    # print(services)
+    return render(request, 'customer_rentroom/customer_addService.html', {'services' : services})
+    
+# Danh sách dịch vụ đã yêu cầu
+def list_service(request):
+    return render(request, 'customer_rentroom/customer_addService.html')
 
 def add_customer_view(request):
     if request.method == 'POST':
@@ -162,7 +169,30 @@ def get_all_rentrooms():
         return [dict(zip(columns, row)) for row in cursor.fetchall()]  # Convert tuple -> dict
  
 # Hiện danh sách thông tin thuê phòng        
-def rentroom_list(request):
-    rentrooms = get_all_rentrooms()
-    print(rentrooms)
-    return render(request, 'rentroom/rentroom_list.html', {'rentrooms': rentrooms})
+def customer_rentroom(request):
+    # Lấy ra thông tin khách hàng đang đăng nhập
+    with connection.cursor() as cursor:
+        cursor.callproc('GetCustomerByAccountId', [request.user.id])
+        columns = [col[0] for col in cursor.description]
+        customer = [dict(zip(columns, row)) for row in cursor.fetchall()]
+        
+    print( customer)
+    # Lấy ra phòng của khách hàng đang thuê
+    with connection.cursor() as cursor:
+        cursor.callproc('GetCustomerRentRoom', [customer[0]['id']])   
+        columns = [col[0] for col in cursor.description]
+        rentRooms = [dict(zip(columns, row)) for row in cursor.fetchall()]
+        
+    return render(request, 'customer_rentroom/customer_rentroom.html', {"rentRooms" : rentRooms})
+
+# Tìm kiếm customer
+def search_customer(request):
+    TenKhachHang = request.GET.get('TenKhachHang', '').strip()
+    DiaChi = request.GET.get('DiaChi', '').strip()
+    SoDienThoai = request.GET.get('SoDienThoai', '').strip()
+    with connection.cursor() as cursor:
+        cursor.callproc('SearchCustomer', [TenKhachHang, DiaChi,SoDienThoai])
+        columns = [col[0] for col in cursor.description]
+        customers = [dict(zip(columns, row)) for row in cursor.fetchall()]
+    print(TenKhachHang, DiaChi, SoDienThoai, customers)
+    return render(request, 'customer/customer_list.html', {"customers": customers})
