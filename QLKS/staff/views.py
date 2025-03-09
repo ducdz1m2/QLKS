@@ -22,7 +22,7 @@ def receptionist_home(request):
 @login_required
 @phongban_required(allowed_departments=['engineer'])
 def engineer_home(request):
-    return render(request, 'staff/receptionist_home.html')
+    return render(request, 'staff/engineer_home.html')
 
 @login_required
 def staff_home(request):

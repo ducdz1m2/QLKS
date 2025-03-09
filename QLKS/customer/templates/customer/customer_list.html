@@ -27,16 +27,16 @@
         </thead>
         {% for customer in customers %}
         <tr>
-            <td><a href="{% url 'detail_customer' customer.MaKhachHang %}">
+            <td><a href="{% url 'detail_customer' customer.id %}">
                     {{ customer.TenKhachHang }}
                 </a></td>
             <td>{{ customer.DiaChi }}</td>
             <td>{{ customer.SoDienThoai }}</td>
             <td> <!-- Nút chỉnh sửa -->
-                <a href="{% url 'edit_customer' customer.MaKhachHang %}" class="btn btn-primary btn-sm">✏️ Sửa</a>
+                <a href="{% url 'edit_customer' customer.id %}" class="btn btn-primary btn-sm">✏️ Sửa</a>
 
                 <!-- Nút xóa -->
-                <form action="{% url 'delete_customer' customer.MaKhachHang %}" method="post" class="d-inline">
+                <form action="{% url 'delete_customer' customer.id %}" method="post" class="d-inline">
                     {% csrf_token %}
                     <input type="hidden" name="so_phong" value=""> <!-- Đảm bảo có name -->
                     <button type="submit" class="btn btn-danger btn-sm"

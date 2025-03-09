@@ -24,3 +24,8 @@ class CustomerForm(forms.ModelForm):
     class Meta:
         model = KhachHang
         fields = ['TenKhachHang', 'SoDienThoai', 'DiaChi']
+
+class CustomerRegisterForm(UserCreationForm):
+    class Meta:
+        model = CustomUser
+        fields = ['username', 'email', 'password1', 'password2']  # Không cần 'role'

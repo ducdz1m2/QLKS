@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block title %}Không có quyền truy cập{% endblock %}
+
+{% block hero_title %}Truy cập bị từ chối{% endblock %}
+{% block hero_subtitle %}Bạn không có quyền truy cập vào trang này.{% endblock %}
+
+{% block content %}
+  <div class="text-center mt-5">
+    <h2 class="text-danger">⚠️ Bạn không có quyền truy cập chức năng này.</h2>
+    <p>Vui lòng liên hệ quản trị viên nếu bạn nghĩ đây là nhầm lẫn.</p>
+    <a href="{% url 'home' %}" class="btn btn-primary mt-3">Quay về Trang chủ</a>
+  </div>
+{% endblock %}
