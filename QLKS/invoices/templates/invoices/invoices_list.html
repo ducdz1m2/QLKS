@@ -25,7 +25,7 @@
         <select name="MaSuDung_id" class="form-select">
           <option value="">-- Mã Sử Dụng Dịch Vụ --</option>
           {% for Ma in invoices_types %}
-          <option value="{{ Ma.MaSuDung_id }}" {% if request.GET.MaSuDung_id == Ma.MaSuDung_id %}selected{% endif %}>{{ Ma.MaSuDung_id }}</option>
+          <option value="{{ Ma }}" {% if request.GET.MaSuDung_id == Ma %}selected{% endif %}>{{ Ma  }}</option>
           {% endfor %}
         </select>
       </div>

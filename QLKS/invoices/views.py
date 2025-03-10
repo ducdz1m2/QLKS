@@ -113,7 +113,10 @@ def search_invoices(request):
         cursor.callproc('SearchInvoices', [MaHoaDon, NgayLapHoaDon,TongTien, MaSuDung_id])
         columns = [col[0] for col in cursor.description]
         invoice = [dict(zip(columns, row)) for row in cursor.fetchall()]
+    invoices_types = []
+    temp = get_all_invoicestypes()
+    for item in temp:
+        invoices_types.append(item['MaSuDung'])
 
-    invoices_types = get_all_invoicestypes()
-    print(invoice)
+    print(invoices_types)
     return render(request, 'invoices/invoices_list.html', {'invoices': invoice, 'invoices_types': invoices_types})
