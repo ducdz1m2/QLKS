@@ -3,6 +3,8 @@ from .models import *
 from django.db import connection
 from django.contrib import messages
 from .models import HoaDon
+from accounts.decorators import phongban_required
+from django.contrib.auth.decorators import login_required
 
 def get_all_useservice():
     with connection.cursor() as cursor:
@@ -17,14 +19,16 @@ def get_invoices_detail(MaHoaDon):
         row = cursor.fetchone()
         columns = [col[0] for col in cursor.description] if cursor.description else []
         return dict(zip(columns, row)) if row else None
-
+@login_required
+@phongban_required(allowed_departments=['admin', 'receptionist'])
 def detail_invoices(request, MaHoaDon):
     invoice = get_invoices(MaHoaDon)
     if not invoice:
         return render(request, 'invoices/detail_invoices.html', {'error': 'Không tìm thấy hóa đơn'})
     return render(request, 'invoices/detail_invoices.html', {'invoices': invoice})
 
-
+@login_required
+@phongban_required(allowed_departments=['admin', 'receptionist'])
 def add_invoices(request):
     print(request)
     if request.method == 'POST':
@@ -50,7 +54,8 @@ def get_invoices(MaHoaDon):
         columns = [col[0] for col in cursor.description] if cursor.description else []
         return dict(zip(columns, row)) if row else None
     
-
+@login_required
+@phongban_required(allowed_departments=['admin', 'receptionist'])
 def edit_invoices(request, MaHoaDon):
     invoice = get_invoices(MaHoaDon)    
     
@@ -90,12 +95,15 @@ def get_all_invoicestypes():
         cursor.callproc('GetAllInvoicesType')
         columns = [col[0] for col in cursor.description]  # Lấy tên cột
         return [dict(zip(columns, row)) for row in cursor.fetchall()]  # Convert tuple -> dict
-
+@login_required
+@phongban_required(allowed_departments=['admin', 'receptionist'])
 def invoices_list(request):
     invoice= get_all_invoices()
     return render(request, 'invoices/invoices_list.html', {'invoices': invoice})
 
 # tìm kiếm hóa đơn
+@login_required
+@phongban_required(allowed_departments=['admin', 'receptionist'])
 def search_invoices(request):
     MaHoaDon = request.GET.get('MaHoaDon', '').strip()
     NgayLapHoaDon = request.GET.get('NgayLapHoaDon', '').strip()

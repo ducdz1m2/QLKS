@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% block title %}Danh sách dịch vụ{% endblock %}
+{% load humanize %}
 
 {% block content %}
 <div class="container">
@@ -37,6 +38,17 @@
         </select>
       </div>
       <div class="col-md-3">
+        <select name="phongban" class="form-select">
+          <option value="">-- Chọn phòng ban --</option>
+          {% for pb in phongbans %}
+            <option value="{{ pb.MaPhongBan }}" {% if request.GET.phongban == pb.MaPhongBan|stringformat:"s" %}selected{% endif %}>
+              {{ pb.TenPhongBan }}
+            </option>
+          {% endfor %}
+        </select>
+      </div>
+      
+      <div class="col-md-3">
         <button type="submit" class="btn btn-primary w-100">🔍 Tìm kiếm</button>
       </div>
     </div>
@@ -49,19 +61,21 @@
         <th>Mã dịch vụ</th>
         <th>Tên dịch vụ</th>
         <th>Giá dịch vụ</th>
+        <th>Phòng ban</th>
         <th>Hành động</th>
       </tr>
     </thead>
     <tbody>
       {% for service in services %}
-      <tr style="cursor: pointer;" onclick="window.location.href='{% url 'service_detail' service.MaDichVu %}'">
+      <tr style="cursor: pointer;" data-href="{% url 'service_detail' service.MaDichVu %}">
         <td>
           <a href="{% url 'service_detail' service.MaDichVu %}" class="btn btn-primary btn-sm">
-            <b>{{ service.MaDichVu }}</b>
+            <strong>{{ service.MaDichVu }}</strong>
           </a>
         </td>
         <td>{{ service.TenDichVu }}</td>
-        <td>{{ service.GiaDichVu }}</td>
+        <td>{{ service.GiaDichVu|intcomma }} ₫</td>
+        <td>{{ service.TenPhongBan }}</td>
         <td>
           <a href="{% url 'edit_service' service.MaDichVu %}" class="btn btn-warning btn-sm" onclick="event.stopPropagation();">✏️ Sửa</a>
           <form action="{% url 'delete_service' service.MaDichVu %}" method="post" class="d-inline" onclick="event.stopPropagation();">
@@ -70,8 +84,23 @@
           </form>
         </td>
       </tr>
+      {% empty %}
+      <tr>
+        <td colspan="5" class="text-center text-muted">Không có dịch vụ nào phù hợp.</td>
+      </tr>
       {% endfor %}
     </tbody>
   </table>
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const rows = document.querySelectorAll('tr[data-href]');
+      rows.forEach(row => {
+        row.addEventListener('click', function () {
+          window.location.href = row.getAttribute('data-href');
+        });
+      });
+    });
+  </script>
+  
 </div>
 {% endblock %}

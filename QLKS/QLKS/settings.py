@@ -43,11 +43,12 @@ INSTALLED_APPS = [
     'customer',
     'service',
     'accounts',
+    'django.contrib.humanize',
 ]
 
 AUTH_USER_MODEL = 'accounts.CustomUser'
 LOGIN_URL = '/accounts/login/'  
-LOGIN_REDIRECT_URL = '/'  
+LOGIN_REDIRECT_URL = '/accounts/redirect/'
 LOGOUT_REDIRECT_URL = '/accounts/login/'  # Chuyển hướng sau khi logout
 
 

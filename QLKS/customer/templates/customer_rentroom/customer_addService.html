@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+{% block title %}Danh sách dịch vụ{% endblock %}
+
+{% block content %}
+
+
+<h2>Danh sách dịch vụ</h2>
+
+<form action="{% url 'comfirm_request' %}" method="POST">
+    {% csrf_token %}
+    <input type="hidden" name="MaThue" value="{{ MaThue }}">
+    <table class="table table-bordered table-hover">
+        <thead class="table-dark">
+            <tr>
+                <th>Tên dịch vụ</th>
+                <th>Giá tiền</th>
+                <th>Thao tác</th>
+            </tr>
+        </thead>
+        {% for service in services %}
+        <tr>
+            <td>{{ service.TenDichVu }}</td>
+            <td>{{ service.GiaDichVu }}</td>
+            <td>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="serviceID{{service.MaDichVu}}"
+                    name="serviceId" value="{{ service.MaDichVu }}">
+                    <label class="form-check-label" for="serviceID{{service.MaDichVu}}">
+                        Chọn dịch vụ
+                    </label>
+                </div>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+    <div class="text-end mb-3">
+        <button type="submit" class="btn btn-success">➕ Gọi dịch vụ</button>
+    </div>
+</form>
+
+
+
+
+{% endblock %}

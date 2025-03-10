@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% block title %}Dịch vụ đã đặt{% endblock %}
+
+{% block content %}
+
+
+<h2>Dịch vụ đã yêu cầu</h2>
+
+<div class="text-end mb-3">
+    <a href="{% url 'customer_rentroom' %}" class="btn btn-secondary">Quay lại</a>
+</div>
+<table class="table table-bordered table-hover">
+    <thead class="table-dark">
+        <tr>
+            <th>Tên dịch vụ</th>
+            <th>Giá tiền</th>
+            <th>Trạng thái</th>
+        </tr>
+    </thead>
+    {% for service in services %}
+    <tr>
+        <td>{{ service.TenDichVu }}</td>
+        <td>{{ service.GiaDichVu }}</td>
+        <td>
+            Trạng thái
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+{% endblock %}

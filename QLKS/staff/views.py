@@ -2,12 +2,31 @@ from django.shortcuts import render, redirect
 from django.db import connection
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from accounts.decorators import phongban_required
+
+
+@login_required
+@phongban_required(allowed_departments=['HK'])
+def hk_home(request):
+    return render(request, 'staff/hk_home.html')
+
+@login_required
+@phongban_required(allowed_departments=['FB'])
+def fb_home(request):
+    return render(request, 'staff/fb_home.html')
+@login_required
+@phongban_required(allowed_departments=['receptionist'])
+
+def receptionist_home(request):
+    return render(request, 'staff/receptionist_home.html')
+@login_required
+@phongban_required(allowed_departments=['engineer'])
+def engineer_home(request):
+    return render(request, 'staff/engineer_home.html')
 
 @login_required
 def staff_home(request):
     return render(request, 'staff/staff_home.html')  # Trang dành cho nhân viên
-
-
 
 
 def get_phongban_by_id(MaPhongBan):

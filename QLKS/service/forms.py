@@ -2,31 +2,24 @@ from django import forms
 from .models import DichVu
 
 #Dich vu
-class DichVuForm(forms.Form):
-    TenDichVu = forms.CharField(
-        label="Tên Dịch Vụ", 
-        max_length=100, 
-        required=True, 
-        widget=forms.TextInput(
-            attrs={
+class DichVuForm(forms.ModelForm):
+    class Meta:
+        model = DichVu
+        fields = ['TenDichVu', 'GiaDichVu', 'PhongBan']
+        widgets = {
+            'TenDichVu': forms.TextInput(attrs={
                 'class': 'form-control',
                 'placeholder': 'Nhập tên dịch vụ'
-            }
-        )
-    )
-
-    GiaDichVu = forms.DecimalField(
-        label="Giá Dịch Vụ", 
-        max_digits=10, 
-        decimal_places=2, 
-        required=False,
-        widget=forms.NumberInput(
-            attrs={
+            }),
+            'GiaDichVu': forms.NumberInput(attrs={
                 'class': 'form-control',
                 'placeholder': 'Nhập giá dịch vụ'
-            }
-        )
-    )
+            }),
+            'PhongBan': forms.Select(attrs={
+                'class': 'form-control'
+            }),
+        }
+
 
 #Su dung dich vu
 class SuDungDichVuForm(forms.Form):

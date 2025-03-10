@@ -1,6 +1,9 @@
 from django.shortcuts import render, redirect
 from django.db import connection
 from django.contrib import messages
+from accounts.decorators import phongban_required
+from django.contrib.auth.decorators import login_required
+
 
 ## Xem chi tiet phong
 def get_room_detail(MaPhong):
@@ -18,6 +21,8 @@ def view_room_detail(request, MaPhong):
     return render(request, 'room/detail_room.html', {'room': room})
 
 #them phong
+@login_required
+@phongban_required(allowed_departments=['admin', 'receptionist'])
 def add_room(request):
     print(request)
     if request.method == 'POST':
@@ -33,6 +38,7 @@ def add_room(request):
     return render(request, 'room/add_room.html', {'loai_phongs': loai_phongs})
 
 #xoa phong
+
 def delete_room(request, MaPhong):
     if request.method == 'POST':  
         
@@ -43,6 +49,8 @@ def delete_room(request, MaPhong):
         messages.success(request, f"Xóa phòng {SoPhong} thành công!")
     return redirect('room_list')
 #chinh sua phong
+@login_required
+@phongban_required(allowed_departments=['HK', 'receptionist'])
 def edit_room(request, MaPhong):
     room = get_room_detail(MaPhong)
 
@@ -70,6 +78,7 @@ def edit_room(request, MaPhong):
 
     return render(request, 'room/edit_room.html', {'room': room, 'loai_phongs': loai_phongs})
 #lay tat ca phong
+
 def get_all_rooms():
     with connection.cursor() as cursor:
         cursor.callproc('GetAllRooms')
@@ -80,7 +89,8 @@ def get_all_roomtypes():
         cursor.callproc('GetAllRoomType')
         columns = [col[0] for col in cursor.description]  # Lấy tên cột
         return [dict(zip(columns, row)) for row in cursor.fetchall()]  # Convert tuple -> dict
-
+@login_required
+@phongban_required(allowed_departments=['HK', 'receptionist'])
 def room_list(request):
     rooms = get_all_rooms()
     room_types = get_all_roomtypes()
@@ -88,6 +98,8 @@ def room_list(request):
     return render(request, 'room/room_list.html', {'rooms': rooms, 'room_types': room_types})
 
 #tim kiem phong
+@login_required
+@phongban_required(allowed_departments=['HK', 'receptionist'])
 def search_rooms(request):
     so_phong = request.GET.get('so_phong', '').strip()
     trang_thai = request.GET.get('trang_thai', '').strip()

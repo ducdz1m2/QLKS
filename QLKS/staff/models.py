@@ -2,10 +2,15 @@ from django.db import models
 from accounts.models import CustomUser 
 
 
+
+
 class PhongBan(models.Model):
     MaPhongBan = models.AutoField(primary_key=True)
     TenPhongBan = models.CharField(max_length=100)
-    
+    def __str__(self):
+        return self.TenPhongBan 
+
+
 class NhanVien(models.Model):
     user = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
     MaNhanVien = models.AutoField(primary_key=True)
