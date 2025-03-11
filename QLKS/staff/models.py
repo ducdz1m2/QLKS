@@ -18,4 +18,4 @@ class NhanVien(models.Model):
     NgaySinh = models.DateField()
     SoDienThoai = models.CharField(max_length=12)
     MaPhongBan = models.ForeignKey(PhongBan, on_delete=models.CASCADE)
-
+    Task = models.IntegerField(default=0)

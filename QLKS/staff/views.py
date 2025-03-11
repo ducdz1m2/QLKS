@@ -3,30 +3,86 @@ from django.db import connection
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from accounts.decorators import phongban_required
+from django.views.decorators.csrf import csrf_exempt
 
 
-@login_required
-@phongban_required(allowed_departments=['HK'])
-def hk_home(request):
-    return render(request, 'staff/hk_home.html')
+@csrf_exempt
+def accept(request, MaSuDung):
+    user_id = request.user.id
+    MaNhanVien = 0
+    with connection.cursor() as cursor:
+        cursor.callproc('GetStaffId', [user_id])
+        MaNhanVien = cursor.fetchone()[0]
+    
+    with connection.cursor() as cursor:
+        cursor.callproc('AcceptTask', [MaNhanVien, MaSuDung])
+    with connection.cursor() as cursor:
+        cursor.callproc('UpdateUsage1', [MaSuDung])
+    
 
-@login_required
-@phongban_required(allowed_departments=['FB'])
-def fb_home(request):
-    return render(request, 'staff/fb_home.html')
-@login_required
-@phongban_required(allowed_departments=['receptionist'])
+    with connection.cursor() as cursor:
+        cursor.callproc('GetTaskByStaffId', [MaNhanVien])
+        staff_task = cursor.fetchone()
+        messages.success(request, "Chấp nhận công việc")
+        return render(request, 'staff/staff_task.html', {'staff_task': staff_task})
 
-def receptionist_home(request):
-    return render(request, 'staff/receptionist_home.html')
-@login_required
-@phongban_required(allowed_departments=['engineer'])
-def engineer_home(request):
-    return render(request, 'staff/engineer_home.html')
+
+def done(request, MaSuDung):
+    user_id = request.user.id
+    MaNhanVien = 0
+    with connection.cursor() as cursor:
+        cursor.callproc('GetStaffId', [user_id])
+        MaNhanVien = cursor.fetchone()[0]
+
+    with connection.cursor() as cursor:
+        cursor.callproc('DoneTask', [MaNhanVien])
+    with connection.cursor() as cursor:
+        cursor.callproc('UpdateUsage2', [MaSuDung])
+    
+    messages.success(request, "Hoàn thành công việc")
+    return redirect('/')
+
+def getTask(MaPhongBan):
+    with connection.cursor() as cursor:
+        cursor.callproc('GetStaffTask', [MaPhongBan])
+        columns = [col[0] for col in cursor.description]
+        return [dict(zip(columns, row)) for row in cursor.fetchall()]
 
 @login_required
 def staff_home(request):
-    return render(request, 'staff/staff_home.html')  # Trang dành cho nhân viên
+    user_id = request.user.id
+
+    with connection.cursor() as cursor:
+        cursor.callproc('GetStaffId', [user_id])
+        result1 = cursor.fetchone()
+    MaNhanVien = result1[0] if result1 else 0
+
+    with connection.cursor() as cursor:
+        cursor.callproc('GetPhongBanByStaffId', [MaNhanVien])
+        result2 = cursor.fetchone()
+    PhongBan = result2  
+
+    with connection.cursor() as cursor:
+        cursor.callproc('GetTaskByStaffId', [MaNhanVien])
+        staff_task = cursor.fetchone()
+
+    if staff_task:
+        return render(request, 'staff/staff_task.html', {
+            'staff_task': staff_task,
+            'TenPhongBan': PhongBan[1]
+        })
+    else:
+        tasks = getTask(PhongBan[0])  
+        return render(request, 'staff/staff_home.html', {
+            'tasks': tasks,
+            'TenPhongBan': PhongBan[1]
+        })
+
+@login_required
+@phongban_required(allowed_departments=['receptionist'])
+def receptionist_home(request):
+    return render(request, 'staff/receptionist_home.html')
+
 
 
 def get_phongban_by_id(MaPhongBan):

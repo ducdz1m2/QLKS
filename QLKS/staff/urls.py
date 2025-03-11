@@ -9,8 +9,9 @@ urlpatterns = [
     path('edit/<int:MaNhanVien>/', edit_staff, name='edit_staff'),
     path('<int:MaNhanVien>/', view_staff_detail, name='view_staff_detail'),
     path('search/', search_staff, name='search_staff'),
-     path('hk/', hk_home, name='hk_home'),
-    path('fb/', fb_home, name='fb_home'),
+  
     path('receptionist/', receptionist_home, name='receptionist_home'),
-    path('engineer/', engineer_home, name='engineer_home'),
+   
+    path('accept/<int:MaSuDung>', accept, name='accept'),
+    path('done/<int:MaSuDung>', done, name='done'),
 ]

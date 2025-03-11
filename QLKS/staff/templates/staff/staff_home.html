@@ -1,15 +1,46 @@
 {% extends 'base.html' %}
 
-{% block title %}Trang Nhân Viên{% endblock %}
-
-{% block hero_title %}Chào mừng đến trang nhân viên{% endblock %}
-{% block hero_subtitle %}Đây là khu vực dành riêng cho nhân viên.{% endblock %}
-
 {% block content %}
-<div class="container mt-4">
-    <div class="alert alert-info">
-        <h2>Thông tin dành cho nhân viên</h2>
-        <p>Quản lý đặt phòng, khách hàng, dịch vụ và hóa đơn.</p>
-    </div>
+<div class="container mt-5 text-center">
+  <h2 class="mb-4">Trang chính - Nhân viên {{ TenPhongBan }}</h2>
+
+
+  <div class="card shadow p-4">
+    <h5 class="mb-3">Danh sách công việc</h5>
+    <table class="table table-bordered">
+      <thead>
+        <tr>
+          <th>Số phòng</th>
+          <th>Tên dịch vụ</th>
+          <th>Trạng thái</th>
+          <th>Hành động</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for task in tasks %}
+        <tr>
+          <td>{{ task.SoPhong }}</td>
+          <td>{{ task.TenDichVu }}</td>
+          <td>{{ task.TrangThai }}</td>
+          <td>
+            {% if task.TrangThai != "HOAN_THANH" and task.TrangThai != "DANG_XU_LY" %}
+              <form method="post" action="{% url 'accept' task.MaSuDung %}">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-success btn-sm">Chấp nhận</button>
+              </form>
+            {% elif task.TrangThai == "DANG_XU_LY" %}
+              <span class="text-warning">Đang xử lý</span>
+            {% elif task.TrangThai == "HOAN_THANH" %}
+              <span class="text-muted">Đã hoàn thành</span>
+            {% endif %}
+          </td>
+          
+        </tr>
+        {% empty %}
+        <tr><td colspan="4">Không có công việc nào.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
 </div>
 {% endblock %}

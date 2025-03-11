@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container mt-5">
+  <h3 class="mb-3">Danh sách Task</h3>
+  <table class="table table-bordered">
+    <thead>
+      <tr>
+        <th>Task ID</th>
+        <th>Dịch vụ</th>
+        <th>Số phòng</th>
+        <th>Hành động</th>
+      </tr>
+    </thead>
+    <tbody>
+     
+      <tr>
+        <td>{{ staff_task.0 }}</td>
+        <td>{{ staff_task.1 }}</td>
+        <td>{{ staff_task.2 }}</td>
+        <td>
+          <form method="POST" action="{% url 'done' staff_task.0 %}">
+            {% csrf_token %}
+       
+            <button type="submit" class="btn btn-success btn-sm">Done</button>
+          </form>
+        </td>
+      </tr>
+     
+    </tbody>
+  </table>
+</div>
+{% endblock %}

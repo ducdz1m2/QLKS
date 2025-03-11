@@ -63,16 +63,12 @@ def redirect_user_home(request):
             nhanvien = NhanVien.objects.get(user=request.user)
             phongban = nhanvien.MaPhongBan.TenPhongBan.lower()
 
-            if "hk" in phongban:
-                return redirect('hk_home')
-            elif "fb" in phongban:
-                return redirect('fb_home')
-            elif "receptionist" in phongban:
+          
+            if "receptionist" in phongban:
                 return redirect('receptionist_home')
-            elif "engineer" in phongban:
-                return redirect('engineer_home')
+           
             else:
-                return redirect('home')
+                return redirect('staff_home')
         except NhanVien.DoesNotExist:
             return redirect('home')
 

@@ -6,9 +6,22 @@
   <div class="card shadow-lg p-4">
     <h5 class="mb-3">Chức năng của bạn:</h5>
     <ul class="list-group">
-      <li class="list-group-item">Tiếp nhận khách thuê phòng</li>
-      <li class="list-group-item">Quản lý thông tin khách hàng</li>
-      <li class="list-group-item">Tạo hóa đơn và thanh toán</li>
+      <li class="list-group-item">
+        <a href="{% url 'room_list' %}">
+          Quản lý Phòng
+        </a>
+      </li>
+      <li class="list-group-item">
+        <a href="{% url 'invoices_list' %}">
+          Quản lý hóa đơn
+        </a>
+      </li>
+      <li class="list-group-item">
+        <a href="{% url 'usage_list' %}">
+          Quản lý yêu cầu dịch vụ
+        </a>
+      </li>
+     
     </ul>
   </div>
 </div>
