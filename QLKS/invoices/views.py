@@ -102,7 +102,7 @@ def invoices_list(request):
     invoices_types = []
     temp = get_all_invoicestypes()
     for item in temp:
-        invoices_types.append(item['MaSuDung'])
+        invoices_types.append(item['phong_id'])
     print(invoices_types)
     return render(request, 'invoices/invoices_list.html', {'invoices': invoice, 'invoices_types': invoices_types})
 
@@ -129,7 +129,7 @@ def search_invoices(request):
     invoices_types = []
     temp = get_all_invoicestypes()
     for item in temp:
-        invoices_types.append(item['MaSuDung'])
+        invoices_types.append(item['MaThue'])
 
     print(invoices_types)
     return render(request, 'invoices/invoices_list.html', {'invoices': invoice, 'invoices_types': invoices_types})
