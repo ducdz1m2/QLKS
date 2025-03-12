@@ -65,7 +65,7 @@ def staff_home(request):
     with connection.cursor() as cursor:
         cursor.callproc('GetTaskByStaffId', [MaNhanVien])
         staff_task = cursor.fetchone()
-
+    
     if staff_task:
         return render(request, 'staff/staff_task.html', {
             'staff_task': staff_task,

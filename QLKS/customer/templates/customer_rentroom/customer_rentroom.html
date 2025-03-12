@@ -43,10 +43,10 @@
                 <td>{{ rentRoom.NgayNhan }}</td>
                 <td>{{ rentRoom.NgayTra }}</td>
                 {% if rentRoom.TrangThai != 'Đã thanh toán' %}
-    <td><a href="{% url 'request_service' rentRoom.MaThue %}" class="btn btn-success">➕ Gọi dịch vụ</a></td>
-            {% else %}
-                <td><span class="text-muted">Đã thanh toán</span></td>
-            {% endif %}
+                <td><a href="{% url 'request_service' rentRoom.MaThue %}" class="btn btn-success">➕ Gọi dịch vụ</a></td>
+                {% else %}
+                    <td><span class="text-muted">Đã thanh toán</span></td>
+                {% endif %}
 
             </tr>
             {% endfor %}

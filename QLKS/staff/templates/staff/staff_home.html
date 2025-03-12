@@ -23,14 +23,14 @@
           <td>{{ task.TenDichVu }}</td>
           <td>{{ task.TrangThai }}</td>
           <td>
-            {% if task.TrangThai != "HOAN_THANH" and task.TrangThai != "DANG_XU_LY" %}
+            {% if task.TrangThai != "Hoàn thành" and task.TrangThai != "Đang xử lý" %}
               <form method="post" action="{% url 'accept' task.MaSuDung %}">
                 {% csrf_token %}
                 <button type="submit" class="btn btn-success btn-sm">Chấp nhận</button>
               </form>
-            {% elif task.TrangThai == "DANG_XU_LY" %}
+            {% elif task.TrangThai == "Đang xử lý" %}
               <span class="text-warning">Đang xử lý</span>
-            {% elif task.TrangThai == "HOAN_THANH" %}
+            {% elif task.TrangThai == "Hoàn thành" %}
               <span class="text-muted">Đã hoàn thành</span>
             {% endif %}
           </td>
