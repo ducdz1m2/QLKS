@@ -1,4 +1,3 @@
-
 {% extends 'base.html' %}
 
 {% block content %}
@@ -18,21 +17,22 @@
         <div class="mb-3">
             <label for="NgayLapHoaDon" class="form-label">Ngày Lập Hóa Đơn</label>
             <input type="date" class="form-control" id="NgayLapHoaDon" name="NgayLapHoaDon"
-       value="{{ invoices.NgayLapHoaDon|date:'Y-m-d' }}" required >
+                value="{{ invoices.NgayLapHoaDon|date:'Y-m-d' }}" required>
         </div>
 
         <div class="mb-3">
             <label for="TongTien" class="form-label">Tổng Tiền</label>
-            <input type="text" class="form-control" id="TongTien" name="TongTien"
-            value="{{ invoices.TongTien}}" required >
+            <input type="text" class="form-control" id="TongTien" name="TongTien" value="{{ invoices.TongTien}}"
+                required>
         </div>
 
         <select class="form-control" id="MaThue_id" name="MaThue_id" required>
-            {% for ma in useservices %}
-                <option value="{{ ma }}" {% if invoices.MaThue_id == ma %}selected{% endif %}>{{ ma }}</option>
+            <option value="">-- Mã thuê phòng --</option>
+            {% for ma in rentrooms %}
+            <option value="{{ ma }}" {% if invoices.MaThue_id == ma %}selected{% endif %}>{{ ma }}</option>
             {% endfor %}
         </select>
-        
+
 
         <div class="d-flex justify-content-end">
             <a href="{% url 'invoices_list' %}" class="btn btn-secondary me-1" style="width: 8rem;">Quay lại</a>

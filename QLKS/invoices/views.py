@@ -6,7 +6,7 @@ from .models import HoaDon
 from accounts.decorators import phongban_required
 from django.contrib.auth.decorators import login_required
 
-def get_all_useservice():
+def get_all_customerrentroom():
     with connection.cursor() as cursor:
         cursor.callproc('GetAllIdCustomerRentRoom')
         row = cursor.fetchall()
@@ -42,9 +42,9 @@ def add_invoices(request):
             
         messages.success(request, f"Thêm hóa đơn thành công!")
 
-    useservices= get_all_useservice()
+    rentrooms= get_all_customerrentroom()
     
-    return render(request, 'invoices/add_invoices.html', {'useservices': useservices})
+    return render(request, 'invoices/add_invoices.html', {'rentrooms': rentrooms})
 
 # Lấy một hóa đơn theo mã 
 def get_invoices(MaHoaDon):
@@ -71,8 +71,8 @@ def edit_invoices(request, MaHoaDon):
     if not invoice:
         return render(request, 'invoices/edit_invoices.html', {'error': 'Không tìm thấy hóa đơn'})
     
-    useservices= get_all_useservice()
-    return render(request, 'invoices/edit_invoices.html', {'invoices' : invoice, 'useservices': useservices})
+    rentrooms= get_all_customerrentroom()
+    return render(request, 'invoices/edit_invoices.html', {'invoices' : invoice, 'rentrooms': rentrooms})
 
 # Xóa hóa đơn
 def delete_invoices(request, MaHoaDon):
