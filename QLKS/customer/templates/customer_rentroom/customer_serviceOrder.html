@@ -15,15 +15,19 @@
             <th>Tên dịch vụ</th>
             <th>Giá tiền</th>
             <th>Trạng thái</th>
+            <th>Thời gian</th>
         </tr>
     </thead>
     {% for service in services %}
     <tr>
         <td>{{ service.TenDichVu }}</td>
         <td>{{ service.GiaDichVu }}</td>
-        <td>
-            Trạng thái
-        </td>
+        {% if service.TrangThai == "pending" %}
+        <td><p class="btn btn-warning mb-0">Đang chờ xử lý</p></td>
+        {% else %}
+        <td><p class="btn btn-success mb-0">Đã xong</p></td>
+        {% endif %}
+        <td>{{ service.NgaySuDung }}</td>
     </tr>
     {% endfor %}
 </table>
