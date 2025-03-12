@@ -16,8 +16,9 @@
         <div class="mb-3">
             <label for="trangThai" class="form-label">Trạng thái</label>
             <select class="form-control" id="trangThai" name="trang_thai" required>
-                <option value="TRONG" {% if room.TrangThai == 'TRONG' %}selected{% endif %}>Trống</option>
-                <option value="SU_DUNG" {% if room.TrangThai == 'SU_DUNG' %}selected{% endif %}>Đang sử dụng</option>
+               
+                <option value="Trống" {% if room.TrangThai == 'Trống' %}selected{% endif %}>Trống</option>
+                <option value="Đã đặt" {% if room.TrangThai == 'Đã đặt' %}selected{% endif %}>Đang sử dụng</option>
             </select>
         </div>
         

@@ -8,4 +8,6 @@ urlpatterns = [
     path('edit/<int:MaPhong>', edit_room, name='edit_room'),
     path('<int:MaPhong>', view_room_detail, name='view_room_detail'),
     path('search/', search_rooms, name='search_rooms'),
+    path('rentroom/', rent_room, name='rent_room'),
+    
 ]
