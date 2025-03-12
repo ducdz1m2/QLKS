@@ -165,7 +165,7 @@ def customer_rentroom(request):
         cursor.callproc('GetCustomerRentRoom', [customer[0]['id']])   
         columns = [col[0] for col in cursor.description]
         rentRooms = [dict(zip(columns, row)) for row in cursor.fetchall()]
-        
+        print(customer[0]['id'])
     return render(request, 'customer_rentroom/customer_rentroom.html', {"rentRooms" : rentRooms})
 
 
