@@ -8,7 +8,7 @@ from django.contrib.auth.decorators import login_required
 
 def get_all_useservice():
     with connection.cursor() as cursor:
-        cursor.callproc('GetAllMaUseService')
+        cursor.callproc('GetAllIdCustomerRentRoom')
         row = cursor.fetchall()
         row = [item[0] for item in row]
         return row
@@ -102,7 +102,7 @@ def invoices_list(request):
     invoices_types = []
     temp = get_all_invoicestypes()
     for item in temp:
-        invoices_types.append(item['phong_id'])
+        invoices_types.append(item['id'])
     print(invoices_types)
     return render(request, 'invoices/invoices_list.html', {'invoices': invoice, 'invoices_types': invoices_types})
 
@@ -129,7 +129,7 @@ def search_invoices(request):
     invoices_types = []
     temp = get_all_invoicestypes()
     for item in temp:
-        invoices_types.append(item['MaThue'])
+        invoices_types.append(item['id'])
 
     print(invoices_types)
     return render(request, 'invoices/invoices_list.html', {'invoices': invoice, 'invoices_types': invoices_types})
