@@ -5,6 +5,13 @@ from accounts.decorators import phongban_required
 from django.contrib.auth.decorators import login_required
 
 
+
+# def rent_room(request, MaPhong):
+    
+#     return add_customer_view(room)
+    
+    
+
 ## Xem chi tiet phong
 def get_room_detail(MaPhong):
     with connection.cursor() as cursor:

@@ -1,16 +1,127 @@
 {% extends "base.html" %}
 {% block content %}
+
+<div class="alert alert-info rounded-4 shadow-sm">
+    <h5 class="fw-bold text-info">Thông tin phòng đang đăng ký:</h5>
+    <ul class="mb-0">
+        <li><strong>Mã phòng:</strong> {{ room.MaPhong }}</li>
+        <li><strong>Số phòng:</strong> {{ room.SoPhong }}</li>
+        <li><strong>Trạng thái:</strong> {{ room.TrangThai }}</li>
+        <li><strong>Loại phòng:</strong> {{ room.MaLoai_id }}</li>
+    </ul>
+    <!-- Thông tin thuê phòng -->
+
+
+</div>
+
 <div class="container mt-4">
-    <h2 class="text-center mb-4">Đăng ký Khách hàng</h2>
-    <form method="post" class="card p-4 shadow">
-        {% csrf_token %}
-        <div class="mb-3">
-            {{ user_form.as_p }}
+    <h3 class="fw-bold text-center text-primary">Thuê phòng</h3>
+
+<form method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+
+    <input type="hidden" name="ma_phong" value="{{ room.MaPhong }}">
+
+    <div class="row g-3">
+        <div class="col-md-4">
+            <label class="form-label fw-semibold">Ngày thuê</label>
+            <input type="date" name="ngay_thue" class="form-control" required>
         </div>
-        <div class="mb-3">
-            {{ customer_form.as_p }}
+        <div class="col-md-4">
+            <label class="form-label fw-semibold">Ngày nhận phòng</label>
+            <input type="date" name="ngay_nhan" class="form-control" required>
         </div>
-        <button type="submit" class="btn btn-primary w-100">Đăng ký</button>
-    </form>
+        <div class="col-md-4">
+            <label class="form-label fw-semibold">Ngày trả phòng</label>
+            <input type="date" name="ngay_tra" class="form-control" required>
+        </div>
+    </div>
+
+    <hr class="my-4">
+
+    <h5 class="fw-bold text-danger">Chọn cách thuê phòng:</h5>
+    <div class="mb-3">
+        <div class="form-check">
+            <input class="form-check-input" type="radio" name="chon_khach_hang" value="cu" id="chon_cu" checked>
+            <label class="form-check-label" for="chon_cu">Khách hàng đã có tài khoản</label>
+        </div>
+        <div class="form-check">
+            <input class="form-check-input" type="radio" name="chon_khach_hang" value="moi" id="chon_moi">
+            <label class="form-check-label" for="chon_moi">Khách hàng mới (đăng ký tài khoản)</label>
+        </div>
+    </div>
+
+    <div id="chon_khach_cu">
+        <label class="form-label fw-semibold">Chọn khách hàng:</label>
+        <select name="customer_id" class="form-select">
+            {% for customer in customers %}
+                <option value="{{ customer.id }}">{{ customer.TenKhachHang }} - {{ customer.user.email }}</option>
+            {% endfor %}
+        </select>
+    </div>
+
+    <div id="form_khach_moi" style="display: none;">
+        <h5 class="text-primary mt-4 mb-2">Thông tin tài khoản</h5>
+        <div class="row g-3">
+            {% for field in user_form %}
+            <div class="col-md-6">
+                <label class="form-label fw-semibold">{{ field.label_tag }}</label>
+                {{ field }}
+            </div>
+            {% endfor %}
+        </div>
+
+        <h5 class="text-success mt-4 mb-2">Thông tin khách hàng</h5>
+        <div class="row g-3">
+            {% for field in customer_form %}
+            <div class="col-md-6">
+                <label class="form-label fw-semibold">{{ field.label_tag }}</label>
+                {{ field }}
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <div class="text-center mt-4">
+        <button type="submit" class="btn btn-primary px-4 py-2">Thuê phòng</button>
+    </div>
+</form>
+<script>
+    const radio_cu = document.getElementById("chon_cu");
+    const radio_moi = document.getElementById("chon_moi");
+    const khach_cu = document.getElementById("chon_khach_cu");
+    const khach_moi = document.getElementById("form_khach_moi");
+
+    function setDisabled(form, disabled) {
+        const inputs = form.querySelectorAll("input, select, textarea");
+        inputs.forEach(input => input.disabled = disabled);
+    }
+
+    radio_cu.addEventListener("change", () => {
+        khach_cu.style.display = "block";
+        khach_moi.style.display = "none";
+        setDisabled(khach_cu, false);
+        setDisabled(khach_moi, true);
+    });
+
+    radio_moi.addEventListener("change", () => {
+        khach_cu.style.display = "none";
+        khach_moi.style.display = "block";
+        setDisabled(khach_cu, true);
+        setDisabled(khach_moi, false);
+    });
+
+    // Gọi khi load trang để đảm bảo trạng thái ban đầu
+    window.onload = function () {
+        if (radio_cu.checked) {
+            setDisabled(khach_cu, false);
+            setDisabled(khach_moi, true);
+        } else {
+            setDisabled(khach_cu, true);
+            setDisabled(khach_moi, false);
+        }
+    }
+</script>
+
 </div>
 {% endblock %}

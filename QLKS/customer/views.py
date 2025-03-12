@@ -6,33 +6,57 @@ from django.contrib import messages
 from accounts.forms import CustomerRegisterForm, CustomerForm
 from django.contrib.auth import login
 from service.views import get_all_services
+from room.views import get_room_detail
+from accounts.forms import RegisterForm, CustomerForm
 
+def add_customer_view(request, MaPhong):
+    room = get_room_detail(MaPhong)
+    customers = get_all_customers()
 
-def add_customer_view(request):
     if request.method == 'POST':
-        user_form = CustomerRegisterForm(request.POST)
-        customer_form = CustomerForm(request.POST)
+        chon_khach_hang = request.POST.get('chon_khach_hang')
+        ma_phong = request.POST.get('ma_phong')
+        ngay_thue = request.POST.get('ngay_thue')
+        ngay_nhan = request.POST.get('ngay_nhan')
+        ngay_tra = request.POST.get('ngay_tra')
 
-        if user_form.is_valid() and customer_form.is_valid():
-            user = user_form.save(commit=False)
-            user.role = 'khachhang'  # Gán cứng
-            user.save()
+        if chon_khach_hang == 'cu':
+            customer_id = request.POST.get('customer_id')
+            if customer_id:
+                add_rentroom(ngay_thue, ngay_nhan, ngay_tra, customer_id, ma_phong)
+                messages.success(request, "Thuê phòng thành công cho khách hàng đã có tài khoản.")
+                return redirect('room_list')
+        else:  # khách mới
+            user_form = CustomerRegisterForm(request.POST)
+            customer_form = CustomerForm(request.POST)
+            if user_form.is_valid() and customer_form.is_valid():
+                user = user_form.save(commit=False)
+                user.role = 'khachhang'
+                user.save()
 
-            customer = customer_form.save(commit=False)
-            customer.user = user
-            customer.save()
+                customer = customer_form.save(commit=False)
+                customer.user = user
+                customer.save()
 
-            login(request, user)
-            return redirect('home')
+                add_rentroom(ngay_thue, ngay_nhan, ngay_tra, customer.id, ma_phong)
+                messages.success(request, f"Thuê phòng thành công cho khách hàng mới: {customer.user}")
+                return redirect('room_list')
     else:
         user_form = CustomerRegisterForm()
         customer_form = CustomerForm()
 
-    return render(request, 'accounts/add_customer.html', {
+    return render(request, 'customer/add_customer.html', {
         'user_form': user_form,
-        'customer_form': customer_form
+        'customer_form': customer_form,
+        'room': room,
+        'customers': customers,
     })
 
+
+def add_rentroom(NgayThue, NgayNhan, NgayTra, khach_hang_id, phong_id):
+    with connection.cursor() as cursor:
+        cursor.callproc("RentRoomByLeTan", [khach_hang_id, phong_id, NgayThue, NgayNhan, NgayTra])
+        
 def customer_home(request):
     return render(request, 'customer/customer_home.html')
 
@@ -50,41 +74,6 @@ def detail_customer(request):
     
     return render(request, 'customer/detail_customer.html', {'customer': customer})
 
-# Lấy danh sách phòng & dịch vụ có sẵn
-@login_required
-@khachhang_required
-def rentroom_list(request):
-    with connection.cursor() as cursor:
-        cursor.callproc("GetAllRentRoom")
-        columns = [col[0] for col in cursor.description]  
-        rentrooms = [dict(zip(columns, row)) for row in cursor.fetchall()]  
-
-    return render(request, 'customer/rentroom_list.html', {'rentrooms': rentrooms})
-
-def add_customer_view(request):
-    if request.method == 'POST':
-        user_form = CustomerRegisterForm(request.POST)
-        customer_form = CustomerForm(request.POST)
-
-        if user_form.is_valid() and customer_form.is_valid():
-            user = user_form.save(commit=False)
-            user.role = 'khachhang'  # Gán cứng
-            user.save()
-
-            customer = customer_form.save(commit=False)
-            customer.user = user
-            customer.save()
-
-            login(request, user)
-            return redirect('home')
-    else:
-        user_form = CustomerRegisterForm()
-        customer_form = CustomerForm()
-
-    return render(request, 'customer/add_customer.html', {
-        'user_form': user_form,
-        'customer_form': customer_form
-    })
 
 
 # Lấy một khách hàng theo mã 
