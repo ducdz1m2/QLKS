@@ -27,7 +27,11 @@
                     <th>Trạng Thái</th>
                     <th>Ngày thuê</th>
                     <th>Ngày nhận</th>
+                    <th>Ngày trả</th>
+
+                    {% if rentRoom.NgayTra != 'DA_THANH_TOAN' %}
                     <th>Thao tác</th>
+                    {% endif %}
                 </tr>
             </thead>
             {% for rentRoom in rentRooms %}
@@ -37,7 +41,10 @@
                 <td>{{ rentRoom.TrangThai }}</td>
                 <td>{{ rentRoom.NgayThue }}</td>
                 <td>{{ rentRoom.NgayNhan }}</td>
+                <td>{{ rentRoom.NgayTra }}</td>
+                {% if rentRoom.NgayTra != 'DA_THANH_TOAN' %}
                 <td><a href="{% url 'request_service' rentRoom.MaThue %}" class="btn btn-success">➕ Gọi dịch vụ</a></td>
+                {% endif %}
             </tr>
             {% endfor %}
         </table>

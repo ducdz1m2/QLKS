@@ -4,13 +4,11 @@ from django.contrib import messages
 from accounts.decorators import phongban_required
 from django.contrib.auth.decorators import login_required
 
+def return_room(request, MaPhong):
+    with connection.cursor() as cursor:
+        cursor.callproc('ReturnRoom', [MaPhong])
 
-
-# def rent_room(request, MaPhong):
-    
-#     return add_customer_view(room)
-    
-    
+    return redirect('room_list')
 
 ## Xem chi tiet phong
 def get_room_detail(MaPhong):

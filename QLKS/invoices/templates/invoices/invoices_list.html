@@ -44,6 +44,7 @@
         <th>Ngày Lập</th>
         <th>Tổng Tiền</th>
         <th>Mã Thuê</th>
+        <th>Trạng thái</th>
         <th>Hành động</th>
       </tr>
     </thead>
@@ -58,6 +59,7 @@
         <td>{{ invoice.NgayLapHoaDon }}</td>
         <td>{{ invoice.TongTien }}</td>
         <td>{{ invoice.MaThue_id }}</td>
+        <td>{{ invoice.TrangThai }}</td>
         <td>
           <!-- Nút chỉnh sửa -->
           <a href="{% url 'edit_invoices' invoice.MaHoaDon %}" class="btn btn-primary btn-sm">✏️ Sửa</a>
@@ -70,6 +72,10 @@
               🗑️ Xóa
             </button>
           </form>
+          {% if invoice.TrangThai == 'CHUA_THANH_TOAN' %}
+            <a href="{% url 'pay' invoice.MaHoaDon %}" class="btn btn-success btn-sm">💸 Thanh toán</a>
+
+          {% endif %}
         </td>
       </tr>
       {% endfor %}

@@ -73,7 +73,7 @@
           {% endif %}
           {% if room.TrangThai == 'Đã đặt' %}
          
-            <a href="" class="btn btn-primary btn-sm"> 🏨 Trả phòng</a>
+            <a href="{% url 'return_room' room.MaPhong %}" class="btn btn-primary btn-sm"> 🏨 Trả phòng</a>
           {% endif %}
 
         </td>

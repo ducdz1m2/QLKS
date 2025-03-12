@@ -20,4 +20,4 @@ class ThuePhong(models.Model):
         ('DANG_O', 'Đang ở'),
         ('DA_TRA', 'Đã trả')
     ]
-    TrangThai = models.CharField(max_length=10, choices=TRANG_THAI_CHOICES)
+    TrangThai = models.CharField(max_length=20, choices=TRANG_THAI_CHOICES)

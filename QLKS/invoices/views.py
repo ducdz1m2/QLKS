@@ -99,11 +99,16 @@ def get_all_invoicestypes():
 @phongban_required(allowed_departments=['admin', 'receptionist'])
 def invoices_list(request):
     invoice= get_all_invoices()
+
+
+
     invoices_types = []
     temp = get_all_invoicestypes()
     for item in temp:
         invoices_types.append(item['id'])
-    print(invoices_types)
+   
+
+    print(invoice)
     return render(request, 'invoices/invoices_list.html', {'invoices': invoice, 'invoices_types': invoices_types})
 
 # tìm kiếm hóa đơn
@@ -133,3 +138,12 @@ def search_invoices(request):
 
     print(invoices_types)
     return render(request, 'invoices/invoices_list.html', {'invoices': invoice, 'invoices_types': invoices_types})
+
+
+
+
+def pay(request, MaHoaDon):
+    with connection.cursor() as cursor:
+        cursor.callproc('ThanhToanHoaDon', [MaHoaDon])
+        messages.success(request, "Thanh toán hóa đơn thành công")
+        return redirect('invoices_list')
