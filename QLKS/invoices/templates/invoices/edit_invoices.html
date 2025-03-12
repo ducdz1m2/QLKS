@@ -27,9 +27,9 @@
             value="{{ invoices.TongTien}}" required >
         </div>
 
-        <select class="form-control" id="MaSuDung_id" name="MaSuDung_id" required>
+        <select class="form-control" id="MaThue_id" name="MaThue_id" required>
             {% for ma in useservices %}
-                <option value="{{ ma }}" {% if invoices.MaSuDung_id == ma %}selected{% endif %}>{{ ma }}</option>
+                <option value="{{ ma }}" {% if invoices.MaThue_id == ma %}selected{% endif %}>{{ ma }}</option>
             {% endfor %}
         </select>
         

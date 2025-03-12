@@ -4,4 +4,4 @@ from .models import HoaDon
 class HoaDonForm(forms.ModelForm):
     class Meta:
         model = HoaDon
-        fields = ['MaHoaDon', 'MaSDDV','NgayLapHoaDon','TongTien']
+        fields = ['MaHoaDon', 'MaThue_id','NgayLapHoaDon','TongTien']
