@@ -39,6 +39,7 @@ def add_customer_view(request, MaPhong):
                 customer.save()
 
                 add_rentroom(ngay_thue, ngay_nhan, ngay_tra, customer.id, ma_phong)
+                
                 messages.success(request, f"Thuê phòng thành công cho khách hàng mới: {customer.user}")
                 return redirect('room_list')
     else:
