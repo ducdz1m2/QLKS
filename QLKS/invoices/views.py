@@ -12,20 +12,30 @@ def get_all_customerrentroom():
         row = cursor.fetchall()
         row = [item[0] for item in row]
         return row
-
-def get_invoices_detail(MaHoaDon):
+    
+def get_all_services(maThuePhong):
     with connection.cursor() as cursor:
-        cursor.callproc('GetDetailInvoices', [MaHoaDon])
-        row = cursor.fetchone()
-        columns = [col[0] for col in cursor.description] if cursor.description else []
-        return dict(zip(columns, row)) if row else None
+        cursor.callproc('GetServiceByRentRoom', [maThuePhong])
+        columns = [col[0] for col in cursor.description]
+        return [dict(zip(columns, row)) for row in cursor.fetchall()]
+    
+
 @login_required
 @phongban_required(allowed_departments=['admin', 'receptionist'])
 def detail_invoices(request, MaHoaDon):
     invoice = get_invoices(MaHoaDon)
     if not invoice:
         return render(request, 'invoices/detail_invoices.html', {'error': 'Không tìm thấy hóa đơn'})
-    return render(request, 'invoices/detail_invoices.html', {'invoices': invoice})
+
+    services = get_all_services(invoice['MaThue_id'])
+    
+    money = {
+        "total_rent": invoice['GiaPhong'] * invoice['NgayLuuTru'],
+        "total_service": sum([service['GiaDichVu'] for service in services]),
+        "total": invoice['TongTien']
+    }
+
+    return render(request, 'invoices/detail_invoices.html', {'invoices': invoice, 'services': services, 'money': money})
 
 @login_required
 @phongban_required(allowed_departments=['admin', 'receptionist'])
@@ -71,13 +81,14 @@ def edit_invoices(request, MaHoaDon):
     if not invoice:
         return render(request, 'invoices/edit_invoices.html', {'error': 'Không tìm thấy hóa đơn'})
     
+    sum = dict(5,5)
+
     rentrooms= get_all_customerrentroom()
-    return render(request, 'invoices/edit_invoices.html', {'invoices' : invoice, 'rentrooms': rentrooms})
+    return render(request, 'invoices/edit_invoices.html', {'invoices' : invoice, 'rentrooms': rentrooms, 'sum': [sum]})
 
 # Xóa hóa đơn
 def delete_invoices(request, MaHoaDon):
     
-
     if request.method == 'POST':  
         with connection.cursor() as cursor:
             cursor.callproc('DeleteInvoices', [MaHoaDon])
@@ -138,9 +149,6 @@ def search_invoices(request):
 
     print(invoices_types)
     return render(request, 'invoices/invoices_list.html', {'invoices': invoice, 'invoices_types': invoices_types})
-
-
-
 
 def pay(request, MaHoaDon):
     with connection.cursor() as cursor:

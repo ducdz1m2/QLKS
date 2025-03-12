@@ -1,4 +1,3 @@
-
 {% extends 'base.html' %}
 
 {% block content %}
@@ -14,19 +13,74 @@
 
     <div class="card p-4 shadow-lg mb-5">
         <div class="mb-3">
-            <label for="NgayLapHoaDon" class="form-label">Ngày Lập Hóa Đơn</label>
-            <p class="form-control">{{ invoices.NgayLapHoaDon }}</p>
+            <label class="form-label text-center me-2"><b>Mã hóa đơn:</b> {{ invoices.MaHoaDon }}</label>
+            |
+            <label class="form-label text-center ms-2 me-2"><b>Ngày lập hóa đơn:</b> {{ invoices.NgayLapHoaDon }}</label>
+            |
+            <label class="form-label text-center ms-2"><b>Trạng thái:</b> {{ invoices.TrangThai }}</label>
         </div>
 
         <div class="mb-3">
-            <label for="TongTien" class="form-label">Tổng Tiền</label>
-            <p class="form-control">{{ invoices.TongTien }}</p>
+            <label class="form-label text-center me-2"><b>Tên khách hàng:</b> {{ invoices.TenKhachHang }}</label>
+            |
+            <label class="form-label text-center ms-2 me-2"><b>Số điện thoại:</b> {{ invoices.SoDienThoai }}</label>
+            |
+            <label class="form-label text-center ms-2"><b>Địa chỉ:</b> {{ invoices.DiaChi }}</label>
+        </div>
+
+
+        <div class="mb-3">
+            <label class="form-label text-center me-2"><b>Số phòng:</b> {{ invoices.SoPhong }}</label>
+            |
+            <label class="form-label text-center ms-2 me-2"><b>Loại phòng:</b> {{ invoices.TenLoai }}</label>
+            |
+            <label class="form-label text-center ms-2"><b>Giá phòng:</b> {{ invoices.GiaPhong }}</label>
         </div>
 
         <div class="mb-3">
-            <label for="MaThue_id" class="form-label">Mã Sử Dụng Dịch Vụ</label>
-            <p class="form-control">{{ invoices.MaThue_id }}</p>
+            <label class="form-label text-center me-2"><b>Ngày nhận:</b> {{ invoices.NgayNhan }}</label>
+            |
+            <label class="form-label text-center ms-2 me-2"><b>Ngày trả:</b> {{ invoices.NgayTra }}</label>
+            |
+            <label class="form-label text-center ms-2"><b>Số ngày lưu trú:</b> {{ invoices.NgayLuuTru }}</label>
         </div>
+
+        <table class="table table-bordered table-hover">
+            <thead class="table-dark">
+                <tr>
+                    <th>Tên dịch vụ</th>
+                    <th>Ngày sử dụng</th>
+                    <th>Trạng thái</th>
+                    <th>Giá tiền</th>
+                </tr>
+            </thead>
+            {% for service in services %}
+            <tr>
+                <td>{{ service.TenDichVu }}</td>
+                <td>{{ service.NgaySuDung }}</td>
+                {% if service.TrangThai == "Đang chờ xử lý" %}
+                <td>Đang chờ xử lý</td>
+                {% elif service.TrangThai == "Đang xử lý"  %}
+                <td>Đang xử lý</td>
+                {% elif service.TrangThai == "Hoàn thành"  %}
+                <td>Hoàn thành</td>
+                {% endif %}
+                <td>{{ service.GiaDichVu }}</td>
+            </tr>
+            {% endfor %}
+            <tr>
+                <td colspan="3" class="text-end"><b>Tổng tiền dịch vụ:</b></td>
+                <td><b>{{ money.total_service }}</b></td>
+            </tr>
+            <tr>
+                <td colspan="3" class="text-end"><b>Tổng tiền phòng:</b></td>
+                <td><b>{{ money.total_rent }}</b></td>
+            </tr>
+            <tr>
+                <td colspan="3" class="text-end"><b>Tổng tiền:</b></td>
+                <td><b>{{ money.total }}</b></td>
+            </tr>
+        </table>
 
         <div class="d-flex justify-content-end">
             <a href="{% url 'invoices_list' %}" class="btn btn-secondary me-1" style="width: 8rem;">Quay lại</a>
