@@ -6,9 +6,9 @@ from .models import HoaDon
 from accounts.decorators import phongban_required
 from django.contrib.auth.decorators import login_required
 
-def get_all_useservice():
+def get_all_customerrentroom():
     with connection.cursor() as cursor:
-        cursor.callproc('GetAllMaUseService')
+        cursor.callproc('GetAllIdCustomerRentRoom')
         row = cursor.fetchall()
         row = [item[0] for item in row]
         return row
@@ -35,16 +35,16 @@ def add_invoices(request):
         
         NgayLapHoaDon = request.POST['NgayLapHoaDon']
         TongTien = request.POST['TongTien']
-        MaSuDung_id = request.POST['MaSuDung_id']
+        MaThue_id = request.POST['MaThue_id']
         print(NgayLapHoaDon, TongTien)
         with connection.cursor() as cursor:
-            cursor.callproc('AddInvoices', [NgayLapHoaDon, TongTien, MaSuDung_id])
+            cursor.callproc('AddInvoices', [NgayLapHoaDon, TongTien, MaThue_id])
             
         messages.success(request, f"Thêm hóa đơn thành công!")
 
-    useservices= get_all_useservice()
+    rentrooms= get_all_customerrentroom()
     
-    return render(request, 'invoices/add_invoices.html', {'useservices': useservices})
+    return render(request, 'invoices/add_invoices.html', {'rentrooms': rentrooms})
 
 # Lấy một hóa đơn theo mã 
 def get_invoices(MaHoaDon):
@@ -62,17 +62,17 @@ def edit_invoices(request, MaHoaDon):
     if request.method == 'POST':
         NgayLapHoaDon = request.POST.get("NgayLapHoaDon")
         TongTien = request.POST.get("TongTien")
-        MaSuDung_id = request.POST.get("MaSuDung_id")
+        MaThue_id = request.POST.get("MaThue_id")
         with connection.cursor() as cursor:
-            cursor.callproc('UpdateInvoices', [MaHoaDon ,NgayLapHoaDon, MaSuDung_id, TongTien])
+            cursor.callproc('UpdateInvoices', [MaHoaDon ,NgayLapHoaDon, MaThue_id, TongTien])
         messages.success(request, f"Cập nhật hóa đơn {MaHoaDon} thành công!")
         return redirect('invoices_list')
     
     if not invoice:
         return render(request, 'invoices/edit_invoices.html', {'error': 'Không tìm thấy hóa đơn'})
     
-    useservices= get_all_useservice()
-    return render(request, 'invoices/edit_invoices.html', {'invoices' : invoice, 'useservices': useservices})
+    rentrooms= get_all_customerrentroom()
+    return render(request, 'invoices/edit_invoices.html', {'invoices' : invoice, 'rentrooms': rentrooms})
 
 # Xóa hóa đơn
 def delete_invoices(request, MaHoaDon):
@@ -102,7 +102,7 @@ def invoices_list(request):
     invoices_types = []
     temp = get_all_invoicestypes()
     for item in temp:
-        invoices_types.append(item['MaSuDung'])
+        invoices_types.append(item['id'])
     print(invoices_types)
     return render(request, 'invoices/invoices_list.html', {'invoices': invoice, 'invoices_types': invoices_types})
 
@@ -113,23 +113,23 @@ def search_invoices(request):
     MaHoaDon = request.GET.get('MaHoaDon', '').strip()
     NgayLapHoaDon = request.GET.get('NgayLapHoaDon', '').strip()
     TongTien = request.GET.get('TongTien', '').strip()
-    MaSuDung_id = request.GET.get('MaSuDung_id', '').strip()
+    MaThue_id = request.GET.get('MaThue_id', '').strip()
    
 
     MaHoaDon = MaHoaDon if MaHoaDon else None
     NgayLapHoaDon = NgayLapHoaDon if NgayLapHoaDon else None
     TongTien = TongTien if TongTien else None
-    MaSuDung_id = MaSuDung_id if MaSuDung_id else None
+    MaThue_id = MaThue_id if MaThue_id else None
    
 
     with connection.cursor() as cursor:
-        cursor.callproc('SearchInvoices', [MaHoaDon, NgayLapHoaDon,TongTien, MaSuDung_id])
+        cursor.callproc('SearchInvoices', [MaHoaDon, NgayLapHoaDon,TongTien, MaThue_id])
         columns = [col[0] for col in cursor.description]
         invoice = [dict(zip(columns, row)) for row in cursor.fetchall()]
     invoices_types = []
     temp = get_all_invoicestypes()
     for item in temp:
-        invoices_types.append(item['MaSuDung'])
+        invoices_types.append(item['id'])
 
     print(invoices_types)
     return render(request, 'invoices/invoices_list.html', {'invoices': invoice, 'invoices_types': invoices_types})
