@@ -62,10 +62,20 @@
           <a href="{% url 'edit_room' room.MaPhong %}" class="btn btn-warning btn-sm">✏️ Sửa</a>
           
           <!-- Nút xóa -->
+           {% if room.TrangThai != 'Đã đặt' %}
           <form action="{% url 'delete_room' room.MaPhong %}" method="post" class="d-inline">
             {% csrf_token %}
             <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Bạn có chắc chắn muốn xóa phòng này?');">🗑️ Xóa</button>
           </form>
+          {% endif %}
+          {% if room.TrangThai == 'Trống' %}
+            <a href="{% url 'add_customer_view' room.MaPhong %}" class="btn btn-success btn-sm"> 🏨 Cho thuê</a>
+          {% endif %}
+          {% if room.TrangThai == 'Đã đặt' %}
+         
+            <a href="" class="btn btn-primary btn-sm"> 🏨 Trả phòng</a>
+          {% endif %}
+
         </td>
       </tr>
       {% endfor %}

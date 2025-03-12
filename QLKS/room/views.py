@@ -3,11 +3,14 @@ from django.db import connection
 from django.contrib import messages
 from accounts.decorators import phongban_required
 from django.contrib.auth.decorators import login_required
-from customer.views import rentroom_list
 
 
-def rent_room(request):
-    return rentroom_list
+
+# def rent_room(request, MaPhong):
+    
+#     return add_customer_view(room)
+    
+    
 
 ## Xem chi tiet phong
 def get_room_detail(MaPhong):
