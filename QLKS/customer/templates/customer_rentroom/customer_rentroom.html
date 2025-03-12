@@ -29,7 +29,7 @@
                     <th>Ngày nhận</th>
                     <th>Ngày trả</th>
 
-                    {% if rentRoom.NgayTra != 'DA_THANH_TOAN' %}
+                    {% if rentRoom.TrangThai != 'DA_THANH_TOAN' %}
                     <th>Thao tác</th>
                     {% endif %}
                 </tr>
@@ -42,7 +42,7 @@
                 <td>{{ rentRoom.NgayThue }}</td>
                 <td>{{ rentRoom.NgayNhan }}</td>
                 <td>{{ rentRoom.NgayTra }}</td>
-                {% if rentRoom.NgayTra != 'DA_THANH_TOAN' %}
+                {% if rentRoom.TrangThai != 'Đã thanh toán' %}
                 <td><a href="{% url 'request_service' rentRoom.MaThue %}" class="btn btn-success">➕ Gọi dịch vụ</a></td>
                 {% endif %}
             </tr>

@@ -72,9 +72,13 @@
             <a href="{% url 'add_customer_view' room.MaPhong %}" class="btn btn-success btn-sm"> 🏨 Cho thuê</a>
           {% endif %}
           {% if room.TrangThai == 'Đã đặt' %}
-         
-            <a href="{% url 'return_room' room.MaPhong %}" class="btn btn-primary btn-sm"> 🏨 Trả phòng</a>
+            {% if room.ThanhToan == 'DA_THANH_TOAN' %}
+              <a href="{% url 'return_room' room.MaPhong %}" class="btn btn-primary btn-sm"> 🏨 Trả phòng</a>
+            {% else %}
+              <span class="btn btn-secondary btn-sm">💳 Chưa thanh toán</span>
+            {% endif %}
           {% endif %}
+
 
         </td>
       </tr>

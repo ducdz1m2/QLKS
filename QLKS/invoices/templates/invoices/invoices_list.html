@@ -72,7 +72,7 @@
               🗑️ Xóa
             </button>
           </form>
-          {% if invoice.TrangThai == 'CHUA_THANH_TOAN' %}
+          {% if invoice.TrangThai == 'Chưa thanh toán' %}
             <a href="{% url 'pay' invoice.MaHoaDon %}" class="btn btn-success btn-sm">💸 Thanh toán</a>
 
           {% endif %}

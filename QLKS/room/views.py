@@ -94,12 +94,29 @@ def get_all_roomtypes():
         cursor.callproc('GetAllRoomType')
         columns = [col[0] for col in cursor.description]  # Lấy tên cột
         return [dict(zip(columns, row)) for row in cursor.fetchall()]  # Convert tuple -> dict
+    
+def getRoomStatus(MaPhong):
+    with connection.cursor() as cursor:
+        cursor.callproc('GetInvoiceStatus', [MaPhong])
+        columns = [col[0] for col in cursor.description]  # Lấy tên cột
+        return [dict(zip(columns, row)) for row in cursor.fetchall()]  # Convert tuple -> dict
+
 @login_required
 @phongban_required(allowed_departments=['HK', 'receptionist'])
 def room_list(request):
     rooms = get_all_rooms()
     room_types = get_all_roomtypes()
-    print(rooms)
+    
+    for room in rooms:
+        temp = getRoomStatus(room['MaPhong'])
+
+        if temp and len(temp) > 0:
+                room['ThanhToan'] = temp[0]['TrangThai']
+        else:
+            room['ThanhToan'] = 'Chưa cho thuê'
+
+      
+        print(room)
     return render(request, 'room/room_list.html', {'rooms': rooms, 'room_types': room_types})
 
 #tim kiem phong
