@@ -80,11 +80,9 @@ def edit_invoices(request, MaHoaDon):
     
     if not invoice:
         return render(request, 'invoices/edit_invoices.html', {'error': 'Không tìm thấy hóa đơn'})
-    
-    sum = dict(5,5)
 
     rentrooms= get_all_customerrentroom()
-    return render(request, 'invoices/edit_invoices.html', {'invoices' : invoice, 'rentrooms': rentrooms, 'sum': [sum]})
+    return render(request, 'invoices/edit_invoices.html', {'invoices' : invoice, 'rentrooms': rentrooms})
 
 # Xóa hóa đơn
 def delete_invoices(request, MaHoaDon):
