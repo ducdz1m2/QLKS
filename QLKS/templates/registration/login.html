@@ -1,10 +1,39 @@
-{% extends "base.html" %}  {# Nếu có base.html thì kế thừa, không thì xóa dòng này #}
+{% extends "base.html" %}
 
 {% block content %}
-<h2>Đăng nhập</h2>
-<form method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Đăng nhập</button>
-</form>
+<div class="container d-flex justify-content-center align-items-center" style="min-height: 30vh;">
+    <div class="card shadow-lg p-4" style="width: 400px;">
+        <h3 class="text-center mb-3">Đăng nhập</h3>
+        
+        <form method="post">
+            {% csrf_token %}
+            
+            <div class="mb-3">
+                <label for="id_username" class="form-label">Tên đăng nhập</label>
+                <input type="text" name="username" id="id_username" class="form-control" placeholder="Nhập tên đăng nhập" required>
+            </div>
+
+            <div class="mb-3">
+                <label for="id_password" class="form-label">Mật khẩu</label>
+                <input type="password" name="password" id="id_password" class="form-control" placeholder="Nhập mật khẩu" required>
+            </div>
+
+            {% if form.errors %}
+                <div class="alert alert-danger">
+                    {% for field in form %}
+                        {% for error in field.errors %}
+                            <p>{{ error }}</p>
+                        {% endfor %}
+                    {% endfor %}
+                </div>
+            {% endif %}
+            
+            <button type="submit" class="btn btn-primary w-100">Đăng nhập</button>
+        </form>
+
+        <p class="text-center mt-3">
+            Chưa có tài khoản? <a href="{% url 'register' %}" class="text-decoration-none">Đăng ký ngay</a>
+        </p>
+    </div>
+</div>
 {% endblock %}

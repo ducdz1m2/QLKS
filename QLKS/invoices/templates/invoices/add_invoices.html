@@ -16,11 +16,6 @@
             <label for="TongTien" class="form-label">Tổng Tiền</label>
             <input type="text" class="form-control" id="TongTien" name="TongTien" required>
         </div>
-
-        <!-- <div class="mb-3">
-            <label for="MaThue_id" class="form-label">Mã Sử Dụng Dịch Vụ</label>
-            <input type="text" class="form-control" id="MaThue_id" name="MaThue_id" required>
-        </div> -->
         <select class="form-control" id="MaThue_id" name="MaThue_id" required>
             <option value="">-- Mã thuê phòng --</option>
             {% for ma in rentrooms %}
