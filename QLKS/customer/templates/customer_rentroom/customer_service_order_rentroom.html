@@ -1,10 +1,10 @@
 {% extends 'base.html' %}
-{% block title %}Tổng dịch vụ đã đặt{% endblock %}
+{% block title %}Dịch vụ đã đặt{% endblock %}
 
 {% block content %}
 
 
-<h2>Lịch sử dịch vụ đã yêu cầu</h2>
+<h2>Dịch vụ đã yêu cầu</h2>
 
 <div class="text-end mb-3">
     <a href="{% url 'customer_rentroom' %}" class="btn btn-secondary">Quay lại</a>
@@ -13,7 +13,6 @@
 <table class="table table-bordered table-hover">
     <thead class="table-dark">
         <tr>
-            <th>Mã thuê</th>
             <th>Tên dịch vụ</th>
             <th>Giá tiền</th>
             <th>Trạng thái</th>
@@ -22,15 +21,20 @@
     </thead>
     {% for service in services %}
     <tr>
-        <td>{{ service.id }}</td>
         <td>{{ service.TenDichVu }}</td>
         <td>{{ service.GiaDichVu }}</td>
         {% if service.TrangThai == "Đang chờ xử lý" %}
-        <td><p class="btn btn-primary mb-0">Đã gửi yêu cầu</p></td>
-        {% elif service.TrangThai == "Đang xử lý"  %}
-        <td><p class="btn btn-warning mb-0">Đang chờ xử lý</p></td>
-        {% elif service.TrangThai == "Hoàn thành"  %}
-        <td><p class="btn btn-success mb-0">Hoàn thành</p></td>
+        <td>
+            <p class="btn btn-primary mb-0">Đã gửi yêu cầu</p>
+        </td>
+        {% elif service.TrangThai == "Đang xử lý" %}
+        <td>
+            <p class="btn btn-warning mb-0">Đang chờ xử lý</p>
+        </td>
+        {% elif service.TrangThai == "Hoàn thành" %}
+        <td>
+            <p class="btn btn-success mb-0">Hoàn thành</p>
+        </td>
         {% endif %}
         <td>{{ service.NgaySuDung|date:"d/m/Y" }}</td>
     </tr>

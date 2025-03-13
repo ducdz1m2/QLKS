@@ -242,3 +242,14 @@ def service_order(request):
         columns = [col[0] for col in cursor.description]  
         services = [dict(zip(columns, row)) for row in cursor.fetchall()] 
     return render(request, 'customer_rentroom/customer_serviceOrder.html', {"services" : services})
+
+# Xem dịch vụ của 1 phòng cụ thể
+def service_order_rentroom(request, MaThue):
+    # MaThue = request.POST.get("MaThue")
+    with connection.cursor() as cursor:
+        cursor.callproc("GetServiceByRentRoom", [MaThue])
+        columns = [col[0] for col in cursor.description]  
+        services = [dict(zip(columns, row)) for row in cursor.fetchall()] 
+        print(services)
+    return render(request, 'customer_rentroom/customer_service_order_rentroom.html', {"services" : services})    
+

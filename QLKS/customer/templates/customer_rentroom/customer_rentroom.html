@@ -38,19 +38,22 @@
             <tr>
                 <td>{{ rentRoom.SoPhong }}</td>
                 <td>{{ rentRoom.TenLoai }}</td>
-                <td>{{ rentRoom.TrangThai }}</td>
-                <td>{{ rentRoom.NgayThue }}</td>
-                <td>{{ rentRoom.NgayNhan }}</td>
-                <td>{{ rentRoom.NgayTra }}</td>
+                <td><p class="btn btn-{% if rentRoom.TrangThai == 'Đã thanh toán' %}success{% else %}secondary
+                {% endif %}">{{ rentRoom.TrangThai }}</p></td>
+                <td>{{ rentRoom.NgayThue|date:"d/m/Y" }}</td>
+                <td>{{ rentRoom.NgayNhan|date:"d/m/Y" }}</td>
+                <td>{{ rentRoom.NgayTra|date:"d/m/Y" }}</td>
                 {% if rentRoom.TrangThai != 'Đã thanh toán' %}
-                <td><a href="{% url 'request_service' rentRoom.MaThue %}" class="btn btn-success">➕ Gọi dịch vụ</a></td>
+                <td><a href="{% url 'service_order_rentroom' rentRoom.MaThue %}" class="btn btn-primary">Xem dịch vụ</a>
+                    <a href="{% url 'request_service' rentRoom.MaThue %}" class="btn btn-success">➕ Gọi dịch vụ</a></td>
                 {% else %}
-                    <td><span class="text-muted">Đã thanh toán</span></td>
+                    <td><a href="{% url 'service_order_rentroom' rentRoom.MaThue %}" class="btn btn-primary">Xem dịch vụ</a></td>
                 {% endif %}
 
             </tr>
             {% endfor %}
         </table>
+        
 </body>
 
 </html>
