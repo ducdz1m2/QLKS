@@ -15,9 +15,8 @@
         <th>Số phòng</th>
         <th>Tên Khách Hàng</th>
         <th>Tên Dịch Vụ</th>
-        <th>Số Lượng</th>
         <th>Ngày Sử Dụng</th>
-        <th>Thành Tiền</th>
+        <th>Đơn giá</th>
         <th>Hành động</th>
       </tr>
     </thead>
@@ -28,9 +27,8 @@
         <td>{{ usage.SoPhong }}</td>
         <td>{{ usage.TenKhachHang }}</td>
         <td>{{ usage.TenDichVu }}</td>
-        <td>{{ usage.SoLuong }}</td>
         <td>{{ usage.NgaySuDung }}</td>
-        <td>{{ usage.ThanhTien }}</td>
+        <td>{{ usage.GiaDichVu }}</td>
         <td>
           <a href="{% url 'edit_usage' usage.MaSuDung %}" class="btn btn-primary btn-sm">Sửa</a>
           <form action="{% url 'delete_usage' usage.MaSuDung %}" method="post" class="d-inline">

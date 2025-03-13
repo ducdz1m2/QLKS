@@ -22,7 +22,7 @@ def export_room_excel(request):
 
     # Lấy dữ liệu
     room_list = get_all_rooms()
-    print(room_list)
+    # print(room_list)
     
     for row in room_list:
         ws.append([
@@ -58,7 +58,7 @@ def get_room_detail(MaPhong):
 
 def view_room_detail(request, MaPhong):
     room = get_room_detail(MaPhong)
-    print(room)
+    # print(room)
     if not room:
         return render(request, 'room/detail_room.html', {'error': 'Không tìm thấy phòng'})
     return render(request, 'room/detail_room.html', {'room': room})
@@ -67,13 +67,13 @@ def view_room_detail(request, MaPhong):
 @login_required
 @phongban_required(allowed_departments=['admin', 'receptionist'])
 def add_room(request):
-    print(request)
+    # print(request)
     if request.method == 'POST':
         
         SoPhong = request.POST['so_phong']
         TrangThai = request.POST['trang_thai']
         MaLoai_id = request.POST['ma_loai_id']
-        print(SoPhong, TrangThai)
+        # print(SoPhong, TrangThai)
         with connection.cursor() as cursor:
             cursor.callproc('AddRoom', [SoPhong, TrangThai, MaLoai_id])
         messages.success(request, f"Thêm phòng {SoPhong} thành công!")
@@ -154,7 +154,7 @@ def room_list(request):
             room['ThanhToan'] = 'Chưa cho thuê'
 
       
-        print(room)
+    print(rooms)
     return render(request, 'room/room_list.html', {'rooms': rooms, 'room_types': room_types})
 
 #tim kiem phong
@@ -176,5 +176,5 @@ def search_rooms(request):
         rooms = [dict(zip(columns, row)) for row in cursor.fetchall()]
     
     room_types = get_all_roomtypes()
-    print(rooms)  # Debug kết quả
+    # print(rooms)  # Debug kết quả
     return render(request, 'room/room_list.html', {'rooms': rooms, 'room_types': room_types})

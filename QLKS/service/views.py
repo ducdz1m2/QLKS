@@ -50,7 +50,7 @@ def export_usage_excel(request):
     # Ghi dòng tiêu đề
     ws.append([
         'Mã sử dụng', 'Số phòng', 'Tên khách hàng', 'Tên dịch vụ',
-        'Số lượng', 'Ngày sử dụng', 'Giá dịch vụ', 'Trạng thái', 'Thành tiền'
+         'Ngày sử dụng',  'Trạng thái', 'Giá dịch vụ',
     ])
 
     # Lấy dữ liệu
@@ -63,11 +63,9 @@ def export_usage_excel(request):
             row.get('SoPhong', ''),
             row.get('TenKhachHang', ''),
             row.get('TenDichVu', ''),
-            row.get('SoLuong', ''),
             row.get('NgaySuDung', '').strftime('%Y-%m-%d') if row.get('NgaySuDung') else '',
-            (row.get('GiaDichVu', 0)),
             row.get('TrangThai', ''),
-            (row.get('ThanhTien', 0)),
+            float(row.get('GiaDichVu', 0)),
         ])
 
     # Tạo file response

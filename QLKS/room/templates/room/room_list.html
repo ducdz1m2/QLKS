@@ -1,5 +1,5 @@
-{% extends 'base.html' %} 
-{% block title %}Danh sách phòng{% endblock %} 
+{% extends 'base.html' %}
+{% block title %}Danh sách phòng{% endblock %}
 
 {% block content %}
 <div class="container">
@@ -8,7 +8,8 @@
   <!-- Nút thêm phòng -->
   <div class="text-end mb-3">
     <a href="{% url 'add_room' %}" class="btn btn-success">➕ Thêm phòng</a>
-    <a href="{% url 'export_room_excel' %}" class="btn btn-outline-primary ms-2" target="_blank">📥 Xuất danh sách phòng</a>
+    <a href="{% url 'export_room_excel' %}" class="btn btn-outline-primary ms-2" target="_blank">📥 Xuất danh sách
+      phòng</a>
 
   </div>
 
@@ -16,20 +17,25 @@
   <form method="GET" action="{% url 'search_rooms' %}" class="mb-3 p-3 bg-light rounded shadow-sm">
     <div class="row g-2 align-items-center">
       <div class="col-md-3">
-        <input type="number" name="so_phong" class="form-control" placeholder="Nhập số phòng" value="{{ request.GET.so_phong }}">
+        <input type="number" name="so_phong" class="form-control" placeholder="Nhập số phòng"
+          value="{{ request.GET.so_phong }}">
       </div>
       <div class="col-md-3">
         <select name="trang_thai" class="form-select">
           <option value="">-- Trạng thái --</option>
-          <option value="Trống" {% if request.GET.trang_thai == "Trống" %}selected{% endif %}>Trống</option>
-          <option value="Đã đặt" {% if request.GET.trang_thai == "Đã đặt" %}selected{% endif %}>Đã đặt</option>
+          <option value="Trống" 
+          {% if request.GET.trang_thai == "Trống" %}
+           selected 
+           {% endif %}>Trống</option>
+          <option value="Đã đặt" {% if request.GET.trang_thai == "Đã đặt" %} selected {% endif %}>Đã đặt</option>
         </select>
       </div>
       <div class="col-md-3">
         <select name="ten_loai" class="form-select">
           <option value="">-- Loại phòng --</option>
           {% for loai in room_types %}
-          <option value="{{ loai.TenLoai }}" {% if request.GET.ten_loai == loai.TenLoai %}selected{% endif %}>{{ loai.TenLoai }}</option>
+          <option value="{{ loai.TenLoai }}" {% if request.GET.ten_loai == loai.TenLoai %}selected{% endif %}>{{
+            loai.TenLoai }}</option>
           {% endfor %}
         </select>
       </div>
@@ -62,26 +68,23 @@
         <td>
           <!-- Nút chỉnh sửa -->
           <a href="{% url 'edit_room' room.MaPhong %}" class="btn btn-warning btn-sm">✏️ Sửa</a>
-          
+
           <!-- Nút xóa -->
-           {% if room.TrangThai != 'Đã đặt' %}
+          {% if room.TrangThai != 'Đã đặt' %}
           <form action="{% url 'delete_room' room.MaPhong %}" method="post" class="d-inline">
             {% csrf_token %}
-            <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Bạn có chắc chắn muốn xóa phòng này?');">🗑️ Xóa</button>
+            <button type="submit" class="btn btn-danger btn-sm"
+              onclick="return confirm('Bạn có chắc chắn muốn xóa phòng này?');">🗑️ Xóa</button>
           </form>
           {% endif %}
           {% if room.TrangThai == 'Trống' %}
-            <a href="{% url 'add_customer_view' room.MaPhong %}" class="btn btn-success btn-sm"> 🏨 Cho thuê</a>
+          <a href="{% url 'add_customer_view' room.MaPhong %}" class="btn btn-success btn-sm"> 🏨 Cho thuê</a>
           {% endif %}
           {% if room.TrangThai == 'Đã đặt' %}
-            {% if room.ThanhToan == 'DA_THANH_TOAN' %}
-              <a href="{% url 'return_room' room.MaPhong %}" class="btn btn-primary btn-sm"> 🏨 Trả phòng</a>
-            {% else %}
-              <span class="btn btn-secondary btn-sm">💳 Chưa thanh toán</span>
-            {% endif %}
+          {% if room.TrangThaiThue == 'Đang ở' %}
+          <a href="{% url 'detail_customer' room.MaKhachHang %}" class="btn btn-primary btn-sm"> 🔍 Xem khách hàng</a>
           {% endif %}
-
-
+          {% endif %}
         </td>
       </tr>
       {% endfor %}
