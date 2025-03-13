@@ -81,9 +81,7 @@
           <a href="{% url 'add_customer_view' room.MaPhong %}" class="btn btn-success btn-sm"> 🏨 Cho thuê</a>
           {% endif %}
           {% if room.TrangThai == 'Đã đặt' %}
-          {% if room.TrangThaiThue == 'Đang ở' %}
           <a href="{% url 'detail_customer' room.MaKhachHang %}" class="btn btn-primary btn-sm"> 🔍 Xem khách hàng</a>
-          {% endif %}
           {% endif %}
         </td>
       </tr>
