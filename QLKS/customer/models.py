@@ -7,7 +7,7 @@ class KhachHang(models.Model):
     TenKhachHang = models.CharField(max_length=100)
     SoDienThoai = models.CharField(max_length=15)
     DiaChi = models.CharField(max_length=100)
-    Diem = models.DecimalField(max_digits=10, decimal_places=2,default=0.00)
+   
 
 class ThuePhong(models.Model):
     khach_hang = models.ForeignKey(KhachHang, on_delete=models.CASCADE)  # Thêm lại khóa ngoại
