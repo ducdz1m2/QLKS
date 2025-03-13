@@ -27,7 +27,6 @@
         </div>
 
         <select class="form-control" id="MaThue_id" name="MaThue_id" required>
-            <option value="">-- Mã thuê phòng --</option>
             {% for ma in rentrooms %}
             <option value="{{ ma }}" {% if invoices.MaThue_id == ma %}selected{% endif %}>{{ ma }}</option>
             {% endfor %}

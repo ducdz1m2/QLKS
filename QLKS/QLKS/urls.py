@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.urls import path, include
 from .views import home
-
+from .views import login_view
 urlpatterns = [
     path('', home, name='home'),
     path('admin/', admin.site.urls),
@@ -16,4 +16,5 @@ urlpatterns = [
 
     # Giữ lại django auth urls để hỗ trợ login/logout
     path("accounts/", include("django.contrib.auth.urls")),  
+    path("login/", login_view, name="login")  
 ]
