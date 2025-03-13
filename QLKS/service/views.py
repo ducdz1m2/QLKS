@@ -65,9 +65,9 @@ def export_usage_excel(request):
             row.get('TenDichVu', ''),
             row.get('SoLuong', ''),
             row.get('NgaySuDung', '').strftime('%Y-%m-%d') if row.get('NgaySuDung') else '',
-            float(row.get('GiaDichVu', 0)),
+            (row.get('GiaDichVu', 0)),
             row.get('TrangThai', ''),
-            float(row.get('ThanhTien', 0)),
+            (row.get('ThanhTien', 0)),
         ])
 
     # Tạo file response
