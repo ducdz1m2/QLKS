@@ -4,7 +4,34 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from accounts.decorators import phongban_required
 from django.views.decorators.csrf import csrf_exempt
+import openpyxl
+from django.http import HttpResponse
+from django.contrib.admin.views.decorators import staff_member_required
 
+@staff_member_required
+def export_staff_excel(request):
+    wb = openpyxl.Workbook()
+    ws = wb.active
+    ws.title = "Danh sách nhân viên"
+
+    ws.append(['Mã nhân viên', 'Họ tên', 'Ngày sinh', 'Số điện thoại', 'Phòng ban'])
+
+    staff_list = get_all_staff()
+    for nv in staff_list:
+        ws.append([
+            nv.get('MaNhanVien', ''),
+            nv.get('HoTen', ''),
+            nv.get('NgaySinh', ''),
+            nv.get('SoDienThoai', ''),
+            nv.get('TenPhongBan', ''),
+        ])
+
+    response = HttpResponse(
+        content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+    )
+    response['Content-Disposition'] = 'attachment; filename=nhan_vien.xlsx'
+    wb.save(response)
+    return response
 
 @csrf_exempt
 def accept(request, MaSuDung):

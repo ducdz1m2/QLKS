@@ -5,6 +5,71 @@ from django.contrib import messages
 from .models import HoaDon
 from accounts.decorators import phongban_required
 from django.contrib.auth.decorators import login_required
+import openpyxl
+from django.http import HttpResponse
+from django.utils.timezone import now
+from django.template.loader import get_template
+from django.http import HttpResponse
+from xhtml2pdf import pisa
+from django.template.loader import render_to_string
+from weasyprint import HTML
+from django.http import HttpResponse
+
+def export_invoice_pdf(request, MaHoaDon):
+    invoice = get_invoices(MaHoaDon)
+    services = get_all_services(invoice['MaThue_id'])
+    money = {
+        "total_rent": invoice['GiaPhong'] * invoice['NgayLuuTru'],
+        "total_service": sum([s['GiaDichVu'] for s in services]),
+        "total": invoice['TongTien']
+    }
+
+    html_string = render_to_string("invoices/detail_invoices_pdf.html", {
+        'invoices': invoice,
+        'services': services,
+        'money': money
+    })
+
+    pdf_file = HTML(string=html_string, base_url=request.build_absolute_uri()).write_pdf()
+
+    response = HttpResponse(pdf_file, content_type='application/pdf')
+    response['Content-Disposition'] = 'inline; filename="invoice.pdf"'
+    return response
+
+def export_invoices_excel(request):
+    wb = openpyxl.Workbook()
+    ws = wb.active
+
+    # Tiêu đề sheet
+    timestamp = now().strftime('%Y-%m-%d_%H-%M-%S')
+    ws.title = "Danh sách hóa đơn"
+
+    # Ghi dòng tiêu đề
+    ws.append([
+        'Mã hóa đơn', 'Ngày lập hóa đơn', 'Trạng thái', 'Mã thuê', 'Tổng tiền'
+    ])
+
+    # Lấy dữ liệu
+    invoices = get_all_invoices()
+    
+    
+    for row in invoices:
+        ws.append([
+            row.get('MaHoaDon', ''),
+            row.get('NgayLapHoaDon', ''),
+            row.get('TrangThai', ''),
+            row.get('MaThue_id', ''),
+            row.get('TongTien', ''),
+         
+        ])
+    response = HttpResponse(
+        content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+    )
+    response['Content-Disposition'] = f'attachment; filename=hoadon_{timestamp}.xlsx'
+
+    wb.save(response)
+    return response
+
 
 def get_all_customerrentroom():
     with connection.cursor() as cursor:

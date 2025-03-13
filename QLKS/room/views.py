@@ -3,6 +3,44 @@ from django.db import connection
 from django.contrib import messages
 from accounts.decorators import phongban_required
 from django.contrib.auth.decorators import login_required
+import openpyxl
+from django.http import HttpResponse
+from django.utils.timezone import now
+
+def export_room_excel(request):
+    wb = openpyxl.Workbook()
+    ws = wb.active
+
+    # Tiêu đề sheet
+    timestamp = now().strftime('%Y-%m-%d_%H-%M-%S')
+    ws.title = "Danh sách phòng"
+
+    # Ghi dòng tiêu đề
+    ws.append([
+        'Mã phòng', 'Số phòng', 'Trạng thái', 'Loại phòng', 'Thanh toán'
+    ])
+
+    # Lấy dữ liệu
+    room_list = get_all_rooms()
+    print(room_list)
+    
+    for row in room_list:
+        ws.append([
+            row.get('MaPhong', ''),
+            row.get('SoPhong', ''),
+            row.get('TrangThai', ''),
+            row.get('TenLoai', ''),
+            row.get('ThanhToan', ''),
+         
+        ])
+    response = HttpResponse(
+        content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+    )
+    response['Content-Disposition'] = f'attachment; filename=phong_{timestamp}.xlsx'
+
+    wb.save(response)
+    return response
+
 
 def return_room(request, MaPhong):
     with connection.cursor() as cursor:

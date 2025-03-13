@@ -14,4 +14,7 @@ urlpatterns = [
     path('usage/add/', add_usage, name='add_usage'),
     path('usage/edit/<int:pk>/', edit_usage, name='edit_usage'),
     path('usage/delete/<int:pk>/', delete_usage, name='delete_usage'),
+    path('usage/export', export_usage_excel, name='export_usage_excel'),
+    path('export', export_service_excel, name='export_service_excel'),
+    
 ]

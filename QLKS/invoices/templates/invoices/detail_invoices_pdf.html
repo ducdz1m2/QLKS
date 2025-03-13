@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Hóa đơn {{ invoices.MaHoaDon }}</title>
+    <style>
+        @font-face {
+            font-family: "DejaVu";
+            src: url("file:///{{ font_path }}") format("truetype");
+        }
+
+        body {
+            font-family: "DejaVu", sans-serif;
+            font-size: 14px;
+        }
+
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin-top: 20px;
+        }
+
+        th, td {
+            border: 1px solid #000;
+            padding: 6px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #eee;
+        }
+
+        .section {
+            margin-bottom: 12px;
+        }
+    </style>
+</head>
+<body>
+
+    <h2 style="text-align:center;">THÔNG TIN HÓA ĐƠN</h2>
+
+    <div class="section">
+        <p><strong>Mã hóa đơn:</strong> {{ invoices.MaHoaDon }}</p>
+        <p><strong>Ngày lập hóa đơn:</strong> {{ invoices.NgayLapHoaDon }}</p>
+        <p><strong>Trạng thái:</strong> {{ invoices.TrangThai }}</p>
+    </div>
+
+    <div class="section">
+        <p><strong>Tên khách hàng:</strong> {{ invoices.TenKhachHang }}</p>
+        <p><strong>Số điện thoại:</strong> {{ invoices.SoDienThoai }}</p>
+        <p><strong>Địa chỉ:</strong> {{ invoices.DiaChi }}</p>
+    </div>
+
+    <div class="section">
+        <p><strong>Số phòng:</strong> {{ invoices.SoPhong }}</p>
+        <p><strong>Loại phòng:</strong> {{ invoices.TenLoai }}</p>
+        <p><strong>Giá phòng:</strong> {{ invoices.GiaPhong }}</p>
+        <p><strong>Ngày nhận:</strong> {{ invoices.NgayNhan }}</p>
+        <p><strong>Ngày trả:</strong> {{ invoices.NgayTra }}</p>
+        <p><strong>Số ngày lưu trú:</strong> {{ invoices.NgayLuuTru }}</p>
+    </div>
+
+    <h4 style="margin-top: 30px;">DỊCH VỤ SỬ DỤNG</h4>
+    <table>
+        <thead>
+            <tr>
+                <th>Tên dịch vụ</th>
+                <th>Ngày sử dụng</th>
+                <th>Trạng thái</th>
+                <th>Giá tiền</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for service in services %}
+            <tr>
+                <td>{{ service.TenDichVu }}</td>
+                <td>{{ service.NgaySuDung }}</td>
+                <td>{{ service.TrangThai }}</td>
+                <td>{{ service.GiaDichVu }}</td>
+            </tr>
+            {% endfor %}
+            <tr>
+                <td colspan="3" style="text-align: right;"><strong>Tổng tiền dịch vụ:</strong></td>
+                <td><strong>{{ money.total_service }}</strong></td>
+            </tr>
+            <tr>
+                <td colspan="3" style="text-align: right;"><strong>Tổng tiền phòng:</strong></td>
+                <td><strong>{{ money.total_rent }}</strong></td>
+            </tr>
+            <tr>
+                <td colspan="3" style="text-align: right;"><strong>Tổng tiền thanh toán:</strong></td>
+                <td><strong>{{ money.total }}</strong></td>
+            </tr>
+        </tbody>
+    </table>
+
+</body>
+</html>

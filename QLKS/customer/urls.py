@@ -10,8 +10,7 @@ urlpatterns = [
     path('edit/<int:MaKhachHang>', edit_customer, name='edit_customer'),
     path('delete/<int:MaKhachHang>', delete_customer, name='delete_customer'),
     path('detail/<int:MaKhachHang>', detail_customer, name='detail_customer'),
-    
-    #
+    path('export/', export_customer_excel, name='export_customer_excel'),
     path('rentrooms/', customer_rentroom, name='customer_rentroom'),    
     path('request/<int:MaThue>/', request_service, name='request_service'),  # Yêu cầu dịch vụ
     path('comfirm_request/', comfirm_request, name='comfirm_request'),  # Xác nhận dịch vụ

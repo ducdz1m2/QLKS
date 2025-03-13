@@ -3,6 +3,83 @@ from django.db import connection
 from django.contrib import messages
 from .forms import DichVuForm, SuDungDichVuForm
 from staff.views import get_all_phongban
+import openpyxl
+from django.http import HttpResponse
+from django.utils.timezone import now
+
+def export_service_excel(request):
+    wb = openpyxl.Workbook()
+    ws = wb.active
+
+    timestamp = now().strftime('%Y-%m-%d_%H-%M-%S')
+    ws.title = "Danh sách dịch vụ"
+
+    # Ghi dòng tiêu đề
+    ws.append([
+        'Mã dịch vụ', 'Tên dịch vụ', 'Giá dịch vụ', 'Tên phòng ban'
+    ])
+
+    # Lấy dữ liệu
+    service_list = get_all_services()
+    
+    for sv in service_list:
+        ws.append([
+            sv['MaDichVu'],
+            sv['TenDichVu'],
+            sv['GiaDichVu'],
+            sv['TenPhongBan'],
+        ])
+
+    # Tạo file response
+    response = HttpResponse(
+        content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+    )
+    response['Content-Disposition'] = f'attachment; filename=dich_vu_{timestamp}.xlsx'
+
+    wb.save(response)
+    return response
+
+def export_usage_excel(request):
+    wb = openpyxl.Workbook()
+    ws = wb.active
+
+    # Tiêu đề sheet
+    timestamp = now().strftime('%Y-%m-%d_%H-%M-%S')
+    ws.title = "Danh sách sử dụng dịch vụ"
+
+    # Ghi dòng tiêu đề
+    ws.append([
+        'Mã sử dụng', 'Số phòng', 'Tên khách hàng', 'Tên dịch vụ',
+        'Số lượng', 'Ngày sử dụng', 'Giá dịch vụ', 'Trạng thái', 'Thành tiền'
+    ])
+
+    # Lấy dữ liệu
+    usage_list = get_all_usages()
+
+    # Ghi dữ liệu từng dòng
+    for row in usage_list:
+        ws.append([
+            row.get('MaSuDung', ''),
+            row.get('SoPhong', ''),
+            row.get('TenKhachHang', ''),
+            row.get('TenDichVu', ''),
+            row.get('SoLuong', ''),
+            row.get('NgaySuDung', '').strftime('%Y-%m-%d') if row.get('NgaySuDung') else '',
+            float(row.get('GiaDichVu', 0)),
+            row.get('TrangThai', ''),
+            float(row.get('ThanhTien', 0)),
+        ])
+
+    # Tạo file response
+    response = HttpResponse(
+        content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+    )
+    response['Content-Disposition'] = f'attachment; filename=su_dung_dich_vu_{timestamp}.xlsx'
+
+    wb.save(response)
+    return response
+
+
 #Dich vu
 def service_list(request):
     services = get_all_services()

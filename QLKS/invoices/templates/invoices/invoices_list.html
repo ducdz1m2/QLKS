@@ -8,6 +8,8 @@
   <!-- Nút thêm hóa đơn -->
   <div class="text-end mb-3">
     <a href="{% url 'add_invoices' %}" class="btn btn-success">➕ Thêm Hóa Đơn</a>
+    <a href="{% url 'export_invoices_excel' %}" class="btn btn-outline-primary ms-2" target="_blank">📥 Xuất danh sách hóa đơn</a>
+
   </div>
   <!-- Form tìm kiếm hóa dơn -->
   <form method="GET" action="{% url 'search_invoices' %}" class="mb-3 p-3 bg-light rounded shadow-sm">

@@ -6,10 +6,12 @@
 <div class="container">
   <h2 class="text-center my-4">Danh Sách Nhân Viên</h2>
 
-  <!-- Nút thêm nhân viên -->
-  <div class="text-end mb-3">
-    <a href="{% url 'add_staff' %}" class="btn btn-success">➕ Thêm nhân viên</a>
-  </div>
+  <!-- Nút thêm nhân viên + xuất Excel -->
+<div class="text-end mb-3">
+  <a href="{% url 'add_staff' %}" class="btn btn-success">➕ Thêm nhân viên</a>
+  <a href="{% url 'export_staff_excel' %}" class="btn btn-outline-primary ms-2" target="_blank">📥 Xuất danh sách nhân viên</a>
+</div>
+
 
   <!-- Form tìm kiếm -->
   <form method="GET" action="{% url 'search_staff' %}" class="mb-3 p-3 bg-light rounded shadow-sm">

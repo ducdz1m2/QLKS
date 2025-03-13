@@ -10,5 +10,6 @@ urlpatterns = [
     path('detail/<int:MaHoaDon>',detail_invoices, name='detail_invoices'),
     path('search/', search_invoices, name='search_invoices'),
     path('pay/<int:MaHoaDon>', pay, name='pay'),
-    
+    path('export/', export_invoices_excel, name='export_invoices_excel'),
+    path('detail/export/<int:MaHoaDon>', export_invoice_pdf, name='export_invoice_pdf')
 ]

@@ -10,5 +10,6 @@ urlpatterns = [
     path('search/', search_rooms, name='search_rooms'),
     path('rentroom/<int:MaPhong>', add_customer_view, name='add_customer_view'),
     path('return_room/<int:MaPhong>', return_room, name='return_room'),
+    path('report/', export_room_excel, name='export_room_excel'),
     
 ]

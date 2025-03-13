@@ -8,6 +8,46 @@ from django.contrib.auth import login
 from service.views import get_all_services
 from room.views import get_room_detail
 from accounts.forms import RegisterForm, CustomerForm
+import openpyxl
+from django.http import HttpResponse
+from django.utils.timezone import now
+
+
+
+
+
+def export_customer_excel(request):
+    wb = openpyxl.Workbook()
+    ws = wb.active
+
+    # Tiêu đề sheet
+    timestamp = now().strftime('%Y-%m-%d_%H-%M-%S')
+    ws.title = "Danh sách khách hàng"
+
+    # Ghi dòng tiêu đề
+    ws.append([
+        'Mã khách hàng', 'Tên khách hàng', 'Số điện thoại', 'Địa chỉ'
+    ])
+
+    # Lấy dữ liệu
+    customer_list = get_all_customers()
+
+    
+    for row in customer_list:
+        ws.append([
+            row.get('id', ''),
+            row.get('TenKhachHang', ''),
+            row.get('SoDienThoai', ''),
+            row.get('DiaChi', ''),
+         
+        ])
+    response = HttpResponse(
+        content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+    )
+    response['Content-Disposition'] = f'attachment; filename=khachhang_{timestamp}.xlsx'
+
+    wb.save(response)
+    return response
 
 def add_customer_view(request, MaPhong):
     room = get_room_detail(MaPhong)
