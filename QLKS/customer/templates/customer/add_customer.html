@@ -54,7 +54,7 @@
     <div id="chon_khach_cu">
         <label class="form-label fw-semibold">Chọn khách hàng:</label>
         <select name="customer_id" class="form-select">
-            <option value="" disabled selected hidden>--Tên khách hàng--</option>
+            <option value="" disabled selected hidden>--Chọn khách hàng--</option>
             {% for customer in customers %}
                 <option value="{{ customer.id }}" {% if customer.TrangThai == 'Đang ở' %} disabled {% endif %}>{{ customer.TenKhachHang }} {% if customer.TrangThai == 'Đang ở' %} (Đang thuê) {% endif %}</option>
             {% endfor %}
