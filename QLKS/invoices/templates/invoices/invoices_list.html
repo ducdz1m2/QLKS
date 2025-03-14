@@ -7,7 +7,6 @@
 
   <!-- Nút thêm hóa đơn -->
   <div class="text-end mb-3">
-    <a href="{% url 'add_invoices' %}" class="btn btn-success">➕ Thêm Hóa Đơn</a>
     <a href="{% url 'export_invoices_excel' %}" class="btn btn-outline-primary ms-2" target="_blank">📥 Xuất danh sách hóa đơn</a>
 
   </div>
@@ -18,34 +17,55 @@
         <input type="number" name="MaHoaDon" class="form-control" placeholder="Nhập mã hóa đơn" value="{{ request.GET.MaHoaDon }}">
       </div>
       <div class="col-md-3">
-        <input type="date" name="NgayLapHoaDon" class="form-control" placeholder="Nhập ngày lập hóa đơn" value="{{ request.GET.NgayLapHoaDon }}">
+        <input type="text" name="TenKhachHang" class="form-control" placeholder="Nhập tên khách hàng" value="{{ request.GET.TongTien }}">
       </div>
       <div class="col-md-3">
-        <input type="number" name="TongTien" class="form-control" placeholder="Nhập tổng tiền hóa đơn" value="{{ request.GET.TongTien }}">
+        <input type="text" name="DiaChi" class="form-control" placeholder="Nhập địa chỉ" value="{{ request.GET.DiaChi }}">
       </div>
       <div class="col-md-3">
-        <select name="MaThue_id" class="form-select">
-          <option value="">-- Mã thuê phòng --</option>
-          {% for Ma in invoices_types %}
-    <option value="{{ Ma }}" {% if request.GET.MaThue_id|default:'' == Ma|stringformat:"s" %}selected{% endif %}>{{ Ma }}</option>
-{% endfor %}
+        <input type="text" name="SoDienThoai" class="form-control" placeholder="Nhập số điện thoại" value="{{ request.GET.SoDienThoai }}">
+      </div>
 
+      <div class="col-md-3">
+        <select name="SoPhong" class="form-select">
+          <option value="">-- Số phòng --</option>
+          {% for room in rooms %}
+          <option value="{{ room.SoPhong }}" {% if request.GET.SoPhong == room.SoPhong %}selected{% endif %}>
+            {{ room.SoPhong }}</option>
+          {% endfor %}
         </select>
       </div>
+
+      <div class="col-md-3">
+        <input type="date" name="NgayLapHoaDon" class="form-control" placeholder="Nhập ngày lập hóa đơn" value="{{ request.GET.NgayLapHoaDon }}">
+      </div>
+      
+      <div class="col-md-3">
+        <select name="TrangThai" class="form-select">
+          <option value="">-- Trạng thái --</option>
+          <option value="Chưa thanh toán" {% if request.GET.TrangThai == "Chưa thanh toán" %}selected{% endif %}>Chưa thanh
+            toán</option>
+          <option value="Đã thanh toán" {% if request.GET.TrangThai == "Đã thanh toán" %}selected{% endif %}>Đã thanh toán
+          </option>
+        </select>
+      </div>
+      
       <div class="col-md-3">
         <button type="submit" class="btn btn-primary w-100">🔍 Tìm kiếm</button>
       </div>
     </div>
   </form>
 
-
   <table class="table table-bordered table-hover">
     <thead class="table-dark">
       <tr>
-        <th>Mã Hóa Đơn</th>
-        <th>Ngày Lập</th>
-        <th>Tổng Tiền</th>
-        <th>Mã Thuê</th>
+        <th>Mã hóa đơn</th>
+        <th>Tên khách hàng</th>
+        <th>Số phòng</th>
+        <th>Địa chỉ</th>
+        <th>Số điện thoại</th>
+        <th>Ngày lập</th>
+        <th>Tổng tiền</th>
         <th>Trạng thái</th>
         <th>Hành động</th>
       </tr>
@@ -58,25 +78,18 @@
             <b>{{ invoice.MaHoaDon }}</b>
           </a>
         </td>
-        <td>{{ invoice.NgayLapHoaDon }}</td>
-        <td>{{ invoice.TongTien }}</td>
-        <td>{{ invoice.MaThue_id }}</td>
+        <td>{{ invoice.TenKhachHang }}</td>
+        <td>{{ invoice.SoPhong }}</td>
+        <td>{{ invoice.DiaChi }}</td>
+        <td>{{ invoice.SoDienThoai }}</td>
+        <td>{{ invoice.NgayLapHoaDon|date:"d/m/Y" }}</td>
+        <td>{{ invoice.TongTien }} VNĐ</td>
         <td>{{ invoice.TrangThai }}</td>
         <td>
-          <!-- Nút chỉnh sửa -->
-          <a href="{% url 'edit_invoices' invoice.MaHoaDon %}" class="btn btn-primary btn-sm">✏️ Sửa</a>
-
-          <!-- Nút xóa -->
-          <form action="{% url 'delete_invoices' invoice.MaHoaDon %}" method="post" class="d-inline">
-            {% csrf_token %}
-            <button type="submit" class="btn btn-danger btn-sm"
-              onclick="return confirm('Bạn có chắc chắn muốn xóa hóa đơn này?');">
-              🗑️ Xóa
-            </button>
-          </form>
           {% if invoice.TrangThai == 'Chưa thanh toán' %}
-            <a href="{% url 'pay' invoice.MaHoaDon %}" class="btn btn-success btn-sm">💸 Thanh toán</a>
-
+            <a href="{% url 'pay' invoice.MaHoaDon %}" class="btn btn-success btn-sm"> 💸 Thanh toán  </a>
+          {% else %}
+            <a href="{% url 'export_invoice_pdf' invoice.MaHoaDon %}" class="btn btn-secondary btn-sm">🖨️ Xuất hóa đơn </a>
           {% endif %}
         </td>
       </tr>

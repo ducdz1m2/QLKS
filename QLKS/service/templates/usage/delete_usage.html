@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block title %}Xóa sử dụng dịch vụ{% endblock %}
+
+{% block content %}
+<div class="container my-4">
+  <div class="card border-danger">
+    <div class="card-header text-center bg-danger text-white">
+      Xác nhận xóa sử dụng dịch vụ
+    </div>
+    <div class="card-body">
+      <p>Bạn có chắc chắn muốn xóa sử dụng dịch vụ với thông tin sau?</p>
+      <ul class="list-group mb-3">
+         <li class="list-group-item"><strong>Mã Sử Dụng:</strong> {{ usage.MaSuDung }}</li>
+         <li class="list-group-item"><strong>Mã Thuê:</strong> {{ usage.MaThue }}</li>
+         <li class="list-group-item"><strong>Mã Dịch Vụ:</strong> {{ usage.MaDichVu }}</li>
+         <li class="list-group-item"><strong>Số Lượng:</strong> {{ usage.SoLuong }}</li>
+         <li class="list-group-item"><strong>Ngày Sử Dụng:</strong> {{ usage.NgaySuDung }}</li>
+         <li class="list-group-item"><strong>Trạng Thái:</strong> {{ usage.TrangThai }}</li>
+      </ul>
+      <form method="post">
+         {% csrf_token %}
+         <div class="text-center">
+           <button type="submit" class="btn btn-danger">Xóa</button>
+           <a href="{% url 'usage_list' %}" class="btn btn-secondary">Hủy</a>
+         </div>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% block title %}Chỉnh sửa sử dụng dịch vụ{% endblock %}
+
+{% block content %}
+<div class="container my-4">
+  <div class="card">
+    <div class="card-header text-center">
+      Chỉnh sửa sử dụng dịch vụ
+    </div>
+    <div class="card-body">
+      <form method="post">
+        {% csrf_token %}
+        <div class="mb-3">
+          <label for="MaDichVu" class="form-label">Dịch vụ</label>
+          <select name="MaDichVu" id="MaDichVu" class="form-control">
+              {% for service in services %}
+              <option value="{{ service.MaDichVu }}" {% if service.MaDichVu == usage.MaDichVu_id %}selected{% endif %}>{{ service.TenDichVu }}</option>
+              {% endfor %}
+          </select>
+        </div>
+        <div class="mb-3">
+          <label for="NgaySuDung" class="form-label">Ngày sử dụng</label>
+          <input type="date" name="NgaySuDung" id="NgaySuDung" class="form-control" value="{{ usage.NgaySuDung|date:'Y-m-d' }}" required>
+        </div>
+        <div class="mb-3">
+          <label for="TrangThai" class="form-label">Trạng thái</label>
+          <select name="TrangThai" id="TrangThai" class="form-control">
+              <option value="Đang chờ xử lý" {% if usage.TrangThai == 'Đang chờ xử lý' %}selected{% endif %}>Đang chờ xử lý</option>
+              <option value="Đã xử lý" {% if usage.TrangThai == 'Đang xử lý' %}selected{% endif %}>Đã xử lý</option>
+              <option value="Hoàn thành" {% if usage.TrangThai == 'Hoàn thành' %}selected{% endif %}>Hoàn thành</option>
+          </select>
+        </div>
+        <div class="mb-3">
+          <button type="submit" class="btn btn-success">Cập nhật</button>
+          <a href="{% url 'usage_list' %}" class="btn btn-secondary">Hủy</a>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}

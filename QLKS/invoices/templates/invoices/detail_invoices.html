@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<div class="container">
+<div class="container px-5">
     <h2 class="text-center mb-4">Thông Tin Hóa Đơn</h2>
 
     {% if error %}
@@ -12,39 +12,33 @@
     </div>
     {% else %}
 
-    <div class="card p-4 shadow-lg mb-5">
-        <div class="mb-3">
-            <label class="form-label text-center me-2"><b>Mã hóa đơn:</b> {{ invoices.MaHoaDon }}</label>
-            |
-            <label class="form-label text-center ms-2 me-2"><b>Ngày lập hóa đơn:</b> {{ invoices.NgayLapHoaDon }}</label>
-            |
-            <label class="form-label text-center ms-2"><b>Trạng thái:</b> {{ invoices.TrangThai }}</label>
+    <div class="card p-4 shadow-lg mb-5 p-5">
+        <div style="width: 100%; height: max-content mx-5">
+            <div style="width: max-content; height: max-content; float: left;">
+                <p><strong>Mã hóa đơn:</strong> {{ invoice.MaHoaDon }}</p>
+                <p><strong>Tên khách hàng:</strong> {{ invoice.TenKhachHang }}</p>
+                <p><strong>Số phòng:</strong> {{ invoice.SoPhong }}</p>
+                <p><strong>Ngày nhận:</strong> {{ invoice.NgayNhan|date:"d/m/Y" }}</p>
+            </div>
+
+            <div style="width: 50%;height: max-content; position: absolute; right: 25%">
+                <div style="width: max-content; height: max-content; position: relative; margin: auto;">
+                    <p><strong>Ngày lập:</strong> {{ invoice.NgayLapHoaDon|date:"d/m/Y" }}</p>
+                    <p><strong>Địa chỉ:</strong> {{ invoice.DiaChi }}</p>
+                    <p><strong>Loại phòng:</strong> {{ invoice.TenLoai }}</p>
+                    <p><strong>Ngày trả:</strong> {{ invoice.NgayTra|date:"d/m/Y" }}</p>
+                </div>
+            </div>
+    
+            <div style="width: max-content; height: max-content; float: right;">
+                <p><strong>Trạng thái:</strong> {{ invoice.TrangThai }}</p>
+                <p><strong>Số điện thoại:</strong> {{ invoice.SoDienThoai }}</p>
+                <p><strong>Giá phòng:</strong> {{ invoice.GiaPhong }}</p>
+                <p><strong>Số ngày lưu trú:</strong> {{ invoice.NgayLuuTru }}</p>
+            </div>
         </div>
 
-        <div class="mb-3">
-            <label class="form-label text-center me-2"><b>Tên khách hàng:</b> {{ invoices.TenKhachHang }}</label>
-            |
-            <label class="form-label text-center ms-2 me-2"><b>Số điện thoại:</b> {{ invoices.SoDienThoai }}</label>
-            |
-            <label class="form-label text-center ms-2"><b>Địa chỉ:</b> {{ invoices.DiaChi }}</label>
-        </div>
-
-
-        <div class="mb-3">
-            <label class="form-label text-center me-2"><b>Số phòng:</b> {{ invoices.SoPhong }}</label>
-            |
-            <label class="form-label text-center ms-2 me-2"><b>Loại phòng:</b> {{ invoices.TenLoai }}</label>
-            |
-            <label class="form-label text-center ms-2"><b>Giá phòng:</b> {{ invoices.GiaPhong }}</label>
-        </div>
-
-        <div class="mb-3">
-            <label class="form-label text-center me-2"><b>Ngày nhận:</b> {{ invoices.NgayNhan }}</label>
-            |
-            <label class="form-label text-center ms-2 me-2"><b>Ngày trả:</b> {{ invoices.NgayTra }}</label>
-            |
-            <label class="form-label text-center ms-2"><b>Số ngày lưu trú:</b> {{ invoices.NgayLuuTru }}</label>
-        </div>
+        <h4 style="margin-top: 15px; text-align: center;">DỊCH VỤ SỬ DỤNG</h4>
 
         <table class="table table-bordered table-hover">
             <thead class="table-dark">
@@ -52,13 +46,13 @@
                     <th>Tên dịch vụ</th>
                     <th>Ngày sử dụng</th>
                     <th>Trạng thái</th>
-                    <th>Giá tiền</th>
+                    <th>Giá dịch vụ</th>
                 </tr>
             </thead>
             {% for service in services %}
             <tr>
                 <td>{{ service.TenDichVu }}</td>
-                <td>{{ service.NgaySuDung }}</td>
+                <td>{{ service.NgaySuDung|date:"d/m/Y" }}</td>
                 {% if service.TrangThai == "Đang chờ xử lý" %}
                 <td>Đang chờ xử lý</td>
                 {% elif service.TrangThai == "Đang xử lý"  %}
@@ -69,22 +63,26 @@
                 <td>{{ service.GiaDichVu }}</td>
             </tr>
             {% endfor %}
-            <tr>
-                <td colspan="3" class="text-end"><b>Tổng tiền dịch vụ:</b></td>
-                <td><b>{{ money.total_service }}</b></td>
-            </tr>
-            <tr>
-                <td colspan="3" class="text-end"><b>Tổng tiền phòng:</b></td>
-                <td><b>{{ money.total_rent }}</b></td>
-            </tr>
-            <tr>
-                <td colspan="3" class="text-end"><b>Tổng tiền:</b></td>
-                <td><b>{{ money.total }}</b></td>
-            </tr>
         </table>
 
+        <div style="width: 100%; height: max-content mx-5 mt-5">
+            <div style="width: max-content; height: max-content; float: left;">
+                <p><b>Tổng tiền phòng:</b> {{ invoice.TongTienPhong }}</p>
+            </div>
+
+            <div style="width: 50%;height: max-content; position: absolute; right: 25%">
+                <div style="width: max-content; height: max-content; position: relative; margin: auto;">
+                    <p><b>Tổng tiền dịch vụ:</b> {{ invoice.TongTienDichVu }}</p>
+                </div>
+            </div>
+    
+            <div style="width: max-content; height: max-content; float: right;">
+                <p><b>Tiền thanh toán:</b> {{ invoice.TongTien }}</p>
+            </div>
+        </div>
+
         <div class="d-flex justify-content-end">
-            <a href="{% url 'export_invoice_pdf' invoices.MaHoaDon %}" class="btn btn-outline-danger">⬇️ Xuất hóa đơn</a>
+            <a href="{% url 'export_invoice_pdf' invoice.MaHoaDon %}" class="btn btn-outline-danger">⬇️ Xuất hóa đơn</a>
             <a href="{% url 'invoices_list' %}" class="btn btn-secondary me-1" style="width: 8rem;">Quay lại</a>
         </div>
     </div>

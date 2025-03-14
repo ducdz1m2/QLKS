@@ -6,6 +6,7 @@ from .models import HoaDon
 from accounts.decorators import phongban_required
 from django.contrib.auth.decorators import login_required
 import openpyxl
+from openpyxl.styles import NamedStyle
 from django.http import HttpResponse
 from django.utils.timezone import now
 from django.template.loader import get_template
@@ -18,16 +19,10 @@ from django.http import HttpResponse
 def export_invoice_pdf(request, MaHoaDon):
     invoice = get_invoices(MaHoaDon)
     services = get_all_services(invoice['MaThue_id'])
-    money = {
-        "total_rent": invoice['GiaPhong'] * invoice['NgayLuuTru'],
-        "total_service": sum([s['GiaDichVu'] for s in services]),
-        "total": invoice['TongTien']
-    }
 
     html_string = render_to_string("invoices/detail_invoices_pdf.html", {
-        'invoices': invoice,
-        'services': services,
-        'money': money
+        'invoice': invoice,
+        'services': services
     })
 
     pdf_file = HTML(string=html_string, base_url=request.build_absolute_uri()).write_pdf()
@@ -46,22 +41,24 @@ def export_invoices_excel(request):
 
     # Ghi dòng tiêu đề
     ws.append([
-        'Mã hóa đơn', 'Ngày lập hóa đơn', 'Trạng thái', 'Mã thuê', 'Tổng tiền'
+        'Mã hóa đơn', 'Tên khách hàng', 'Số phòng','Địa chỉ', 'Số điện thoại', 'Ngày lập', 'Tổng tiền', 'Trạng thái'
     ])
 
     # Lấy dữ liệu
     invoices = get_all_invoices()
     
-    
     for row in invoices:
         ws.append([
             row.get('MaHoaDon', ''),
-            row.get('NgayLapHoaDon', ''),
-            row.get('TrangThai', ''),
-            row.get('MaThue_id', ''),
+            row.get('TenKhachHang', ''),
+            row.get('SoPhong', ''),
+            row.get('DiaChi', ''),
+            row.get('SoDienThoai', ''),
+            row.get('NgayLapHoaDon', '').strftime('%d/%m/%Y'),
             row.get('TongTien', ''),
-         
+            row.get('TrangThai', '')
         ])
+
     response = HttpResponse(
         content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
     )
@@ -93,14 +90,8 @@ def detail_invoices(request, MaHoaDon):
         return render(request, 'invoices/detail_invoices.html', {'error': 'Không tìm thấy hóa đơn'})
 
     services = get_all_services(invoice['MaThue_id'])
-    
-    money = {
-        "total_rent": invoice['GiaPhong'] * invoice['NgayLuuTru'],
-        "total_service": sum([service['GiaDichVu'] for service in services]),
-        "total": invoice['TongTien']
-    }
 
-    return render(request, 'invoices/detail_invoices.html', {'invoices': invoice, 'services': services, 'money': money})
+    return render(request, 'invoices/detail_invoices.html', {'invoice': invoice, 'services': services})
 
 @login_required
 @phongban_required(allowed_departments=['admin', 'receptionist'])
@@ -174,44 +165,49 @@ def get_all_invoicestypes():
 def invoices_list(request):
     invoice= get_all_invoices()
 
-
-
-    invoices_types = []
-    temp = get_all_invoicestypes()
-    for item in temp:
-        invoices_types.append(item['id'])
-   
+    rooms = get_all_rooms()
 
     print(invoice)
-    return render(request, 'invoices/invoices_list.html', {'invoices': invoice, 'invoices_types': invoices_types})
+    return render(request, 'invoices/invoices_list.html', {'invoices': invoice, 'rooms': rooms})
 
 # tìm kiếm hóa đơn
 @login_required
 @phongban_required(allowed_departments=['admin', 'receptionist'])
 def search_invoices(request):
     MaHoaDon = request.GET.get('MaHoaDon', '').strip()
+    TenKhachHang = request.GET.get('TenKhachHang', '').strip()
+    DiaChi = request.GET.get('DiaChi', '').strip()
+    SoDienThoai = request.GET.get('SoDienThoai', '').strip()
+    SoPhong = request.GET.get('SoPhong', '').strip()
     NgayLapHoaDon = request.GET.get('NgayLapHoaDon', '').strip()
-    TongTien = request.GET.get('TongTien', '').strip()
-    MaThue_id = request.GET.get('MaThue_id', '').strip()
+    TrangThai = request.GET.get('TrangThai', '').strip()
+
    
 
     MaHoaDon = MaHoaDon if MaHoaDon else None
+    TenKhachHang = TenKhachHang if TenKhachHang else None
+    DiaChi = DiaChi if DiaChi else None
+    SoDienThoai = SoDienThoai if SoDienThoai else None
+    SoPhong = SoPhong if SoPhong else None
     NgayLapHoaDon = NgayLapHoaDon if NgayLapHoaDon else None
-    TongTien = TongTien if TongTien else None
-    MaThue_id = MaThue_id if MaThue_id else None
+    TrangThai = TrangThai if TrangThai else None
    
 
     with connection.cursor() as cursor:
-        cursor.callproc('SearchInvoices', [MaHoaDon, NgayLapHoaDon,TongTien, MaThue_id])
+        cursor.callproc('SearchInvoices', [MaHoaDon, TenKhachHang, DiaChi, SoDienThoai, SoPhong, NgayLapHoaDon, TrangThai])
         columns = [col[0] for col in cursor.description]
         invoice = [dict(zip(columns, row)) for row in cursor.fetchall()]
-    invoices_types = []
-    temp = get_all_invoicestypes()
-    for item in temp:
-        invoices_types.append(item['id'])
+    
+    rooms = get_all_rooms()
 
-    print(invoices_types)
-    return render(request, 'invoices/invoices_list.html', {'invoices': invoice, 'invoices_types': invoices_types})
+    print(rooms)
+    return render(request, 'invoices/invoices_list.html', {'invoices': invoice, 'rooms': rooms})
+
+def get_all_rooms():
+    with connection.cursor() as cursor:
+        cursor.callproc('GetAllRooms')
+        columns = [col[0] for col in cursor.description]
+        return [dict(zip(columns, row)) for row in cursor.fetchall()]
 
 def pay(request, MaHoaDon):
     with connection.cursor() as cursor:

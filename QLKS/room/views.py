@@ -17,7 +17,7 @@ def export_room_excel(request):
 
     # Ghi dòng tiêu đề
     ws.append([
-        'Mã phòng', 'Số phòng', 'Trạng thái', 'Loại phòng', 'Thanh toán'
+        'Mã phòng', 'Số phòng', 'Trạng thái', 'Loại phòng',
     ])
 
     # Lấy dữ liệu
@@ -30,7 +30,7 @@ def export_room_excel(request):
             row.get('SoPhong', ''),
             row.get('TrangThai', ''),
             row.get('TenLoai', ''),
-            row.get('ThanhToan', ''),
+            
          
         ])
     response = HttpResponse(

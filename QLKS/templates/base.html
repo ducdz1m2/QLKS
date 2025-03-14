@@ -42,7 +42,7 @@
     </style>
   </head>
   <body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark" style="position: fixed; top: 0; width: 100%; z-index: 1000;">
       <div class="container">
         <a class="navbar-brand fw-bold" href="{% url 'home' %}">QLKS</a>
         <button
@@ -73,14 +73,20 @@
                 {% endif %}
 
                 <li class="nav-item">
-                    <a class="nav-link" href="/invoices/">Quản lý hóa đơn</a>
+                  <a class="nav-link" href="/customer/">Quản lý khách hàng</a>
                 </li>
+
                 <li class="nav-item">
-                    <a class="nav-link" href="/customer/">Quản lý khách hàng</a>
+                  <a class="nav-link" href="/service/">Quản lý dịch vụ</a>
                 </li>
+
                 <li class="nav-item">
-                    <a class="nav-link" href="/service/">Quản lý dịch vụ</a>
+                    <a class="nav-link" href="/service/usage">Quản lý sử dụng dịch vụ</a>
                 </li>
+               
+                <li class="nav-item">
+                  <a class="nav-link" href="/invoices/">Quản lý hóa đơn</a>
+              </li>
               {% endif %}
             {% endif %}
         
@@ -97,9 +103,6 @@
                 </li>
             {% endif %}
         </ul>
-        
-          
-          
           
         </div>
       </div>

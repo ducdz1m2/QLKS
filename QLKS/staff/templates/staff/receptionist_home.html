@@ -2,14 +2,14 @@
 
 {% block content %}
 <div class="container mt-5">
-  <h2 class="text-center mb-4 fw-bold text-primary">✨ Trang chính - Nhân viên Lễ Tân ✨</h2>
+  <h2 class="text-center mb-4 fw-bold text-primary">✨ Trang Chính - Nhân Viên Lễ Tân ✨</h2>
 
   <div class="row g-4">
     <div class="col-md-6 col-lg-4">
       <div class="card shadow border-0 rounded-4 text-center h-100">
         <div class="card-body">
           <i class="bi bi-door-open-fill fs-1 text-primary"></i>
-          <h5 class="mt-3 mb-2 fw-semibold">Quản lý Phòng</h5>
+          <h5 class="mt-3 mb-2 fw-semibold">Quản lý phòng</h5>
           <a href="{% url 'room_list' %}" class="btn btn-outline-primary btn-sm">Truy cập</a>
         </div>
       </div>
@@ -19,7 +19,7 @@
       <div class="card shadow border-0 rounded-4 text-center h-100">
         <div class="card-body">
           <i class="bi bi-receipt fs-1 text-success"></i>
-          <h5 class="mt-3 mb-2 fw-semibold">Quản lý Hóa đơn</h5>
+          <h5 class="mt-3 mb-2 fw-semibold">Quản lý hóa đơn</h5>
           <a href="{% url 'invoices_list' %}" class="btn btn-outline-success btn-sm">Truy cập</a>
         </div>
       </div>
@@ -39,7 +39,7 @@
       <div class="card shadow border-0 rounded-4 text-center h-100">
         <div class="card-body">
           <i class="bi bi-tools fs-1 text-warning"></i>
-          <h5 class="mt-3 mb-2 fw-semibold">Quản lý Yêu cầu dịch vụ</h5>
+          <h5 class="mt-3 mb-2 fw-semibold">Quản lý yêu cầu dịch vụ</h5>
           <a href="{% url 'usage_list' %}" class="btn btn-outline-warning btn-sm">Truy cập</a>
         </div>
       </div>
@@ -49,8 +49,18 @@
       <div class="card shadow border-0 rounded-4 text-center h-100">
         <div class="card-body">
           <i class="bi bi-box-seam fs-1 text-danger"></i>
-          <h5 class="mt-3 mb-2 fw-semibold">Quản lý Dịch vụ</h5>
+          <h5 class="mt-3 mb-2 fw-semibold">Quản lý dịch vụ</h5>
           <a href="{% url 'service_list' %}" class="btn btn-outline-danger btn-sm">Truy cập</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-6 col-lg-4">
+      <div class="card shadow border-0 rounded-4 text-center h-100">
+        <div class="card-body">
+          <i class="bi bi-box-seam fs-1 text-danger"></i>
+          <h5 class="mt-3 mb-2 fw-semibold">GitHub</h5>
+          <a href="https://github.com/ducdz1m2/QLKS" class="btn btn-outline-secondary btn-sm">Truy cập</a>
         </div>
       </div>
     </div>

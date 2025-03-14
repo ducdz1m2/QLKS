@@ -16,16 +16,29 @@
   <form method="GET" action="{% url 'search_services' %}" class="mb-3 p-3 bg-light rounded shadow-sm">
     <div class="row g-2 align-items-center">
       <div class="col-md-3">
+        <input type="text" name="id" class="form-control" placeholder="Nhập mã dịch vụ" value="{{ request.GET.id }}">
+      </div>
+      <div class="col-md-3">
         <input type="text" name="name" class="form-control" placeholder="Nhập tên dịch vụ" value="{{ request.GET.name }}">
+      </div>
+      <div class="col-md-3">
+        <input type="number" name="price" class="form-control" placeholder="Nhập giá dịch vụ" value="{{ request.GET.price }}">
+      </div>
+      <div class="col-md-3">
+        <select name="status" class="form-select">
+          <option value="">-- Chọn trạng thái --</option>
+          <option value="Đang được sử dụng" {% if request.GET.status == "Đang được sử dụng" %}selected{% endif %}>Đang được sử dụng</option>
+          <option value="Đang không sử dụng" {% if request.GET.status == "Đang không sử dụng" %}selected{% endif %}>Đang không sử dụng</option>
+        </select>
       </div>
       <div class="col-md-3">
         <select name="min" class="form-select">
           <option value="">-- Giá tối thiểu --</option>
-          <option value="0" {% if request.GET.min == "0" %}selected{% endif %}>0</option>
           <option value="100000" {% if request.GET.min == "100000" %}selected{% endif %}>100,000</option>
           <option value="200000" {% if request.GET.min == "200000" %}selected{% endif %}>200,000</option>
           <option value="500000" {% if request.GET.min == "500000" %}selected{% endif %}>500,000</option>
           <option value="1000000" {% if request.GET.min == "1000000" %}selected{% endif %}>1,000,000</option>
+          <option value="10000000" {% if request.GET.min == "10000000" %}selected{% endif %}>10,000,000</option>
         </select>
       </div>
       <div class="col-md-3">
@@ -63,6 +76,7 @@
         <th>Tên dịch vụ</th>
         <th>Giá dịch vụ</th>
         <th>Phòng ban</th>
+        <th>Trạng thái</th>
         <th>Hành động</th>
       </tr>
     </thead>
@@ -75,8 +89,9 @@
           </a>
         </td>
         <td>{{ service.TenDichVu }}</td>
-        <td>{{ service.GiaDichVu|intcomma }} ₫</td>
+        <td>{{ service.GiaDichVu|intcomma }} VNĐ</td>
         <td>{{ service.TenPhongBan }}</td>
+        <td>{{ service.TrangThai }}</td>
         <td>
           <a href="{% url 'edit_service' service.MaDichVu %}" class="btn btn-warning btn-sm" onclick="event.stopPropagation();">✏️ Sửa</a>
           <form action="{% url 'delete_service' service.MaDichVu %}" method="post" class="d-inline" onclick="event.stopPropagation();">

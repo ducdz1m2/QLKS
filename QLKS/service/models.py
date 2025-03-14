@@ -18,7 +18,6 @@ class SuDungDichVu(models.Model):
     MaSuDung = models.AutoField(primary_key=True, verbose_name="Mã Sử Dụng")
     MaThue = models.ForeignKey(ThuePhong, on_delete=models.CASCADE, verbose_name="Mã Thuê")
     MaDichVu = models.ForeignKey(DichVu, on_delete=models.CASCADE, verbose_name="Mã Dịch Vụ")
-    SoLuong = models.IntegerField(null=True, blank=True, verbose_name="Số Lượng")
     NgaySuDung = models.DateField(null=True, blank=True, verbose_name="Ngày Sử Dụng")
     TrangThai = models.CharField(
         choices=TrangThai,

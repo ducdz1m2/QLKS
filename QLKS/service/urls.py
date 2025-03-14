@@ -11,9 +11,9 @@ urlpatterns = [
     path('search/', search_services, name='search_services'),
     #Su dung dich vu
     path('usage/', usage_list, name='usage_list'),
-    path('usage/add/', add_usage, name='add_usage'),
     path('usage/edit/<int:pk>/', edit_usage, name='edit_usage'),
     path('usage/delete/<int:pk>/', delete_usage, name='delete_usage'),
+    path('usage/search/', search_usages, name='search_usages'),
     path('usage/export', export_usage_excel, name='export_usage_excel'),
     path('export', export_service_excel, name='export_service_excel'),
     

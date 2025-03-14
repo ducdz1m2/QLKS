@@ -2,7 +2,7 @@
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <title>Hóa đơn {{ invoices.MaHoaDon }}</title>
+    <title>Hóa đơn {{ invoice.MaHoaDon }}</title>
     <style>
         @font-face {
             font-family: "DejaVu";
@@ -38,61 +38,78 @@
 <body>
 
     <h2 style="text-align:center;">THÔNG TIN HÓA ĐƠN</h2>
+        
+    <div style="width: 100%; height: max-content; display: flex;">
+        <div style="width: 33.33%; height: max-content;">
+            <div style="position: absolute; left: 0;">
+                <p><strong>Mã hóa đơn:</strong> {{ invoice.MaHoaDon }}</p>
+                <p><strong>Tên khách hàng:</strong> {{ invoice.TenKhachHang }}</p>
+                <p><strong>Số phòng:</strong> {{ invoice.SoPhong }}</p>
+                <p><strong>Ngày nhận:</strong> {{ invoice.NgayNhan|date:"d/m/Y" }}</p>
+            </div>
+        </div>
 
-    <div class="section">
-        <p><strong>Mã hóa đơn:</strong> {{ invoices.MaHoaDon }}</p>
-        <p><strong>Ngày lập hóa đơn:</strong> {{ invoices.NgayLapHoaDon }}</p>
-        <p><strong>Trạng thái:</strong> {{ invoices.TrangThai }}</p>
+        <div style="width: 33.33%; height: max-content;">
+            <div style="position: absolute; left: 50%; transform: translateX(-50%);">
+                <p><strong>Ngày lập:</strong> {{ invoice.NgayLapHoaDon|date:"d/m/Y" }}</p>
+                <p><strong>Địa chỉ:</strong> {{ invoice.DiaChi }}</p>
+                <p><strong>Loại phòng:</strong> {{ invoice.TenLoai }}</p>
+                <p><strong>Ngày trả:</strong> {{ invoice.NgayTra|date:"d/m/Y" }}</p>
+            </div>
+        </div>
+
+        <div style="width: 33.33%; height: max-content;">
+            <div style="position: absolute; right: 0;">
+                <p><strong>Trạng thái:</strong> {{ invoice.TrangThai }}</p>
+                <p><strong>Số điện thoại:</strong> {{ invoice.SoDienThoai }}</p>
+                <p><strong>Giá phòng:</strong> {{ invoice.GiaPhong }}</p>
+                <p><strong>Số ngày lưu trú:</strong> {{ invoice.NgayLuuTru }}</p>
+            </div>
+        </div>
     </div>
 
-    <div class="section">
-        <p><strong>Tên khách hàng:</strong> {{ invoices.TenKhachHang }}</p>
-        <p><strong>Số điện thoại:</strong> {{ invoices.SoDienThoai }}</p>
-        <p><strong>Địa chỉ:</strong> {{ invoices.DiaChi }}</p>
+    <div style="width: 100%;">
+        <h4 style="margin-top: 150px; text-align: center;">DỊCH VỤ SỬ DỤNG</h4>
+        <table>
+            <thead>
+                <tr>
+                    <th style="text-align: left;">Tên dịch vụ</th>
+                    <th style="text-align: center;">Ngày sử dụng</th>
+                    <th style="text-align: center;">Trạng thái</th>
+                    <th style="text-align: right;">Giá dịch vụ</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for service in services %}
+                <tr>
+                    <td style="text-align: left;">{{ service.TenDichVu }}</td>
+                    <td style="text-align: center;">{{ service.NgaySuDung|date:"d/m/Y" }}</td>
+                    <td style="text-align: center;">{{ service.TrangThai }}</td>
+                    <td style="text-align: right;">{{ service.GiaDichVu }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <div style="width: 100%; height: max-content; display: flex; margin-top: 10px;">
+            <div style="width: 33.33%; height: max-content;">
+                <div style="position: absolute; left: 0;">
+                    <p><b>Tổng tiền phòng:</b> {{ invoice.TongTienPhong }}</p>
+                </div>
+            </div>
+    
+            <div style="width: 33.33%; height: max-content;">
+                <div style="position: absolute; left: 50%; transform: translateX(-50%);">
+                    <p><b>Tổng tiền dịch vụ:</b> {{ invoice.TongTienDichVu }}</p>
+                </div>
+            </div>
+    
+            <div style="width: 33.33%; height: max-content;">
+                <div style="position: absolute; right: 0;">
+                    <p><b>Tiền thanh toán:</b> {{ invoice.TongTien }}</p>
+                </div>
+            </div>
+        </div>
     </div>
-
-    <div class="section">
-        <p><strong>Số phòng:</strong> {{ invoices.SoPhong }}</p>
-        <p><strong>Loại phòng:</strong> {{ invoices.TenLoai }}</p>
-        <p><strong>Giá phòng:</strong> {{ invoices.GiaPhong }}</p>
-        <p><strong>Ngày nhận:</strong> {{ invoices.NgayNhan }}</p>
-        <p><strong>Ngày trả:</strong> {{ invoices.NgayTra }}</p>
-        <p><strong>Số ngày lưu trú:</strong> {{ invoices.NgayLuuTru }}</p>
-    </div>
-
-    <h4 style="margin-top: 30px;">DỊCH VỤ SỬ DỤNG</h4>
-    <table>
-        <thead>
-            <tr>
-                <th>Tên dịch vụ</th>
-                <th>Ngày sử dụng</th>
-                <th>Trạng thái</th>
-                <th>Giá tiền</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for service in services %}
-            <tr>
-                <td>{{ service.TenDichVu }}</td>
-                <td>{{ service.NgaySuDung }}</td>
-                <td>{{ service.TrangThai }}</td>
-                <td>{{ service.GiaDichVu }}</td>
-            </tr>
-            {% endfor %}
-            <tr>
-                <td colspan="3" style="text-align: right;"><strong>Tổng tiền dịch vụ:</strong></td>
-                <td><strong>{{ money.total_service }}</strong></td>
-            </tr>
-            <tr>
-                <td colspan="3" style="text-align: right;"><strong>Tổng tiền phòng:</strong></td>
-                <td><strong>{{ money.total_rent }}</strong></td>
-            </tr>
-            <tr>
-                <td colspan="3" style="text-align: right;"><strong>Tổng tiền thanh toán:</strong></td>
-                <td><strong>{{ money.total }}</strong></td>
-            </tr>
-        </tbody>
-    </table>
-
 </body>
 </html>

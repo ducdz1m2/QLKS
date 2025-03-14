@@ -25,7 +25,7 @@
           <option value="">-- Trạng thái --</option>
           <option value="Trống" 
           {% if request.GET.trang_thai == "Trống" %}
-           selected 
+           selected
            {% endif %}>Trống</option>
           <option value="Đã đặt" {% if request.GET.trang_thai == "Đã đặt" %} selected {% endif %}>Đã đặt</option>
         </select>
@@ -34,8 +34,8 @@
         <select name="ten_loai" class="form-select">
           <option value="">-- Loại phòng --</option>
           {% for loai in room_types %}
-          <option value="{{ loai.TenLoai }}" {% if request.GET.ten_loai == loai.TenLoai %}selected{% endif %}>{{
-            loai.TenLoai }}</option>
+          <option value="{{ loai.TenLoai }}" {% if request.GET.ten_loai == loai.TenLoai %}selected{% endif %}>
+            {{ loai.TenLoai }}</option>
           {% endfor %}
         </select>
       </div>
@@ -50,8 +50,9 @@
     <thead class="table-dark">
       <tr>
         <th>Số phòng</th>
-        <th>Trạng thái</th>
         <th>Loại phòng</th>
+        <th>Giá phòng</th>
+        <th>Trạng thái</th>
         <th>Hành động</th>
       </tr>
     </thead>
@@ -63,8 +64,9 @@
             <b>{{ room.SoPhong }}</b>
           </a>
         </td>
-        <td>{{ room.TrangThai }}</td>
         <td>{{ room.TenLoai }}</td>
+        <td>{{ room.GiaPhong }} VNĐ</td>
+        <td>{{ room.TrangThai }}</td>
         <td>
           <!-- Nút chỉnh sửa -->
           <a href="{% url 'edit_room' room.MaPhong %}" class="btn btn-warning btn-sm">✏️ Sửa</a>
@@ -81,7 +83,7 @@
           <a href="{% url 'add_customer_view' room.MaPhong %}" class="btn btn-success btn-sm"> 🏨 Cho thuê</a>
           {% endif %}
           {% if room.TrangThai == 'Đã đặt' %}
-          <a href="{% url 'detail_customer' room.MaKhachHang %}" class="btn btn-primary btn-sm"> 🔍 Xem khách hàng</a>
+          <a href="{% url 'detail_customer' room.MaKhachHang %}" class="btn btn-primary btn-sm pe-3"> 🔍 Xem khách đang ở </a>
           {% endif %}
         </td>
       </tr>

@@ -38,8 +38,9 @@
             <tr>
                 <td>{{ rentRoom.SoPhong }}</td>
                 <td>{{ rentRoom.TenLoai }}</td>
-                <td><p class="btn btn-{% if rentRoom.TrangThai == 'Đã trả' %}success{% else %}secondary
-                {% endif %}">{{ rentRoom.TrangThai }}</p></td>
+                <td><p class="btn btn-{% if rentRoom.TrangThai == 'Đã trả' %}secondary{% else %}success{% endif %}">
+                    {{ rentRoom.TrangThai }}
+                </p></td>
                 <td>{{ rentRoom.NgayThue|date:"d/m/Y" }}</td>
                 <td>{{ rentRoom.NgayNhan|date:"d/m/Y" }}</td>
                 <td>{{ rentRoom.NgayTra|date:"d/m/Y" }}</td>

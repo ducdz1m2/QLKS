@@ -3,20 +3,71 @@
 
 {% block content %}
 <div class="container">
-  <h2>Danh sách Sử Dụng Dịch Vụ</h2>
-  <div class="mb-3">
-    <a href="{% url 'add_usage' %}" class="btn btn-success">Thêm Sử Dụng Dịch Vụ</a>
+  <h2 class="text-center">Danh sách sử dụng dịch vụ</h2>
+  <div class="mb-3 text-end">
     <a href="{% url 'export_usage_excel' %}" class="btn btn-outline-primary ms-2" target="_blank">📥 Xuất danh sách sử dụng dịch vụ</a>
   </div>
+
+  <!-- Form tìm kiếm sử dụng dịch vụ -->
+  <form method="GET" action="{% url 'search_usages' %}" class="mb-3 p-3 bg-light rounded shadow-sm">
+    <div class="row g-2 align-items-center">
+      <div class="col-md-3">
+        <input type="number" name="MaSuDung" class="form-control" placeholder="Nhập mã sử dụng" value="{{ request.GET.MaSuDung }}">
+      </div>
+      <div class="col-md-3">
+        <input type="text" name="TenKhachHang" class="form-control" placeholder="Nhập tên khách hàng" value="{{ request.GET.TongTien }}">
+      </div>
+      <div class="col-md-3">
+        <input type="number" name="GiaDichVu" class="form-control" placeholder="Nhập giá dịch vụ" value="{{ request.GET.GiaDichVu }}">
+      </div>
+      <div class="col-md-3">
+        <input type="date" name="NgaySuDung" class="form-control" placeholder="Nhập ngày sử dụng" value="{{ request.GET.NgaySuDung }}">
+      </div>
+
+      <div class="col-md-3">
+        <select name="SoPhong" class="form-select">
+          <option value="">-- Số phòng --</option>
+          {% for room in rooms %}
+          <option value="{{ room.SoPhong }}" {% if request.GET.SoPhong == room.SoPhong %}selected{% endif %}>
+            {{ room.SoPhong }}</option>
+          {% endfor %}
+        </select>
+      </div>
+
+      <div class="col-md-3">
+        <select name="TenDichVu" class="form-select">
+          <option value="">-- Tên dịch vụ --</option>
+          {% for service in services %}
+          <option value="{{ service.TenDichVu }}" {% if request.GET.TenDichVu == service.TenDichVu %}selected{% endif %}>{{ service.TenDichVu }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      
+      <div class="col-md-3">
+        <select name="TrangThai" class="form-select">
+          <option value="">-- Trạng thái --</option>
+          <option value="Đang chờ xử lý" {% if request.GET.TrangThai == "Đang chờ xử lý" %}selected{% endif %}>Đang chờ xử lý</option>
+          <option value="Đang xử lý" {% if request.GET.TrangThai == "Đang xử lý" %}selected{% endif %}>Đang xử lý</option>
+          <option value="Hoàn thành" {% if request.GET.TrangThai == "Hoàn thành" %}selected{% endif %}>Hoàn thành</option>
+        </select>
+      </div>
+      
+      <div class="col-md-3">
+        <button type="submit" class="btn btn-primary w-100">🔍 Tìm kiếm</button>
+      </div>
+    </div>
+  </form>
+
   <table class="table table-bordered">
     <thead>
       <tr>
         <th>Mã sử dụng</th>
-        <th>Số phòng</th>
         <th>Tên Khách Hàng</th>
+        <th>Số phòng</th>
         <th>Tên Dịch Vụ</th>
+        <th>Giá dịch vụ</th>
         <th>Ngày Sử Dụng</th>
-        <th>Đơn giá</th>
+        <th>Trạng Thái</th>
         <th>Hành động</th>
       </tr>
     </thead>
@@ -24,11 +75,12 @@
       {% for usage in usages %}
       <tr>
         <td>{{ usage.MaSuDung }}</td>
-        <td>{{ usage.SoPhong }}</td>
         <td>{{ usage.TenKhachHang }}</td>
+        <td>{{ usage.SoPhong }}</td>
         <td>{{ usage.TenDichVu }}</td>
-        <td>{{ usage.NgaySuDung }}</td>
-        <td>{{ usage.GiaDichVu }}</td>
+        <td>{{ usage.GiaDichVu }} VNĐ</td>
+        <td>{{ usage.NgaySuDung|date:"d-m-Y" }}</td>
+        <td>{{ usage.TrangThai }}</td>
         <td>
           <a href="{% url 'edit_usage' usage.MaSuDung %}" class="btn btn-primary btn-sm">Sửa</a>
           <form action="{% url 'delete_usage' usage.MaSuDung %}" method="post" class="d-inline">

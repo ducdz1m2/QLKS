@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.db import connection
 from django.contrib import messages
-from .forms import DichVuForm, SuDungDichVuForm
+from .forms import DichVuForm
 from staff.views import get_all_phongban
 import openpyxl
 from django.http import HttpResponse
@@ -16,7 +16,7 @@ def export_service_excel(request):
 
     # Ghi dòng tiêu đề
     ws.append([
-        'Mã dịch vụ', 'Tên dịch vụ', 'Giá dịch vụ', 'Tên phòng ban'
+        'Mã dịch vụ', 'Tên dịch vụ', 'Giá dịch vụ', 'Tên phòng ban', 'Trạng thái'
     ])
 
     # Lấy dữ liệu
@@ -28,6 +28,7 @@ def export_service_excel(request):
             sv['TenDichVu'],
             sv['GiaDichVu'],
             sv['TenPhongBan'],
+            sv['TrangThai'],
         ])
 
     # Tạo file response
@@ -49,8 +50,7 @@ def export_usage_excel(request):
 
     # Ghi dòng tiêu đề
     ws.append([
-        'Mã sử dụng', 'Số phòng', 'Tên khách hàng', 'Tên dịch vụ',
-         'Ngày sử dụng',  'Trạng thái', 'Giá dịch vụ',
+        'Mã sử dụng', 'Tên khách hàng', 'Số phòng', 'Tên dịch vụ', 'Giá dịch vụ', 'Ngày sử dụng',  'Trạng thái'
     ])
 
     # Lấy dữ liệu
@@ -60,12 +60,12 @@ def export_usage_excel(request):
     for row in usage_list:
         ws.append([
             row.get('MaSuDung', ''),
-            row.get('SoPhong', ''),
             row.get('TenKhachHang', ''),
+            row.get('SoPhong', ''),
             row.get('TenDichVu', ''),
-            row.get('NgaySuDung', '').strftime('%Y-%m-%d') if row.get('NgaySuDung') else '',
+            row.get('GiaDichVu', 0),
+            row.get('NgaySuDung', '').strftime('%d-%m-%Y'),
             row.get('TrangThai', ''),
-            float(row.get('GiaDichVu', 0)),
         ])
 
     # Tạo file response
@@ -164,7 +164,10 @@ def service_detail(request, pk):
     return render(request, 'service/detail_service.html', {'service': service})
 
 def search_services(request):
+    id = request.GET.get('id') or None
     name = request.GET.get('name') or None
+    price = request.GET.get('price') or None
+    status = request.GET.get('status') or None
     min_price = request.GET.get('min') or None
     max_price = request.GET.get('max') or None
     phongban_id = request.GET.get('phongban') or None
@@ -174,7 +177,7 @@ def search_services(request):
     phongban_dict = {pb['MaPhongBan']: pb['TenPhongBan'] for pb in phongbans}
 
     with connection.cursor() as cursor:
-        cursor.callproc('SearchServices', [name, min_price, max_price, phongban_id])
+        cursor.callproc('SearchServices', [id, name, phongban_id, status, price ,min_price, max_price])
         results = cursor.fetchall()
         while cursor.nextset():
             pass
@@ -185,6 +188,7 @@ def search_services(request):
                 'TenDichVu': row[1],
                 'GiaDichVu': row[2],
                 'TenPhongBan': phongban_dict.get(row[3], 'Không rõ'),
+                'TrangThai': row[4],
             })
 
     return render(request, 'service/service_list.html', {
@@ -211,62 +215,56 @@ def get_all_usages():
         columns = [col[0] for col in cursor.description]
         return [dict(zip(columns, row)) for row in cursor.fetchall()]
 
-def add_usage(request):
-    from .forms import SuDungDichVuForm
-    if request.method == 'POST':
-        form = SuDungDichVuForm(request.POST)
-        if form.is_valid():
-            with connection.cursor() as cursor:
-                cursor.callproc(
-                    'AddUsage',
-                    [
-                        form.cleaned_data['MaThue'],
-                        form.cleaned_data['MaDichVu'],
-                        form.cleaned_data['SoLuong'],
-                        form.cleaned_data['NgaySuDung']
-                    ]
-                )
-            messages.success(request, "Thêm sử dụng dịch vụ thành công!")
-            return redirect('usage_list')
-    else:
-        form = SuDungDichVuForm()
-    return render(request, 'usage/add_usage.html', {'form': form})
-
 def edit_usage(request, pk):
-    from .forms import SuDungDichVuForm
     usage = get_usage(pk)
     if not usage:
         return redirect('usage_list')
     if request.method == 'POST':
-        form = SuDungDichVuForm(request.POST)
-        if form.is_valid():
+            MaDichVu = request.POST.get('MaDichVu', '').strip()
+            NgaySuDung = request.POST.get('NgaySuDung', '').strip()
+            TrangThai = request.POST.get('TrangThai', '').strip()
             with connection.cursor() as cursor:
-                cursor.callproc(
-                    'UpdateUsage',
-                    [
-                        pk,
-                        form.cleaned_data['MaThue'],
-                        form.cleaned_data['MaDichVu'],
-                        form.cleaned_data['SoLuong'],
-                        form.cleaned_data['NgaySuDung']
-                    ]
-                )
+                cursor.callproc('UpdateUsage', [pk, MaDichVu, NgaySuDung, TrangThai])
             messages.success(request, "Cập nhật sử dụng dịch vụ thành công!")
             return redirect('usage_list')
     else:
-        form = SuDungDichVuForm(initial={
-            'MaThue': usage.get('MaThue'),
-            'MaDichVu': usage.get('MaDichVu'),
-            'SoLuong': usage.get('SoLuong'),
-            'NgaySuDung': usage.get('NgaySuDung')
-        })
-    return render(request, 'usage/edit_usage.html', {'form': form})
+        services = get_all_services()
+        return render(request, 'usage/edit_usage.html', {'usage': usage, 'services': services})
 
 def delete_usage(request, pk):
     usage = get_usage(pk)
     if request.method == 'POST':
         with connection.cursor() as cursor:
-            cursor.callproc('DeleteSudungdichvu', [pk])
+            cursor.callproc('DeleteUsage', [pk])
         messages.success(request, "Xóa sử dụng dịch vụ thành công!")
         return redirect('usage_list')
     return render(request, 'usage/delete_usage.html', {'usage': usage})
+
+def search_usages(request):
+    MaSuDung = request.GET.get('MaSuDung') or None
+    TenKhachHang = request.GET.get('TenKhachHang') or None
+    GiaDichVu = request.GET.get('GiaDichVu') or None
+    NgaySuDung = request.GET.get('NgaySuDung') or None
+    SoPhong = request.GET.get('SoPhong') or None
+    TenDichVu = request.GET.get('TenDichVu') or None
+    TrangThai = request.GET.get('TrangThai') or None
+
+    with connection.cursor() as cursor:
+        cursor.callproc('SearchUsages', [MaSuDung, TenKhachHang, GiaDichVu, NgaySuDung, SoPhong, TenDichVu, TrangThai])
+        columns = [col[0] for col in cursor.description]
+        invoice = [dict(zip(columns, row)) for row in cursor.fetchall()]
+    
+    rooms = get_all_rooms()
+    services = get_all_services()
+
+    return render(request, 'usage/usage_list.html', {
+        'usages': invoice,
+        'rooms': rooms,
+        'services': services,
+    })
+
+def get_all_rooms():
+    with connection.cursor() as cursor:
+        cursor.callproc('GetAllRooms')
+        columns = [col[0] for col in cursor.description]
+        return [dict(zip(columns, row)) for row in cursor.fetchall()]
