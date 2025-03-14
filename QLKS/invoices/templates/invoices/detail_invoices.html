@@ -83,7 +83,7 @@
 
         <div class="d-flex justify-content-end">
             <a href="{% url 'export_invoice_pdf' invoice.MaHoaDon %}" class="btn btn-outline-danger">⬇️ Xuất hóa đơn</a>
-            <a href="{% url 'invoices_list' %}" class="btn btn-secondary me-1" style="width: 8rem;">Quay lại</a>
+            <a href="{{ uri.previous }}" class="btn btn-secondary me-1" style="width: 8rem;">Quay lại</a>
         </div>
     </div>
     {% endif %}

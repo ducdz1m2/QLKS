@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% block title %}Chi tiết sử dụng dịch vụ{% endblock %}
+
+{% block content %}
+<div class="container my-4">
+  <div class="card p-4 shadow-lg">
+    <div class="card-header text-center">
+      <h2>Chi Tiết Sử Dụng Dịch Vụ</h2>
+    </div>
+    <div class="card-body">
+      <div class="mb-3">
+        <label class="form-label">Mã Sử Dụng</label>
+        <p class="form-control">{{ usage.MaSuDung }}</p>
+      </div>
+      <div class="mb-3">
+        <label class="form-label">Khách Hàng</label>
+        <p class="form-control">{{ usage.TenKhachHang }}</p>
+      </div>
+      <div class="mb-3">
+        <label class="form-label">Số Phòng</label>
+        <p class="form-control">{{ usage.SoPhong }}</p>
+      </div>
+      <div class="mb-3">
+        <label class="form-label">Dịch Vụ</label>
+        <p class="form-control">{{ usage.TenDichVu }}</p>
+      </div>
+      <div class="mb-3">
+        <label class="form-label">Ngày Sử Dụng</label>
+        <p class="form-control">{{ usage.NgaySuDung|date:"d-m-Y" }}</p>
+      </div>
+      <div class="mb-3">
+        <label class="form-label">Trạng Thái</label>
+        <p class="form-control">{{ usage.TrangThai }}</p>
+      </div>
+      <div class="d-flex justify-content-end">
+        <a href="{% url 'usage_list' %}" class="btn btn-secondary" style="width: 8rem;">Quay lại</a>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

@@ -1,26 +1,42 @@
 {% extends "base.html" %}
-{% block title %}Chi tiết Dịch vụ{% endblock %}
+{% block title %}Chi tiết dịch vụ{% endblock %}
 
 {% block content %}
 <div class="container my-4">
-  <h2 class="text-center mb-4">Chi tiết Dịch vụ</h2>
+  <h2 class="text-center mb-4">Chi Tiết Dịch Vụ</h2>
 
-  <div class="card shadow">
-    <div class="card-header fw-bold">
-      Mã dịch vụ: {{ service.MaDichVu }}
+{% if error %}
+    <div class="alert alert-danger text-center">{{ error }}</div>
+    <div class="d-flex justify-content-end">
+        <a href="/customer/" class="btn btn-secondary me-1" style="width: 8rem;">Quay lại</a>
     </div>
-    <div class="card-body">
-      <h5 class="card-title">Tên dịch vụ: {{ service.TenDichVu }}</h5>
-      <p class="card-text">Giá dịch vụ: 
-        {% load humanize %}
-        {{ service.GiaDichVu|intcomma }} VNĐ
-      </p>
-      <p class="card-text">Phòng ban: {{ service.TenPhongBan }}</p>
-    </div>
-  </div>
+    {% else %}
 
-  <div class="mt-4 text-end">
-    <a href="{% url 'service_list' %}" class="btn btn-secondary">⬅ Trở về danh sách</a>
-  </div>
+    <div class="card p-4 shadow-lg mb-5">
+        <div class="mb-3">
+            <label for="TenKhachHang" class="form-label">Mã dịch vụ</label>
+            <p class="form-control">{{ service.MaDichVu }}</p>
+        </div>
+
+        <div class="mb-3">
+          <label for="TenKhachHang" class="form-label">Tên dịch vụ</label>
+          <p class="form-control">{{ service.TenDichVu }}</p>
+      </div>
+
+      <div class="mb-3">
+        <label for="TenKhachHang" class="form-label">Giá dịch vụ</label>
+        <p class="form-control">{{ service.GiaDichVu }}</p>
+      </div>
+
+      <div class="mb-3">
+        <label for="TenKhachHang" class="form-label">Phòng ban</label>
+        <p class="form-control">{{ service.TenPhongBan }}</p>
+       </div>
+
+       <div class="d-flex justify-content-end">
+          <a href="/service/" class="btn btn-secondary me-1" style="width: 8rem;">Quay lại</a>
+       </div>
+    </div>
+    {% endif %}
 </div>
 {% endblock %}

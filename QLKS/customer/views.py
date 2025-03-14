@@ -13,9 +13,6 @@ from django.http import HttpResponse
 from django.utils.timezone import now
 
 
-
-
-
 def export_customer_excel(request):
     wb = openpyxl.Workbook()
     ws = wb.active
@@ -135,9 +132,12 @@ def get_all_customers():
 # Show thông tin 1 khách hàng   
 def detail_customer(request, MaKhachHang):  
     customer = get_customer(MaKhachHang) 
+    uri = {
+        'previous': request.META.get('HTTP_REFERER', '/customer/')
+    }
     if not customer:
-        return render(request, 'customer/detail_customer.html', {'error': 'Không tìm thấy khách hàng'})
-    return render(request, 'customer/detail_customer.html', {'customer' : customer})
+        return render(request, 'customer/detail_customer.html', {'error': 'Không tìm thấy khách hàng', 'uri': uri})
+    return render(request, 'customer/detail_customer.html', {'customer' : customer, 'uri': uri})
 
 # Chỉnh sửa thông tin 1 khách hàng
 def edit_customer(request, MaKhachHang):

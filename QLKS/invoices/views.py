@@ -83,15 +83,17 @@ def get_all_services(maThuePhong):
     
 
 @login_required
-@phongban_required(allowed_departments=['admin', 'receptionist'])
 def detail_invoices(request, MaHoaDon):
     invoice = get_invoices(MaHoaDon)
     if not invoice:
         return render(request, 'invoices/detail_invoices.html', {'error': 'Không tìm thấy hóa đơn'})
 
     services = get_all_services(invoice['MaThue_id'])
+    uri = {
+        'previous': request.META.get('HTTP_REFERER', '/invoices/')
+    }
 
-    return render(request, 'invoices/detail_invoices.html', {'invoice': invoice, 'services': services})
+    return render(request, 'invoices/detail_invoices.html', {'invoice': invoice, 'services': services, 'uri': uri})
 
 @login_required
 @phongban_required(allowed_departments=['admin', 'receptionist'])

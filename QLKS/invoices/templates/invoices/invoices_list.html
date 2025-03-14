@@ -16,14 +16,9 @@
       <div class="col-md-3">
         <input type="number" name="MaHoaDon" class="form-control" placeholder="Nhập mã hóa đơn" value="{{ request.GET.MaHoaDon }}">
       </div>
+
       <div class="col-md-3">
         <input type="text" name="TenKhachHang" class="form-control" placeholder="Nhập tên khách hàng" value="{{ request.GET.TongTien }}">
-      </div>
-      <div class="col-md-3">
-        <input type="text" name="DiaChi" class="form-control" placeholder="Nhập địa chỉ" value="{{ request.GET.DiaChi }}">
-      </div>
-      <div class="col-md-3">
-        <input type="text" name="SoDienThoai" class="form-control" placeholder="Nhập số điện thoại" value="{{ request.GET.SoDienThoai }}">
       </div>
 
       <div class="col-md-3">
@@ -38,6 +33,14 @@
 
       <div class="col-md-3">
         <input type="date" name="NgayLapHoaDon" class="form-control" placeholder="Nhập ngày lập hóa đơn" value="{{ request.GET.NgayLapHoaDon }}">
+      </div>
+
+      <div class="col-md-3">
+        <input type="text" name="DiaChi" class="form-control" placeholder="Nhập địa chỉ" value="{{ request.GET.DiaChi }}">
+      </div>
+
+      <div class="col-md-3">
+        <input type="text" name="SoDienThoai" class="form-control" placeholder="Nhập số điện thoại" value="{{ request.GET.SoDienThoai }}">
       </div>
       
       <div class="col-md-3">
@@ -83,7 +86,7 @@
         <td>{{ invoice.DiaChi }}</td>
         <td>{{ invoice.SoDienThoai }}</td>
         <td>{{ invoice.NgayLapHoaDon|date:"d/m/Y" }}</td>
-        <td>{{ invoice.TongTien }} VNĐ</td>
+        <td>{{ invoice.TongTien }}</td>
         <td>{{ invoice.TrangThai }}</td>
         <td>
           {% if invoice.TrangThai == 'Chưa thanh toán' %}

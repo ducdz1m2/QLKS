@@ -13,8 +13,8 @@ urlpatterns = [
     path('usage/', usage_list, name='usage_list'),
     path('usage/edit/<int:pk>/', edit_usage, name='edit_usage'),
     path('usage/delete/<int:pk>/', delete_usage, name='delete_usage'),
+    path('usage/detail/<int:pk>/', usage_detail, name='usage_detail'),
     path('usage/search/', search_usages, name='search_usages'),
     path('usage/export', export_usage_excel, name='export_usage_excel'),
     path('export', export_service_excel, name='export_service_excel'),
-    
 ]

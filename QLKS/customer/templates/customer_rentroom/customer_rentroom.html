@@ -11,7 +11,7 @@
 </head>
 
 <body>
-        <h2>Phòng đang thuê</h2>
+        <h2 class="text-center">Phòng Đang Thuê</h2>
         <!-- Nút thêm phòng -->
         <div class="text-end mb-3">
             <a href="{% url 'service_order' %}" class="btn btn-primary">Dịch vụ đã yêu cầu</a>
@@ -24,33 +24,32 @@
                 <tr>
                     <th>Số phòng</th>
                     <th>Loại phòng</th>
-                    <th>Trạng Thái</th>
                     <th>Ngày thuê</th>
                     <th>Ngày nhận</th>
                     <th>Ngày trả</th>
-
-                 
+                    <th>Trạng Thái</th>
                     <th>Thao tác</th>
-                   
                 </tr>
             </thead>
             {% for rentRoom in rentRooms %}
             <tr>
-                <td>{{ rentRoom.SoPhong }}</td>
+                <td>
+                    <a class="btn btn-primary" href="{% url 'view_room_detail' rentRoom.MaPhong %}">
+                        {{ rentRoom.SoPhong }}</a>
+                </td>
                 <td>{{ rentRoom.TenLoai }}</td>
-                <td><p class="btn btn-{% if rentRoom.TrangThai == 'Đã trả' %}secondary{% else %}success{% endif %}">
-                    {{ rentRoom.TrangThai }}
-                </p></td>
                 <td>{{ rentRoom.NgayThue|date:"d/m/Y" }}</td>
                 <td>{{ rentRoom.NgayNhan|date:"d/m/Y" }}</td>
                 <td>{{ rentRoom.NgayTra|date:"d/m/Y" }}</td>
-                {% if rentRoom.TrangThai != 'Đã trả' %}
-                <td><a href="{% url 'service_order_rentroom' rentRoom.MaThue %}" class="btn btn-primary">Xem dịch vụ</a>
-                    <a href="{% url 'request_service' rentRoom.MaThue %}" class="btn btn-success">➕ Gọi dịch vụ</a></td>
-                {% else %}
-                    <td><a href="{% url 'service_order_rentroom' rentRoom.MaThue %}" class="btn btn-primary">Xem dịch vụ</a></td>
-                {% endif %}
-
+                <td>{{ rentRoom.TrangThai }}</td>
+                <td>
+                    <a href="{% url 'service_order_rentroom' rentRoom.MaThue %}" class="btn btn-primary">Xem dịch vụ</a>
+                    {% if rentRoom.TrangThai != 'Đã trả' %}
+                    <a href="{% url 'request_service' rentRoom.MaThue %}" class="btn btn-success">➕ Gọi dịch vụ </a></td>
+                    {% else %}
+                    <a href="{% url 'detail_invoices' rentRoom.MaHoaDon %}" class="btn btn-secondary">🗎 Xem hóa đơn </a>
+                    {% endif %}
+                </tr>
             </tr>
             {% endfor %}
         </table>

@@ -202,6 +202,13 @@ def usage_list(request):
     usages = get_all_usages()
     return render(request, 'usage/usage_list.html', {'usages': usages})
 
+def usage_detail(request, pk):
+    usage = get_usage(pk)
+    if not usage:
+        messages.error(request, "Không tìm thấy dữ liệu sử dụng dịch vụ!")
+        return redirect('usage_list')
+    return render(request, 'usage/detail_usage.html', {'usage': usage})
+
 def get_usage(pk):
     with connection.cursor() as cursor:
         cursor.callproc('GetUsage', [pk])

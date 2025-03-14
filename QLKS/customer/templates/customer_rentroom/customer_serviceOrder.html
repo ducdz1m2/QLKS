@@ -4,16 +4,13 @@
 {% block content %}
 
 
-<h2>Lịch sử dịch vụ đã yêu cầu</h2>
+<h2 class="text-center">Lịch Sử Dịch Vụ Đã Yêu Cầu</h2>
 
-<div class="text-end mb-3">
-    <a href="{% url 'customer_rentroom' %}" class="btn btn-secondary">Quay lại</a>
-</div>
 {% if services %}
 <table class="table table-bordered table-hover">
     <thead class="table-dark">
         <tr>
-            <th>Mã thuê</th>
+            <th>Mã dịch vụ</th>
             <th>Tên dịch vụ</th>
             <th>Giá tiền</th>
             <th>Trạng thái</th>
@@ -22,7 +19,10 @@
     </thead>
     {% for service in services %}
     <tr>
-        <td>{{ service.id }}</td>
+        <td>
+            <a href="{% url 'service_detail' service.MaDichVu %} " class="btn btn-primary">
+                {{ service.MaDichVu }}</a>
+        </td>
         <td>{{ service.TenDichVu }}</td>
         <td>{{ service.GiaDichVu }}</td>
         {% if service.TrangThai == "Đang chờ xử lý" %}
@@ -39,4 +39,7 @@
 {% else %}
 <h4 class="text-center">Chưa có dịch vụ nào được yêu cầu</h4>
 {% endif %}
+<div class="text-end mb-3">
+    <a href="{% url 'customer_rentroom' %}" class="btn btn-secondary">Quay lại</a>
+</div>
 {% endblock %}

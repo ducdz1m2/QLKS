@@ -3,7 +3,7 @@
 
 {% block content %}
 <div class="container">
-  <h2 class="text-center">Danh sách sử dụng dịch vụ</h2>
+  <h2 class="text-center">Danh Sách Sử Dụng Dịch Vụ</h2>
   <div class="mb-3 text-end">
     <a href="{% url 'export_usage_excel' %}" class="btn btn-outline-primary ms-2" target="_blank">📥 Xuất danh sách sử dụng dịch vụ</a>
   </div>
@@ -14,14 +14,9 @@
       <div class="col-md-3">
         <input type="number" name="MaSuDung" class="form-control" placeholder="Nhập mã sử dụng" value="{{ request.GET.MaSuDung }}">
       </div>
+
       <div class="col-md-3">
         <input type="text" name="TenKhachHang" class="form-control" placeholder="Nhập tên khách hàng" value="{{ request.GET.TongTien }}">
-      </div>
-      <div class="col-md-3">
-        <input type="number" name="GiaDichVu" class="form-control" placeholder="Nhập giá dịch vụ" value="{{ request.GET.GiaDichVu }}">
-      </div>
-      <div class="col-md-3">
-        <input type="date" name="NgaySuDung" class="form-control" placeholder="Nhập ngày sử dụng" value="{{ request.GET.NgaySuDung }}">
       </div>
 
       <div class="col-md-3">
@@ -35,6 +30,10 @@
       </div>
 
       <div class="col-md-3">
+        <input type="date" name="NgaySuDung" class="form-control" placeholder="Nhập ngày sử dụng" value="{{ request.GET.NgaySuDung }}">
+      </div>
+
+      <div class="col-md-3">
         <select name="TenDichVu" class="form-select">
           <option value="">-- Tên dịch vụ --</option>
           {% for service in services %}
@@ -42,7 +41,11 @@
           {% endfor %}
         </select>
       </div>
-      
+
+      <div class="col-md-3">
+        <input type="number" name="GiaDichVu" class="form-control" placeholder="Nhập giá dịch vụ" value="{{ request.GET.GiaDichVu }}">
+      </div>
+
       <div class="col-md-3">
         <select name="TrangThai" class="form-select">
           <option value="">-- Trạng thái --</option>
@@ -58,8 +61,8 @@
     </div>
   </form>
 
-  <table class="table table-bordered">
-    <thead>
+  <table class="table table-bordered table-hover">
+    <thead class="table-dark">
       <tr>
         <th>Mã sử dụng</th>
         <th>Tên Khách Hàng</th>
@@ -74,20 +77,30 @@
     <tbody>
       {% for usage in usages %}
       <tr>
-        <td>{{ usage.MaSuDung }}</td>
+        <td>
+          <a href="{% url 'usage_detail' usage.MaSuDung %}" class="btn btn-primary btn-sm">
+            <b>{{ usage.MaSuDung }}</b>
+          </a>
+        </td>
         <td>{{ usage.TenKhachHang }}</td>
         <td>{{ usage.SoPhong }}</td>
         <td>{{ usage.TenDichVu }}</td>
-        <td>{{ usage.GiaDichVu }} VNĐ</td>
+        <td>{{ usage.GiaDichVu }}</td>
         <td>{{ usage.NgaySuDung|date:"d-m-Y" }}</td>
         <td>{{ usage.TrangThai }}</td>
-        <td>
-          <a href="{% url 'edit_usage' usage.MaSuDung %}" class="btn btn-primary btn-sm">Sửa</a>
+
+        <td> <!-- Nút chỉnh sửa -->
+          <a href="{% url 'edit_usage' usage.MaSuDung %}" class="btn btn-warning btn-sm">✏️ Sửa</a>
+
+          <!-- Nút xóa -->
           <form action="{% url 'delete_usage' usage.MaSuDung %}" method="post" class="d-inline">
-            {% csrf_token %}
-            <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Bạn có chắc muốn xóa không?');">Xóa</button>
-          </form>
-        </td>
+              {% csrf_token %}
+              <input type="hidden" name="so_phong" value=""> <!-- Đảm bảo có name -->
+              <button type="submit" class="btn btn-danger btn-sm"
+                  onclick="return confirm('Bạn có chắc chắn muốn xóa không?');">
+                  🗑️ Xóa
+              </button>
+      </td>
       </tr>
       {% endfor %}
     </tbody>

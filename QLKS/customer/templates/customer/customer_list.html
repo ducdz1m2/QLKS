@@ -11,7 +11,7 @@
 </head>
 
 <body>
-    <h2>Danh Sách Khách Hàng</h2>
+    <h2 class="text-center">Danh Sách Khách Hàng</h2>
     <!-- Nút thêm phòng -->
     <div class="text-end mb-3">
         <a href="{% url 'export_customer_excel' %}" class="btn btn-outline-primary ms-2" target="_blank">📥 Xuất danh sách khách hàng</a>
@@ -43,21 +43,23 @@
     <table class="table table-bordered table-hover">
         <thead class="table-dark">
             <tr>
+                <th>Mã Khách Hàng</th>
                 <th>Tên Khách Hàng</th>
                 <th>Địa Chỉ</th>
                 <th>Số Điện Thoại</th>
-                <th>Thao tác</th>
+                <th>Thao Tác</th>
             </tr>
         </thead>
         {% for customer in customers %}
         <tr>
-            <td><a href="{% url 'detail_customer' customer.id %}">
-                    {{ customer.TenKhachHang }}
-                </a></td>
+            <td><a href="{% url 'detail_customer' customer.id %}" class="btn btn-primary btn-sm">
+                    {{ customer.id }}
+            </a></td>
+            <td>{{ customer.TenKhachHang }}</td>
             <td>{{ customer.DiaChi }}</td>
             <td>{{ customer.SoDienThoai }}</td>
             <td> <!-- Nút chỉnh sửa -->
-                <a href="{% url 'edit_customer' customer.id %}" class="btn btn-primary btn-sm">✏️ Sửa</a>
+                <a href="{% url 'edit_customer' customer.id %}" class="btn btn-warning btn-sm">✏️ Sửa</a>
 
                 <!-- Nút xóa -->
                 <form action="{% url 'delete_customer' customer.id %}" method="post" class="d-inline">

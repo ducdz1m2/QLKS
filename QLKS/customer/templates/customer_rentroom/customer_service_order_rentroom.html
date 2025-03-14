@@ -1,28 +1,31 @@
 {% extends 'base.html' %}
-{% block title %}Dịch vụ đã đặt{% endblock %}
+{% block title %}Dịch vụ đã yêu cầu{% endblock %}
 
 {% block content %}
 
 
-<h2>Dịch vụ đã yêu cầu</h2>
+<h2 class="text-center">Dịch Vụ Đã Yêu Cầu</h2>
 
-<div class="text-end mb-3">
-    <a href="{% url 'customer_rentroom' %}" class="btn btn-secondary">Quay lại</a>
-</div>
 {% if services %}
 <table class="table table-bordered table-hover">
     <thead class="table-dark">
         <tr>
+            <th>Mã dịch vụ</th>
             <th>Tên dịch vụ</th>
             <th>Giá tiền</th>
-            <th>Trạng thái</th>
             <th>Thời gian</th>
+            <th>Trạng thái</th>
         </tr>
     </thead>
     {% for service in services %}
     <tr>
+        <td>
+            <a class="btn btn-primary" href="{% url 'service_detail' service.MaDichVu %}">
+                {{ service.MaDichVu }}</a>
+        </td>
         <td>{{ service.TenDichVu }}</td>
         <td>{{ service.GiaDichVu }}</td>
+        <td>{{ service.NgaySuDung|date:"d/m/Y" }}</td>
         {% if service.TrangThai == "Đang chờ xử lý" %}
         <td>
             <p class="btn btn-primary mb-0">Đã gửi yêu cầu</p>
@@ -36,11 +39,14 @@
             <p class="btn btn-success mb-0">Hoàn thành</p>
         </td>
         {% endif %}
-        <td>{{ service.NgaySuDung|date:"d/m/Y" }}</td>
+    
     </tr>
     {% endfor %}
 </table>
 {% else %}
 <h4 class="text-center">Chưa có dịch vụ nào được yêu cầu</h4>
 {% endif %}
+<div class="text-end mb-3">
+    <a href="{% url 'customer_rentroom' %}" class="btn btn-secondary">Quay lại</a>
+</div>
 {% endblock %}
