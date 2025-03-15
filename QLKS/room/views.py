@@ -164,14 +164,23 @@ def search_rooms(request):
     so_phong = request.GET.get('so_phong', '').strip()
     trang_thai = request.GET.get('trang_thai', '').strip()
     ten_loai = request.GET.get('ten_loai', '').strip()  # Lấy TenLoai từ request
+    sap_xep = request.GET.get('sap_xep', '').strip()  # Lấy TenLoai từ request
 
     # Xử lý giá trị rỗng -> NULL
     so_phong = so_phong if so_phong else None
     trang_thai = trang_thai if trang_thai else None
     ten_loai = ten_loai if ten_loai else None  # Giữ dạng chuỗi, không cần chuyển kiểu
+    sap_xep = sap_xep if sap_xep else None  # Giữ dạng chuỗi, không cần chuyển kiểu
 
+    # if sap_xep == None:
+    #     with connection.cursor() as cursor:
+    #         cursor.callproc('SearchRooms', [so_phong, trang_thai, ten_loai])
+    #         columns = [col[0] for col in cursor.description]
+    #         rooms = [dict(zip(columns, row)) for row in cursor.fetchall()]
+    # else: 
+    
     with connection.cursor() as cursor:
-        cursor.callproc('SearchRooms', [so_phong, trang_thai, ten_loai])
+        cursor.callproc('SearchRoomsOrderBy', [so_phong, trang_thai, ten_loai, sap_xep])
         columns = [col[0] for col in cursor.description]
         rooms = [dict(zip(columns, row)) for row in cursor.fetchall()]
     

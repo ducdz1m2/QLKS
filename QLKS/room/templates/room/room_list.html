@@ -40,6 +40,13 @@
         </select>
       </div>
       <div class="col-md-3">
+        <select name="sap_xep" class="form-select">
+          <option value="">-- Sắp theo giá --</option>
+          <option value="ASC" {% if request.GET.sap_xep == "ASC" %}selected{% endif %}>Tăng dần</option>
+          <option value="DESC" {% if request.GET.sap_xep == "DESC" %}selected{% endif %}>Giảm dần</option>
+        </select>
+      </div>
+      <div class="col-md-3">
         <button type="submit" class="btn btn-primary w-100">🔍 Tìm kiếm</button>
       </div>
     </div>

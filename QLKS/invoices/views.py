@@ -183,6 +183,7 @@ def search_invoices(request):
     SoPhong = request.GET.get('SoPhong', '').strip()
     NgayLapHoaDon = request.GET.get('NgayLapHoaDon', '').strip()
     TrangThai = request.GET.get('TrangThai', '').strip()
+    sap_xep = request.GET.get('sap_xep', '').strip()
 
    
 
@@ -193,10 +194,16 @@ def search_invoices(request):
     SoPhong = SoPhong if SoPhong else None
     NgayLapHoaDon = NgayLapHoaDon if NgayLapHoaDon else None
     TrangThai = TrangThai if TrangThai else None
+    sap_xep = sap_xep if sap_xep else None
    
 
+    # with connection.cursor() as cursor:
+    #     cursor.callproc('SearchInvoices', [MaHoaDon, TenKhachHang, DiaChi, SoDienThoai, SoPhong, NgayLapHoaDon, TrangThai])
+    #     columns = [col[0] for col in cursor.description]
+    #     invoice = [dict(zip(columns, row)) for row in cursor.fetchall()]
+    
     with connection.cursor() as cursor:
-        cursor.callproc('SearchInvoices', [MaHoaDon, TenKhachHang, DiaChi, SoDienThoai, SoPhong, NgayLapHoaDon, TrangThai])
+        cursor.callproc('SearchInvoicesOrderBy', [MaHoaDon, TenKhachHang, DiaChi, SoDienThoai, SoPhong, NgayLapHoaDon, TrangThai, sap_xep])
         columns = [col[0] for col in cursor.description]
         invoice = [dict(zip(columns, row)) for row in cursor.fetchall()]
     
