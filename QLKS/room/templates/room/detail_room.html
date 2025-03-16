@@ -31,7 +31,7 @@
     {% endif %}
     
     <div class="text-center mt-3">
-        <a href="{% url 'room_list' %}" class="btn btn-secondary">Quay lại danh sách</a>
+        <a href="{{ request.META.HTTP_REFERER }}" class="btn btn-secondary">Quay lại danh sách</a>
     </div>
 </div>
 {% endblock %}
