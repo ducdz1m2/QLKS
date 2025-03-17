@@ -7,7 +7,7 @@ from room.models import Phong
 
 class RegisterForm(UserCreationForm):
     ROLE_CHOICES = [
-        ('nhanvien', 'Nhân viên'),
+        # ('nhanvien', 'Nhân viên'),
         ('khachhang', 'Khách hàng'),
     ]
     role = forms.ChoiceField(choices=ROLE_CHOICES, widget=forms.Select(attrs={
